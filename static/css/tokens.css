@@ -1,100 +1,107 @@
 :root {
   /* =====================================================================
-     VISIONOS & APPLE SONOMA DESIGN TOKENS
+     APPLE HIG DARK MODE SPECIFICATION (macOS Sonoma & iOS Wallet)
+     No purple gradients, no neon glow, pure optical contrast & SF Pro
      ===================================================================== */
-  --bg-0: #050811;
-  --bg-1: #0A0F1D;
-  --bg-surface: #0E1626;
+  --bg-0: #08090C;             /* Space Black canvas */
+  --bg-1: #0F1015;             /* Inset Grouped background */
+  --bg-surface: #16181F;       /* Elevated card background */
+  --bg-card: rgba(255, 255, 255, 0.045);
+  --bg-card-hover: rgba(255, 255, 255, 0.075);
+  --bg-input: rgba(255, 255, 255, 0.05);
 
-  /* Frosted Glass Layers (visionOS multi-pass glass) */
-  --glass-base: rgba(14, 22, 38, 0.65);
-  --glass-card: rgba(255, 255, 255, 0.05);
-  --glass-panel: rgba(255, 255, 255, 0.08);
-  --glass-strong: rgba(255, 255, 255, 0.14);
-  --glass-interactive: rgba(255, 255, 255, 0.09);
+  /* Frosted Glass Layers (visionOS multi-pass) */
+  --glass-base: rgba(15, 16, 21, 0.78);
+  --glass-card: rgba(255, 255, 255, 0.04);
+  --glass-panel: rgba(22, 24, 31, 0.72);
+  --glass-strong: rgba(28, 30, 39, 0.88);
+  --glass-interactive: rgba(255, 255, 255, 0.06);
 
-  /* Precise 1px Specular Edge Strokes */
-  --stroke: rgba(255, 255, 255, 0.16);
-  --stroke-subtle: rgba(255, 255, 255, 0.08);
-  --stroke-highlight: rgba(255, 255, 255, 0.32);
-  --highlight-top: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
-  --highlight-inner: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-  --shadow-occlusion: inset 0 -1px 0 0 rgba(0, 0, 0, 0.4);
+  /* Apple Hairline Strokes */
+  --stroke: rgba(255, 255, 255, 0.09);
+  --stroke-subtle: rgba(255, 255, 255, 0.05);
+  --stroke-highlight: rgba(255, 255, 255, 0.18);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --highlight-inner: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-occlusion: inset 0 -1px 0 0 rgba(0, 0, 0, 0.35);
 
-  /* Deep Calm Typography */
-  --text: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --muted: #8E9DB2;
-  --muted-light: #5B6A82;
+  /* Apple Human Interface Typography Tokens */
+  --text: #FFFFFF;                                /* Primary Label */
+  --text-secondary: rgba(235, 235, 245, 0.78);     /* Secondary Label */
+  --muted: rgba(235, 235, 245, 0.52);              /* Tertiary Label */
+  --muted-light: rgba(235, 235, 245, 0.28);        /* Quaternary Label */
 
-  /* Single Restrained Accent: Pure Mint */
-  --accent: #5EEAD4;
-  --accent-rgb: 94, 234, 212;
-  --accent-glow: rgba(94, 234, 212, 0.22);
-  --accent-hover: #2DD4BF;
-  --accent-surface: rgba(94, 234, 212, 0.1);
-  --accent-border: rgba(94, 234, 212, 0.3);
+  /* Apple Financial Accent (Clean Mint & Titanium - Zero Purple) */
+  --accent: #34D399;                               /* Apple Cash Mint */
+  --accent-rgb: 52, 211, 153;
+  --accent-glow: rgba(52, 211, 153, 0.16);
+  --accent-hover: #10B981;
+  --accent-surface: rgba(52, 211, 153, 0.09);
+  --accent-border: rgba(52, 211, 153, 0.25);
 
-  /* Status Tokens */
-  --danger: #FF6B6B;
-  --danger-bg: rgba(255, 107, 107, 0.12);
-  --danger-border: rgba(255, 107, 107, 0.28);
-  --ok: #4ADE80;
-  --ok-bg: rgba(74, 222, 128, 0.12);
-  --ok-border: rgba(74, 222, 128, 0.28);
-  --warning: #F5B461;
-  --warning-bg: rgba(245, 180, 97, 0.12);
+  /* Secondary Status Colors */
+  --danger: #FF453A;                               /* Apple System Red */
+  --danger-bg: rgba(255, 69, 58, 0.12);
+  --danger-border: rgba(255, 69, 58, 0.28);
+  --ok: #30D158;                                   /* Apple System Green */
+  --ok-bg: rgba(48, 209, 88, 0.12);
+  --ok-border: rgba(48, 209, 88, 0.26);
+  --warning: #FF9F0A;                              /* Apple System Orange */
+  --warning-bg: rgba(255, 159, 10, 0.12);
 
-  /* Geometry & Radii */
-  --r-xl: 28px;
-  --r-lg: 20px;
-  --r-md: 14px;
+  /* Apple Corner Radii */
+  --r-xl: 22px;
+  --r-lg: 16px;
+  --r-md: 12px;
   --r-sm: 8px;
   --r-full: 9999px;
 
-  /* Blurs & Shadows */
-  --blur: 28px;
-  --shadow-glass: 0 16px 40px -10px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.1);
-  --shadow-card: 0 10px 28px -6px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  --shadow-floating: 0 24px 56px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  /* Shadows (Natural Optical Softness) */
+  --blur: 24px;
+  --shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--stroke);
+  --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--stroke-subtle);
+  --shadow-floating: 0 20px 44px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--stroke-highlight);
 
-  /* Smooth Easing */
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Smooth Physics */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);          /* Apple standard spring ease */
 
-  /* Fonts */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", -apple-system-subheadline, system-ui, sans-serif;
-  --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  /* Apple SF Typography Stack */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
 }
 
 [data-theme="light"] {
-  --bg-0: #F4F6F9;
-  --bg-1: #E9EEF4;
+  --bg-0: #F2F2F7;                                 /* iOS grouped background */
+  --bg-1: #FFFFFF;                                 /* Card background */
   --bg-surface: #FFFFFF;
+  --bg-card: rgba(0, 0, 0, 0.025);
+  --bg-card-hover: rgba(0, 0, 0, 0.045);
+  --bg-input: #E5E5EA;
 
-  --glass-base: rgba(255, 255, 255, 0.75);
-  --glass-card: rgba(255, 255, 255, 0.7);
-  --glass-panel: rgba(255, 255, 255, 0.85);
-  --glass-strong: rgba(255, 255, 255, 0.95);
-  --glass-interactive: rgba(255, 255, 255, 0.9);
+  --glass-base: rgba(255, 255, 255, 0.82);
+  --glass-card: rgba(255, 255, 255, 0.85);
+  --glass-panel: rgba(255, 255, 255, 0.92);
+  --glass-strong: rgba(255, 255, 255, 0.98);
+  --glass-interactive: rgba(242, 242, 247, 0.85);
 
-  --stroke: rgba(15, 23, 42, 0.1);
-  --stroke-subtle: rgba(15, 23, 42, 0.06);
-  --stroke-highlight: rgba(15, 23, 42, 0.18);
-  --highlight-top: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
-  --highlight-inner: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-  --shadow-occlusion: inset 0 -1px 0 0 rgba(15, 23, 42, 0.05);
+  --stroke: rgba(0, 0, 0, 0.08);
+  --stroke-subtle: rgba(0, 0, 0, 0.04);
+  --stroke-highlight: rgba(0, 0, 0, 0.14);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --highlight-inner: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-occlusion: inset 0 -1px 0 0 rgba(0, 0, 0, 0.04);
 
-  --text: #0B1426;
-  --text-secondary: #334155;
-  --muted: #64748B;
-  --muted-light: #94A3B8;
+  --text: #000000;                                 /* iOS primary text */
+  --text-secondary: rgba(60, 60, 67, 0.75);        /* iOS secondary label */
+  --muted: rgba(60, 60, 67, 0.50);                 /* iOS tertiary label */
+  --muted-light: rgba(60, 60, 67, 0.26);
 
-  --accent: #0D9488;
-  --accent-glow: rgba(13, 148, 136, 0.18);
-  --accent-hover: #0F766E;
-  --accent-surface: rgba(13, 148, 136, 0.08);
+  --accent: #059669;
+  --accent-glow: rgba(5, 150, 105, 0.12);
+  --accent-hover: #047857;
+  --accent-surface: rgba(5, 150, 105, 0.08);
+  --accent-border: rgba(5, 150, 105, 0.2);
 
-  --shadow-glass: 0 14px 34px -8px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(15, 23, 42, 0.06);
-  --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(15, 23, 42, 0.06);
+  --shadow-glass: 0 8px 24px -4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 4px 14px -2px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }

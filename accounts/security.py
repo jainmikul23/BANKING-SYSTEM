@@ -81,3 +81,4 @@ def clear_failed_login(username, request):
     cache.delete(f"failed_attempts:ip:{ip}")
     cache.delete(f"lockout:user:{username.lower()}")
     cache.delete(f"lockout:ip:{ip}")
+

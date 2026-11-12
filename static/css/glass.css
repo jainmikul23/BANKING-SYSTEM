@@ -249,9 +249,9 @@
 }
 
 .badge-current {
-  background: rgba(168, 85, 247, 0.12);
-  color: #C084FC;
-  border: 1px solid rgba(168, 85, 247, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: #E2E8F0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 /* Quick Chips */
@@ -289,7 +289,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 8, 17, 0.7);
+  background: rgba(8, 9, 12, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   z-index: 1000;
@@ -363,7 +363,7 @@
 }
 
 .toast-info {
-  background: rgba(14, 22, 38, 0.94);
+  background: rgba(22, 24, 31, 0.95);
   border: 1px solid var(--stroke-highlight);
   color: var(--text);
 }

@@ -56,3 +56,4 @@ class SessionInactivityTimeoutMiddleware:
             request.session['last_activity'] = now
 
         return self.get_response(request)
+

@@ -84,3 +84,4 @@ class BankingSecurityTests(TestCase):
         res = self.client.get(reverse('security_txt'))
         self.assertEqual(res.status_code, 200)
         self.assertIn(b'Contact: security@apexbank.in', res.content)
+

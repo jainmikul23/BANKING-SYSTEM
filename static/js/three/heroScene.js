@@ -49,11 +49,11 @@
     canvas.height = 646; // Standard 85.6mm x 53.98mm aspect ratio
     const ctx = canvas.getContext('2d');
 
-    // Frosted Titanium/Glass gradient
+    // Apple Space Black Brushed Titanium Gradient
     const grad = ctx.createLinearGradient(0, 0, 1024, 646);
-    grad.addColorStop(0, 'rgba(15, 23, 42, 0.92)');
-    grad.addColorStop(0.5, 'rgba(11, 20, 38, 0.85)');
-    grad.addColorStop(1, 'rgba(15, 118, 110, 0.7)');
+    grad.addColorStop(0, 'rgba(28, 30, 36, 0.98)');
+    grad.addColorStop(0.5, 'rgba(18, 20, 24, 0.96)');
+    grad.addColorStop(1, 'rgba(10, 11, 14, 0.98)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 1024, 646);
 
@@ -75,11 +75,11 @@
 
     // Top Brand Text
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 36px -apple-system, Inter, sans-serif';
+    ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillText('APEX BANK', 60, 80);
 
-    ctx.fillStyle = '#5EEAD4';
-    ctx.font = '600 20px -apple-system, Inter, monospace';
+    ctx.fillStyle = '#34D399';
+    ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.letterSpacing = '2px';
     ctx.fillText('TITANIUM RESERVE', 60, 114);
 
@@ -109,7 +109,7 @@
 
     // Embossed Card Number
     ctx.fillStyle = '#F8FAFC';
-    ctx.font = 'bold 44px "SF Mono", "JetBrains Mono", monospace';
+    ctx.font = 'bold 44px "SF Mono", SFMono-Regular, Menlo, monospace';
     ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetY = 4;
@@ -120,28 +120,27 @@
 
     // Valid Thru
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.font = '500 16px -apple-system, Inter, sans-serif';
+    ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillText('VALID THRU', 60, 490);
 
     ctx.fillStyle = '#F8FAFC';
-    ctx.font = 'bold 24px monospace';
+    ctx.font = 'bold 24px "SF Mono", monospace';
     ctx.fillText('11/29', 60, 520);
 
     // Cardholder Name
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.font = '500 16px -apple-system, Inter, sans-serif';
+    ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.fillText('CARDHOLDER', 320, 490);
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 26px -apple-system, Inter, sans-serif';
+    ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
     ctx.fillText('AARAV SHARMA', 320, 520);
 
-    // Holographic Foil Emblem
+    // Brushed Platinum Metallic Security Emblem
     const holoGrad = ctx.createLinearGradient(820, 480, 940, 560);
-    holoGrad.addColorStop(0, '#5EEAD4');
-    holoGrad.addColorStop(0.3, '#38BDF8');
-    holoGrad.addColorStop(0.7, '#C084FC');
-    holoGrad.addColorStop(1, '#F5B461');
+    holoGrad.addColorStop(0, '#F1F5F9');
+    holoGrad.addColorStop(0.5, '#94A3B8');
+    holoGrad.addColorStop(1, '#475569');
 
     ctx.fillStyle = holoGrad;
     ctx.beginPath();

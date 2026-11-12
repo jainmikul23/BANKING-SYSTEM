@@ -60,3 +60,4 @@ Acknowledgments: https://apexbank.in/hall-of-fame.html
 Expires: 2027-12-31T23:59:59.000Z
 """
     return HttpResponse(content, content_type='text/plain')
+

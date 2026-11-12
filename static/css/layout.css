@@ -18,15 +18,13 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Background Atmospheric Mesh (drifting color gradients) */
+/* Apple HIG Ambient Illumination */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background: 
-    radial-gradient(circle at 15% 20%, rgba(94, 234, 212, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(14, 116, 144, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(30, 58, 138, 0.14) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.035) 0%, transparent 65%),
     linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
   z-index: -2;
   pointer-events: none;
@@ -34,10 +32,8 @@ body::before {
 
 [data-theme="light"] body::before {
   background: 
-    radial-gradient(circle at 15% 20%, rgba(94, 234, 212, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(203, 213, 225, 0.6) 0%, transparent 50%),
-    radial-gradient(circle at 50% 80%, rgba(226, 232, 240, 0.8) 0%, transparent 60%),
-    linear-gradient(180deg, #F8FAFC 0%, #EDF2F7 100%);
+    radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 0.03) 0%, transparent 60%),
+    linear-gradient(180deg, #F2F2F7 0%, #FFFFFF 100%);
 }
 
 /* 3D WebGL Canvas Layer */
@@ -59,7 +55,7 @@ body::before {
 /* Sidebar Navigation */
 .app-sidebar {
   width: 260px;
-  background: rgba(11, 20, 38, 0.65);
+  background: var(--glass-base);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-right: 1px solid var(--stroke);
@@ -75,7 +71,7 @@ body::before {
 }
 
 [data-theme="light"] .app-sidebar {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .sidebar-brand {
@@ -91,12 +87,12 @@ body::before {
   width: 36px;
   height: 36px;
   border-radius: var(--r-md);
-  background: linear-gradient(135deg, var(--accent) 0%, #0F766E 100%);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 14px var(--accent-glow);
-  color: #060B16;
+  color: #08090C;
 }
 
 .brand-title {
@@ -199,9 +195,9 @@ body::before {
   align-items: center;
   justify-content: space-between;
   padding: 0 36px;
-  background: rgba(6, 11, 22, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--glass-base);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--stroke);
   position: sticky;
   top: 0;
@@ -209,7 +205,7 @@ body::before {
 }
 
 [data-theme="light"] .app-topbar {
-  background: rgba(248, 250, 252, 0.7);
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .topbar-title {
@@ -240,7 +236,7 @@ body::before {
   left: 0;
   right: 0;
   height: 64px;
-  background: rgba(11, 20, 38, 0.88);
+  background: var(--glass-base);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-top: 1px solid var(--stroke);
