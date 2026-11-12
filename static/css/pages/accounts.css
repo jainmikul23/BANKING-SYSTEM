@@ -1,0 +1,155 @@
+/* Apple Wallet & Card Visuals with 3D Parallax Tilt */
+
+.wallet-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 28px;
+  margin-top: 24px;
+}
+
+/* Apple Wallet Styled Bank Card */
+.bank-card {
+  width: 100%;
+  height: 230px;
+  border-radius: var(--r-xl);
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Dynamic Radial Mouse Light Sheen */
+.bank-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 55%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.bank-card:hover::after {
+  opacity: 1;
+}
+
+.bank-card-savings {
+  background: linear-gradient(135deg, #091322 0%, #0F2A38 50%, #0F766E 100%);
+}
+
+.bank-card-current {
+  background: linear-gradient(135deg, #091322 0%, #1E1B4B 50%, #6D28D9 100%);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.card-bank-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.card-chip {
+  width: 44px;
+  height: 32px;
+  background: linear-gradient(135deg, #FDE047 0%, #CA8A04 100%);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 2px 6px rgba(0,0,0,0.4);
+  border: 1px solid rgba(161, 98, 7, 0.5);
+}
+
+.card-chip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(113, 63, 18, 0.6);
+}
+
+.card-number {
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #FFFFFF;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  margin: 14px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+.card-holder-name {
+  font-size: 0.813rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.card-balance-val {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.card-details-panel {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--stroke);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.card-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-detail-label {
+  font-size: 0.688rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-detail-val {
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: var(--text);
+}

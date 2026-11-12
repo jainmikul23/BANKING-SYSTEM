@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Apex Global Bank{% endblock %}</title>
+
+  <!-- SEO & Search Engine Metadata -->
+  <meta name="description" content="{% block meta_description %}Apex Global Bank - 3NF Normalized core banking engine with pessimistic row-locked atomic transfers, real-time passbook ledger, and visionOS glassmorphism.{% endblock %}">
+  <meta name="keywords" content="banking management system, DBMS project, 3NF normalization, ACID transactions, atomic transfers, SQL triggers, core banking">
+  <meta name="author" content="Apex Global Bank">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Apex Global Bank | Relational Core Banking Architecture">
+  <meta property="og:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and Apple visionOS design.">
+  <meta property="og:site_name" content="Apex Global Bank">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apex Global Bank | Relational Core Banking Architecture">
+  <meta name="twitter:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and Apple visionOS design.">
+
+  <!-- Typography & Inter / SF -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design Tokens & Glass System -->
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/glass.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  {% block extra_css %}{% endblock %}
+
+  <!-- External Libraries: Three.js, Lenis Smooth Scroll, GSAP, Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Ambient WebGL Background Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  {% block root %}
+  <div class="app-container">
+    {% if user.is_authenticated %}
+      {% include "partials/sidebar.html" %}
+      <main class="app-main">
+        {% include "partials/topbar.html" %}
+        <div class="content-body">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+      {% include "partials/mobile_tab_bar.html" %}
+    {% else %}
+      {% block unauth_content %}{% endblock %}
+    {% endif %}
+  </div>
+  {% endblock %}
+
+  <!-- Global Toast Notification Container -->
+  {% include "partials/toast.html" %}
+
+  <!-- Application Scripts -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/three/bgScene.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
+

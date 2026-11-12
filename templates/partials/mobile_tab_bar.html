@@ -1,0 +1,42 @@
+<nav class="mobile-tab-bar">
+  {% if is_customer %}
+    <a href="{% url 'accounts:dashboard' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Home</span>
+    </a>
+    <a href="{% url 'banking:accounts_list' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'accounts_list' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+      <span>Cards</span>
+    </a>
+    <a href="{% url 'banking:transfer' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'transfer' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+      <span>Pay</span>
+    </a>
+    <a href="{% url 'banking:transactions' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'transactions' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line></svg>
+      <span>History</span>
+    </a>
+    <a href="{% url 'accounts:profile' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Profile</span>
+    </a>
+  {% else %}
+    <a href="{% url 'adminpanel:dashboard' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Admin</span>
+    </a>
+    <a href="{% url 'adminpanel:customers' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'customers' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+      <span>Users</span>
+    </a>
+    <a href="{% url 'adminpanel:accounts' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'accounts' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+      <span>Accounts</span>
+    </a>
+    <a href="{% url 'adminpanel:loans' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'loans' %}active{% endif %}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span>Loans</span>
+    </a>
+  {% endif %}
+</nav>
+

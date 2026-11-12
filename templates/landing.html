@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Apex Global Bank | Relational Core Banking Architecture{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/landing.css">
+
+<!-- Structured JSON-LD Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BankOrCreditUnion",
+  "name": "Apex Global Bank",
+  "url": "http://127.0.0.1:8000/",
+  "description": "High-Precision Core Banking with 3NF Relational Integrity & ACID Transfers",
+  "currenciesAccepted": "INR",
+  "paymentAccepted": "Electronic Fund Transfer, IMPS, NEFT, RTGS",
+  "priceRange": "₹₹",
+  "openingHours": "Mo-Sa 09:00-18:00",
+  "telephone": "+91-98201-12345",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Nariman Point Flagship",
+    "addressLocality": "Mumbai",
+    "addressRegion": "MH",
+    "postalCode": "400021",
+    "addressCountry": "IN"
+  }
+}
+</script>
+<style>
+.hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(94, 234, 212, 0.16) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
+{% endblock %}
+
+{% block root %}
+<div class="landing-viewport">
+  <!-- Floating Frosted Glass Navigation Pill -->
+  <header class="landing-nav glass-panel">
+    <a href="/" class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <span>APEX BANK</span>
+    </a>
+
+    <nav class="nav-menu">
+      <a href="#architecture" class="nav-item">3NF Architecture</a>
+      <a href="#concurrency" class="nav-item">ACID Engine</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm">Portal Access</a>
+      <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">Open Account</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section with 3D Canvas -->
+  <section class="landing-hero">
+    <div class="hero-content">
+      <div class="hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>MySQL 8 Core &bull; Pessimistic Row-Locked Concurrency</span>
+      </div>
+
+      <h1 class="hero-title">
+        High-Precision Banking. <br>
+        <span class="accent-text">Engineered for Absolute Trust.</span>
+      </h1>
+
+      <p class="hero-desc">
+        A relational core banking system built on normalized 3NF schema constraints, atomic fund clearing, automated audit triggers, and real-time passbook ledger reconciliation.
+      </p>
+
+      <div class="hero-cta">
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">
+          <span>Open Digital Account</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-lg">
+          <span>Sign In to Portal</span>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">ACID Compliant</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">3NF</div>
+          <div class="hero-stat-label">Zero Relational Anomalies</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">&lt; 10ms</div>
+          <div class="hero-stat-label">Atomic Settlement</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Interactive WebGL Container -->
+    <div class="hero-3d-container">
+      <div class="hero-glow"></div>
+      <div id="hero-3d-canvas-wrap" style="width: 100%; height: 100%; position: relative; z-index: 1;"></div>
+    </div>
+  </section>
+
+  <!-- Architectural Integrity Section -->
+  <section class="features-section" id="architecture">
+    <div class="section-head">
+      <div class="section-tag">Relational Database Core</div>
+      <h2 class="section-title">Institutional Financial Engineering</h2>
+      <p style="color: var(--muted); font-size: 0.938rem;">Built to demonstrate strict normalization, referential integrity, and database triggers under concurrent transaction loads.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="17 1 21 5 17 9"></polyline>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <polyline points="7 23 3 19 7 15"></polyline>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+        </div>
+        <h3 class="feature-title">Two-Phase Atomic Clearing</h3>
+        <p class="feature-text">Debit and credit operations run in single atomic database blocks. If either side fails, <code>ROLLBACK</code> immediately restores the exact previous state with zero balance loss.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+        </div>
+        <h3 class="feature-title">Apple Wallet Card Stack</h3>
+        <p class="feature-text">High-precision interactive debit and current cards. Hovering tilts the card in real 3D perspective with light-tracking specular highlights.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <h3 class="feature-title">Dynamic Amortization Engine</h3>
+        <p class="feature-text">Live EMI computations powered by standard banking formulas. Approved credit facilities disburse funds automatically via internal atomic ledger transactions.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </div>
+        <h3 class="feature-title">Official PDF Statements</h3>
+        <p class="feature-text">Generate official bank passbooks rendered through ReportLab with cryptographic reference codes, tabular balance histories, and clean accounting totals.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <h3 class="feature-title">Automated Audit Triggers</h3>
+        <p class="feature-text">MySQL triggers capture before-and-after JSON diffs of account status shifts and customer KYC status updates for regulatory compliance.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <div class="feature-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+        </div>
+        <h3 class="feature-title">Compiled Analytical Views</h3>
+        <p class="feature-text">Pre-compiled relational views (<code>v_account_summary</code>, <code>v_monthly_statement</code>, <code>v_loan_overview</code>) power analytics without repetitive application joins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Concurrency & Locking Section -->
+  <section class="features-section" id="concurrency" style="border-top: 1px solid var(--stroke);">
+    <div class="section-head">
+      <div class="section-tag">Concurrency Mechanics</div>
+      <h2 class="section-title">Pessimistic Row-Level Locking</h2>
+      <p style="color: var(--muted); font-size: 0.938rem;">How Apex Bank protects against double-spending and simultaneous debit race conditions.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card glass-panel">
+        <h4 style="color: var(--accent); font-family: var(--font-mono); font-size: 0.938rem;">SELECT ... FOR UPDATE</h4>
+        <p class="feature-text">When an account initiates a transfer, its database row is locked at the storage engine level. Concurrent transfers against the same account wait until the first lock commits.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <h4 style="color: var(--accent); font-family: var(--font-mono); font-size: 0.938rem;">CHECK Constraints & Triggers</h4>
+        <p class="feature-text">Table-level <code>CHECK (balance >= 0)</code> and MySQL triggers ensure that even if application logic were bypassed, the database engine forbids negative balances.</p>
+      </div>
+
+      <div class="feature-card glass-panel">
+        <h4 style="color: var(--accent); font-family: var(--font-mono); font-size: 0.938rem;">Deterministic Lock Ordering</h4>
+        <p class="feature-text">Transfer locks are always acquired in alphabetical order of account numbers (e.g. Account A before Account B), mathematically eliminating deadlock cycles.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding: 40px; text-align: center; border-top: 1px solid var(--stroke); color: var(--muted); font-size: 0.813rem;">
+    <p>&copy; 2026 Apex Global Bank. College DBMS Project Master Implementation.</p>
+    <p style="margin-top: 6px;">Demo Logins: <b>admin / Admin@123</b> &bull; <b>customer1 / Customer@123</b></p>
+  </footer>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/three/heroScene.js"></script>
+{% endblock %}

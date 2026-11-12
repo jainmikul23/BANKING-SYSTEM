@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile & KYC | Apex Global Bank{% endblock %}
+{% block page_title %}Customer Profile & KYC{% endblock %}
+
+{% block content %}
+<div style="max-width: 720px; margin: 0 auto;">
+  <div class="glass-panel" style="padding: 36px; border-radius: var(--r-xl); margin-bottom: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="width: 56px; height: 56px; border-radius: var(--r-full); background: var(--accent-glow); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+          {{ customer.full_name|make_list|first|upper }}
+        </div>
+        <div>
+          <h2 style="font-size: 1.375rem; font-weight: 700;">{{ customer.full_name }}</h2>
+          <div style="font-size: 0.813rem; color: var(--muted);">Customer ID: #{{ customer.id }} &bull; Username: @{{ customer.user.username }}</div>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-{{ customer.kyc_status }}" style="font-size: 0.813rem; padding: 6px 14px;">
+          KYC {{ customer.get_kyc_status_display }}
+        </span>
+      </div>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="auth-grid">
+        <div class="form-group">
+          <label class="form-label" for="id_full_name">Full Legal Name</label>
+          {{ form.full_name }}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_email">Email Address</label>
+          {{ form.email }}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_phone">Mobile Number</label>
+          {{ form.phone }}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_dob">Date of Birth</label>
+          {{ form.dob }}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_city">City</label>
+          {{ form.city }}
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="form-label" for="id_address">Residential Address</label>
+          {{ form.address }}
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; border-top: 1px solid var(--stroke); padding-top: 20px;">
+        <a href="{% url 'accounts:change_password' %}" class="btn btn-glass">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Change Password</span>
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+          <span>Save Changes</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

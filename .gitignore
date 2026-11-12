@@ -1,0 +1,25 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment Variables & Secrets
+.env
+.env.local
+
+# Django Static & Media Artifacts
+staticfiles/
+media/
+*.sqlite3
+
+# Operating System & IDE Artifacts
+.DS_Store
+.vscode/
+.idea/
