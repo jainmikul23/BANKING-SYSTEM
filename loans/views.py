@@ -135,13 +135,29 @@ def pay_emi_view(request, loan_id):
 # LOANS API (SECTION 7 SPECIFICATION)
 # =====================================================================
 
-@require_GET
 def api_loan_emi(request):
-    """GET /api/loan/emi/?p=&r=&n="""
+    """Calculate EMI via GET or POST.
+    GET /api/loan/emi/?p=&r=&n= OR POST /api/loan/emi/ with JSON {principal, interest_rate, tenure_months}
+    """
+    if request.method not in ('GET', 'POST'):
+        return JsonResponse({'ok': False, 'message': 'GET or POST required.'}, status=405)
+
     try:
-        principal = Decimal(request.GET.get('p', '100000'))
-        annual_rate = Decimal(request.GET.get('r', '10.0'))
-        tenure = int(request.GET.get('n', '12'))
+        if request.method == 'POST':
+            if request.content_type == 'application/json' and request.body:
+                data = json.loads(request.body)
+            else:
+                data = request.POST
+        else:
+            data = request.GET
+
+        p_val = data.get('principal') or data.get('p') or '100000'
+        r_val = data.get('interest_rate') or data.get('annual_rate') or data.get('r') or '10.0'
+        n_val = data.get('tenure_months') or data.get('tenure') or data.get('n') or '12'
+
+        principal = Decimal(str(p_val))
+        annual_rate = Decimal(str(r_val))
+        tenure = int(str(n_val))
 
         emi = Loan.calculate_emi(principal, annual_rate, tenure)
         total_repayable = emi * tenure

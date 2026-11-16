@@ -11,7 +11,7 @@ load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-banking-system-secret-key-change-in-production-123456')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+ALLOWED_HOSTS = list(set([h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()] + ['localhost', '127.0.0.1', 'testserver']))
 
 # Application definition
 INSTALLED_APPS = [
@@ -147,5 +147,9 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# Custom Test Runner (defaults to discovering all project apps)
+TEST_RUNNER = 'config.runner.ApexTestRunner'
+
 
 
