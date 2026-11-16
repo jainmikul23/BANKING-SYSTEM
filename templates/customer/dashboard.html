@@ -179,14 +179,17 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ chart_labels|json_script:"customer-chart-labels" }}
+{{ chart_credits|json_script:"customer-chart-credits" }}
+{{ chart_debits|json_script:"customer-chart-debits" }}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const ctx = document.getElementById('monthlySpendingChart');
   if (!ctx) return;
 
-  const labels = {{ chart_labels|safe }};
-  const credits = {{ chart_credits|safe }};
-  const debits = {{ chart_debits|safe }};
+  const labels = JSON.parse(document.getElementById('customer-chart-labels').textContent || '[]');
+  const credits = JSON.parse(document.getElementById('customer-chart-credits').textContent || '[]');
+  const debits = JSON.parse(document.getElementById('customer-chart-debits').textContent || '[]');
 
   new Chart(ctx, {
     type: 'bar',

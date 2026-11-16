@@ -141,19 +141,26 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ days_labels|json_script:"admin-days-labels" }}
+{{ credits_data|json_script:"admin-credits-data" }}
+{{ debits_data|json_script:"admin-debits-data" }}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const ctx = document.getElementById('adminVolumeChart');
   if (!ctx) return;
 
+  const labels = JSON.parse(document.getElementById('admin-days-labels').textContent || '[]');
+  const credits = JSON.parse(document.getElementById('admin-credits-data').textContent || '[]');
+  const debits = JSON.parse(document.getElementById('admin-debits-data').textContent || '[]');
+
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels: {{ days_labels|safe }},
+      labels: labels,
       datasets: [
         {
           label: 'Credits (₹)',
-          data: {{ credits_data|safe }},
+          data: credits,
           borderColor: '#5EEAD4',
           backgroundColor: 'rgba(94, 234, 212, 0.1)',
           fill: true,
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
           label: 'Debits (₹)',
-          data: {{ debits_data|safe }},
+          data: debits,
           borderColor: '#FF6B6B',
           backgroundColor: 'rgba(255, 107, 107, 0.08)',
           fill: true,

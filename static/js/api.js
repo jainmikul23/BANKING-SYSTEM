@@ -17,13 +17,12 @@ function getCookie(name) {
   return cookieValue;
 }
 
-const csrfToken = getCookie('csrftoken');
-
 async function apiRequest(url, method = 'GET', data = null) {
+  const token = getCookie('csrftoken') || '';
   const options = {
     method,
     headers: {
-      'X-CSRFToken': csrfToken,
+      'X-CSRFToken': token,
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
