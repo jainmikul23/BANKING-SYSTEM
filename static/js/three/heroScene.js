@@ -1,19 +1,20 @@
 /**
- * Apex Global Bank - High-End 3D Glass Debit Card Scene
- * Technology: Three.js (MeshPhysicalMaterial with transmission, dynamic canvas texture, procedural EMV chip, drifting 3D coins)
+ * Aetheria Reserve Bank - Photorealistic 3D Rounded Spatial Card Engine
+ * Technology: Three.js (ExtrudeGeometry with rounded corners, beveled edges, MeshPhysicalMaterial,
+ * dynamic canvas texture, dynamic anisotropic specular gleam, and scroll-driven tilt)
  */
 
 (function () {
   const container = document.getElementById('hero-3d-canvas-wrap');
   if (!container || typeof THREE === 'undefined') return;
 
-  // 1. Scene & Setup
+  // 1. Scene & Camera Setup
   const scene = new THREE.Scene();
-  const width = container.clientWidth || 550;
-  const height = container.clientHeight || 550;
+  let width = container.clientWidth || 580;
+  let height = container.clientHeight || 580;
 
-  const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-  camera.position.set(0, 0, 8.2);
+  const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+  camera.position.set(0, 0, 8.4);
 
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -23,225 +24,310 @@
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.35;
+  renderer.toneMappingExposure = 1.3;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  container.innerHTML = '';
   container.appendChild(renderer.domElement);
 
-  // 2. High-Precision Studio Lighting
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+  // 2. Multi-Point Studio Lighting
+  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.6);
   scene.add(ambientLight);
 
-  const keyLight = new THREE.DirectionalLight(0x5EEAD4, 4.0);
-  keyLight.position.set(6, 6, 5);
+  // Key directional light with subtle Apple Cash mint reflection
+  const keyLight = new THREE.DirectionalLight(0x34D399, 3.2);
+  keyLight.position.set(5, 6, 6);
   scene.add(keyLight);
 
-  const fillLight = new THREE.DirectionalLight(0x38BDF8, 2.5);
+  // Cool fill light from opposing angle
+  const fillLight = new THREE.DirectionalLight(0xE2E8F0, 2.4);
   fillLight.position.set(-6, -4, 4);
   scene.add(fillLight);
 
-  const rimLight = new THREE.PointLight(0xF5B461, 3.0, 15);
-  rimLight.position.set(0, 3, -2);
+  // Warm specular point light following dynamic mouse
+  const specularLight = new THREE.PointLight(0xFFFFFF, 3.8, 14);
+  specularLight.position.set(0, 2, 4);
+  scene.add(specularLight);
+
+  // Rim back-light for glass edge definition
+  const rimLight = new THREE.PointLight(0x38BDF8, 2.5, 12);
+  rimLight.position.set(0, 4, -3);
   scene.add(rimLight);
 
-  // 3. Dynamic High-Resolution Card Texture Generator
+  // 3. Dynamic High-Resolution Texture Canvas (2048 x 1292 for Retina Clarity)
   function createCardTexture() {
     const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 646; // Standard 85.6mm x 53.98mm aspect ratio
+    canvas.width = 2048;
+    canvas.height = 1292; // Exact ISO/IEC 7810 ID-1 ratio (1.586)
     const ctx = canvas.getContext('2d');
 
-    // Apple Space Black Brushed Titanium Gradient
-    const grad = ctx.createLinearGradient(0, 0, 1024, 646);
-    grad.addColorStop(0, 'rgba(28, 30, 36, 0.98)');
-    grad.addColorStop(0.5, 'rgba(18, 20, 24, 0.96)');
-    grad.addColorStop(1, 'rgba(10, 11, 14, 0.98)');
+    // Luxury Space Black Titanium Brushed Texture
+    const grad = ctx.createLinearGradient(0, 0, 2048, 1292);
+    grad.addColorStop(0, '#1E2129');
+    grad.addColorStop(0.35, '#13151A');
+    grad.addColorStop(0.7, '#0C0D11');
+    grad.addColorStop(1, '#08090C');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 1024, 646);
+    ctx.fillRect(0, 0, 2048, 1292);
 
-    // Subtle fine geometric grid pattern
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    // Micro-anodized brushed linear grain
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.015)';
     ctx.lineWidth = 1;
-    for (let x = 0; x < 1024; x += 32) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 646);
-      ctx.stroke();
-    }
-    for (let y = 0; y < 646; y += 32) {
+    for (let y = 0; y < 1292; y += 4) {
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.lineTo(1024, y);
+      ctx.lineTo(2048, y);
       ctx.stroke();
     }
 
-    // Top Brand Text
+    // Subtle laser-etched concentric alignment grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+    ctx.lineWidth = 1.5;
+    for (let x = 0; x < 2048; x += 64) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0); ctx.lineTo(x, 1292);
+      ctx.stroke();
+    }
+
+    // Brand Monogram & Wordmark
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillText('APEX BANK', 60, 80);
+    ctx.font = '700 76px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.letterSpacing = '-1px';
+    ctx.fillText('AETHERIA', 120, 160);
 
     ctx.fillStyle = '#34D399';
-    ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.letterSpacing = '2px';
-    ctx.fillText('TITANIUM RESERVE', 60, 114);
+    ctx.font = '600 36px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.letterSpacing = '6px';
+    ctx.fillText('RESERVE', 530, 160);
 
-    // Contactless Wave Icon
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-    ctx.lineWidth = 4;
+    ctx.fillStyle = 'rgba(235, 235, 245, 0.6)';
+    ctx.font = '500 28px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('TITANIUM PRIVATE RESERVE', 120, 215);
+
+    // Contactless NFC Wave Glyphs
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+    ctx.lineWidth = 6;
     for (let i = 1; i <= 3; i++) {
       ctx.beginPath();
-      ctx.arc(880, 80, i * 14, -0.6, 0.6);
+      ctx.arc(1820, 160, i * 26, -0.6, 0.6);
       ctx.stroke();
     }
 
-    // Metallic Gold EMV Chip
-    ctx.fillStyle = '#EAB308';
+    // High-Precision EMV Security Microchip
+    ctx.fillStyle = '#F59E0B';
     ctx.beginPath();
-    ctx.roundRect(60, 200, 120, 95, 12);
+    ctx.roundRect(120, 390, 230, 180, 24);
     ctx.fill();
 
-    // Chip Micro-circuits
-    ctx.strokeStyle = '#713F12';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(75, 215, 90, 65);
+    // Chip internal circuit tracings
+    ctx.strokeStyle = '#78350F';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(150, 420, 170, 120);
     ctx.beginPath();
-    ctx.moveTo(120, 200); ctx.lineTo(120, 295);
-    ctx.moveTo(60, 247); ctx.lineTo(180, 247);
+    ctx.moveTo(235, 390); ctx.lineTo(235, 570);
+    ctx.moveTo(120, 480); ctx.lineTo(350, 480);
     ctx.stroke();
 
-    // Embossed Card Number
-    ctx.fillStyle = '#F8FAFC';
-    ctx.font = 'bold 44px "SF Mono", SFMono-Regular, Menlo, monospace';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    ctx.shadowBlur = 8;
-    ctx.shadowOffsetY = 4;
-    ctx.fillText('5010  4920  8472  5671', 60, 420);
-
-    // Reset shadow
+    // Embossed Card Number with Realistic Dual-Depth Shadow
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 88px "SF Mono", SFMono-Regular, Menlo, monospace';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+    ctx.shadowBlur = 14;
+    ctx.shadowOffsetY = 6;
+    ctx.fillText('5010  8429  9302  1184', 120, 830);
     ctx.shadowColor = 'transparent';
 
-    // Valid Thru
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillText('VALID THRU', 60, 490);
-
-    ctx.fillStyle = '#F8FAFC';
-    ctx.font = 'bold 24px "SF Mono", monospace';
-    ctx.fillText('11/29', 60, 520);
-
-    // Cardholder Name
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.font = '500 15px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-    ctx.fillText('CARDHOLDER', 320, 490);
+    // Valid Thru Label & Date
+    ctx.fillStyle = 'rgba(235, 235, 245, 0.65)';
+    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.fillText('VALID THRU', 120, 970);
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    ctx.fillText('AARAV SHARMA', 320, 520);
+    ctx.font = 'bold 44px "SF Mono", monospace';
+    ctx.fillText('12/30', 120, 1030);
 
-    // Brushed Platinum Metallic Security Emblem
-    const holoGrad = ctx.createLinearGradient(820, 480, 940, 560);
-    holoGrad.addColorStop(0, '#F1F5F9');
+    // Cardholder Name
+    ctx.fillStyle = 'rgba(235, 235, 245, 0.65)';
+    ctx.font = '600 28px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+    ctx.fillText('CARDHOLDER', 560, 970);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 50px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+    ctx.fillText('AARAV SHARMA', 560, 1030);
+
+    // Brushed Metallic Security Medallion
+    const holoGrad = ctx.createLinearGradient(1680, 950, 1920, 1100);
+    holoGrad.addColorStop(0, '#FFFFFF');
     holoGrad.addColorStop(0.5, '#94A3B8');
     holoGrad.addColorStop(1, '#475569');
 
     ctx.fillStyle = holoGrad;
     ctx.beginPath();
-    ctx.ellipse(880, 510, 55, 36, 0, 0, Math.PI * 2);
+    ctx.ellipse(1780, 1000, 110, 70, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    return new THREE.CanvasTexture(canvas);
+    // Micro-etched concentric rings on medallion
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.lineWidth = 2;
+    for (let r = 20; r < 70; r += 12) {
+      ctx.beginPath();
+      ctx.arc(1780, 1000, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    return texture;
   }
 
-  // 4. Construct 3D Glass Debit Card Mesh
-  const cardGroup = new THREE.Group();
+  // 4. Construct Photorealistic Rounded Card ExtrudeGeometry
+  const cardWidth = 3.9;
+  const cardHeight = 2.46;
+  const cornerRadius = 0.22;
+
+  function createRoundedCardShape(w, h, r) {
+    const shape = new THREE.Shape();
+    const x = -w / 2;
+    const y = -h / 2;
+    shape.moveTo(x + r, y);
+    shape.lineTo(x + w - r, y);
+    shape.quadraticCurveTo(x + w, y, x + w, y + r);
+    shape.lineTo(x + w, y + h - r);
+    shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    shape.lineTo(x + r, y + h);
+    shape.quadraticCurveTo(x, y + h, x, y + h - r);
+    shape.lineTo(x, y + r);
+    shape.quadraticCurveTo(x, y, x + r, y);
+    return shape;
+  }
+
+  const cardShape = createRoundedCardShape(cardWidth, cardHeight, cornerRadius);
+  const extrudeSettings = {
+    depth: 0.08,
+    bevelEnabled: true,
+    bevelSegments: 8,
+    steps: 2,
+    bevelSize: 0.024,
+    bevelThickness: 0.024,
+  };
+
+  const cardGeo = new THREE.ExtrudeGeometry(cardShape, extrudeSettings);
+  cardGeo.center();
+
+  // UV mapping adjustment for ExtrudeGeometry front face
+  const pos = cardGeo.attributes.position;
+  const uvs = [];
+  for (let i = 0; i < pos.count; i++) {
+    const px = pos.getX(i);
+    const py = pos.getY(i);
+    const u = (px + cardWidth / 2) / cardWidth;
+    const v = (py + cardHeight / 2) / cardHeight;
+    uvs.push(Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v)));
+  }
+  cardGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+
+  // Materials: Front texture & Brushed Titanium Edge Core
   const cardTexture = createCardTexture();
-
-  const cardWidth = 3.8;
-  const cardHeight = 2.4;
-  const cardThickness = 0.09;
-  const cardGeo = new THREE.BoxGeometry(cardWidth, cardHeight, cardThickness, 32, 32, 4);
-
-  // High-End Physical Glass Material
-  const glassFrontMat = new THREE.MeshPhysicalMaterial({
+  const cardMat = new THREE.MeshPhysicalMaterial({
     map: cardTexture,
     color: 0xFFFFFF,
-    metalness: 0.15,
-    roughness: 0.1,
-    transmission: 0.88,
-    thickness: 1.4,
-    ior: 1.52,
-    reflectivity: 0.8,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.06,
-    transparent: true,
-    opacity: 0.98,
+    metalness: 0.45,
+    roughness: 0.18,
+    clearcoat: 0.95,
+    clearcoatRoughness: 0.08,
+    reflectivity: 0.9,
+    transmission: 0.15,
   });
 
-  const cardMesh = new THREE.Mesh(cardGeo, glassFrontMat);
+  const cardGroup = new THREE.Group();
+  const cardMesh = new THREE.Mesh(cardGeo, cardMat);
   cardGroup.add(cardMesh);
   scene.add(cardGroup);
 
-  // 5. Procedural 3D Rupee Coins Drifting in Orbit
-  const coins = [];
-  const coinGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.08, 36);
-  const coinMat = new THREE.MeshPhysicalMaterial({
-    color: 0x5EEAD4,
-    metalness: 0.85,
-    roughness: 0.18,
-    transmission: 0.6,
-    thickness: 0.8,
+  // 5. Floating Polyhedral Orbit Tokens (Refractive Jewels)
+  const tokens = [];
+  const tokenGeos = [
+    new THREE.IcosahedronGeometry(0.24, 0),
+    new THREE.OctahedronGeometry(0.22, 0),
+    new THREE.DodecahedronGeometry(0.26, 0)
+  ];
+
+  const tokenMat = new THREE.MeshPhysicalMaterial({
+    color: 0x34D399,
+    metalness: 0.3,
+    roughness: 0.1,
+    transmission: 0.85,
+    thickness: 0.6,
+    ior: 1.52,
     transparent: true,
     opacity: 0.85,
-    clearcoat: 0.8,
+    clearcoat: 1.0,
   });
 
-  for (let i = 0; i < 7; i++) {
-    const coin = new THREE.Mesh(coinGeo, coinMat);
-    const angle = (i / 7) * Math.PI * 2;
-    const radius = 2.8 + (Math.random() - 0.5) * 1.2;
+  for (let i = 0; i < 6; i++) {
+    const geo = tokenGeos[i % tokenGeos.length];
+    const mesh = new THREE.Mesh(geo, tokenMat);
+    const angle = (i / 6) * Math.PI * 2;
+    const radius = 2.9 + (Math.random() - 0.5) * 1.0;
 
-    coin.position.set(
+    mesh.position.set(
       Math.cos(angle) * radius,
-      Math.sin(angle) * (radius * 0.75) + (Math.random() - 0.5) * 0.8,
-      (Math.random() - 0.5) * 3.0
+      Math.sin(angle) * (radius * 0.7) + (Math.random() - 0.5) * 0.8,
+      (Math.random() - 0.5) * 2.5
     );
 
-    coin.userData = {
+    mesh.userData = {
       angle: angle,
       radius: radius,
-      speed: 0.003 + Math.random() * 0.005,
-      rotX: 0.01 + Math.random() * 0.015,
-      rotY: 0.01 + Math.random() * 0.015,
-      baseY: coin.position.y
+      speed: 0.0035 + Math.random() * 0.004,
+      rotX: 0.012 + Math.random() * 0.01,
+      rotY: 0.015 + Math.random() * 0.01,
+      baseY: mesh.position.y
     };
 
-    scene.add(coin);
-    coins.push(coin);
+    scene.add(mesh);
+    tokens.push(mesh);
   }
 
-  // 6. Smooth Mouse Parallax Tracking
+  // 6. Multi-Tiered Ultrasmooth Inertia Tracking
   let targetRotX = 0;
   let targetRotY = 0;
   let currentRotX = 0;
   let currentRotY = 0;
+  let scrollTilt = 0;
+
+  // Window scroll hook for scroll-based 3D card tilt
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY || window.pageYOffset;
+    scrollTilt = Math.min(scrollY / 700, 1.2);
+  }, { passive: true });
 
   window.addEventListener('mousemove', (e) => {
     const rect = container.getBoundingClientRect();
+    // Normalized distance from center (-1 to +1)
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
 
-    targetRotY = x * 0.55;
-    targetRotX = -y * 0.42;
+    targetRotY = x * 0.52;
+    targetRotX = -y * 0.40;
+
+    // Move specular highlight with cursor
+    specularLight.position.x = x * 3.5;
+    specularLight.position.y = y * 2.5 + 1.5;
   });
 
-  // 7. Responsive Resizing
-  window.addEventListener('resize', () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    camera.aspect = w / h;
+  // Responsive resize
+  function handleResize() {
+    width = container.clientWidth;
+    height = container.clientHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  });
+    renderer.setSize(width, height);
+  }
+  window.addEventListener('resize', handleResize);
 
-  // 8. Animation Loop
+  // 7. 60-120fps Animation Loop with Organic Damping
   let isRunning = true;
   document.addEventListener('visibilitychange', () => {
     isRunning = !document.hidden;
@@ -249,31 +335,38 @@
 
   const clock = new THREE.Clock();
 
-  function renderLoop() {
-    requestAnimationFrame(renderLoop);
+  function animate() {
+    requestAnimationFrame(animate);
     if (!isRunning) return;
 
     const time = clock.getElapsedTime();
 
-    // Gentle float wave + mouse parallax with smooth damping
-    currentRotY += (targetRotY + Math.sin(time * 0.7) * 0.12 - currentRotY) * 0.05;
-    currentRotX += (targetRotX + Math.cos(time * 0.6) * 0.08 - currentRotX) * 0.05;
+    // Damped exponential spring lerp for zero-jitter, buttery smoothness
+    const effectiveTargetY = targetRotY + Math.sin(time * 0.7) * 0.14 - (scrollTilt * 0.4);
+    const effectiveTargetX = targetRotX + Math.cos(time * 0.55) * 0.09 + (scrollTilt * 0.35);
+
+    currentRotY += (effectiveTargetY - currentRotY) * 0.045;
+    currentRotX += (effectiveTargetX - currentRotX) * 0.045;
 
     cardGroup.rotation.y = currentRotY;
     cardGroup.rotation.x = currentRotX;
-    cardGroup.position.y = Math.sin(time * 1.2) * 0.14;
+    cardGroup.rotation.z = Math.sin(time * 0.5) * 0.025;
 
-    // Coins animation
-    coins.forEach((c) => {
-      c.userData.angle += c.userData.speed;
-      c.position.x = Math.cos(c.userData.angle) * c.userData.radius;
-      c.position.y = c.userData.baseY + Math.sin(time * 1.5 + c.userData.angle) * 0.2;
-      c.rotation.x += c.userData.rotX;
-      c.rotation.y += c.userData.rotY;
+    // Organic compound floating elevation
+    cardGroup.position.y = Math.sin(time * 0.9) * 0.12 + Math.cos(time * 1.5) * 0.03;
+    cardGroup.position.z = -scrollTilt * 0.8;
+
+    // Orbit tokens rotation & harmonic bobbing
+    tokens.forEach((t) => {
+      t.userData.angle += t.userData.speed;
+      t.position.x = Math.cos(t.userData.angle) * t.userData.radius;
+      t.position.y = t.userData.baseY + Math.sin(time * 1.4 + t.userData.angle) * 0.22;
+      t.rotation.x += t.userData.rotX;
+      t.rotation.y += t.userData.rotY;
     });
 
     renderer.render(scene, camera);
   }
 
-  renderLoop();
+  animate();
 })();

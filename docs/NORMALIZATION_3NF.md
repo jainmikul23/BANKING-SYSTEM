@@ -11,7 +11,7 @@ This document formalizes the relational normalization process applied to the Ban
 2. Each column has a unique name and consistent data type.
 3. Every record has a unique identification (Primary Key).
 
-### Implementation in Apex Bank Schema
+### Implementation in Aetheria Reserve Schema
 - **Address & Name**: Stored as single atomic strings, not arrays or nested tables.
 - **Multiple Accounts / Beneficiaries**: Rather than storing multiple account numbers or beneficiaries in a comma-separated column inside `customers`, separate relational entities (`accounts` and `beneficiaries`) are created.
 - **Transactions Ledger**: Each financial event occupies a separate, discrete tuple in `transactions`.
@@ -24,7 +24,7 @@ This document formalizes the relational normalization process applied to the Ban
 1. Table must be in **1NF**.
 2. **No Partial Functional Dependencies**: All non-prime attributes must be fully functionally dependent on the entire Primary Key. (Applies to composite primary keys).
 
-### Implementation in Apex Bank Schema
+### Implementation in Aetheria Reserve Schema
 - Most tables use synthetic primary keys (`id`).
 - For tables with composite unique constraints such as `beneficiaries (customer_id, beneficiary_account_id)`:
   - The attribute `nickname` is dependent on both `customer_id` and `beneficiary_account_id` (a nickname represents the customer's specific label for that exact beneficiary account). It cannot depend solely on `customer_id` or `beneficiary_account_id`.

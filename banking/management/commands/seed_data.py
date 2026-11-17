@@ -30,7 +30,7 @@ class Command(BaseCommand):
         admin_user, _ = User.objects.get_or_create(
             username='admin',
             defaults={
-                'email': 'admin@apexbank.in',
+                'email': 'admin@aetheriareserve.in',
                 'first_name': 'System',
                 'last_name': 'Administrator',
                 'role': 'admin',

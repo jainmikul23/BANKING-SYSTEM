@@ -83,5 +83,5 @@ class BankingSecurityTests(TestCase):
         """Verify RFC 9116 security.txt exists and specifies contact."""
         res = self.client.get(reverse('security_txt'))
         self.assertEqual(res.status_code, 200)
-        self.assertIn(b'Contact: security@apexbank.in', res.content)
+        self.assertIn(b'Contact: security@aetheriareserve.in', res.content)
 

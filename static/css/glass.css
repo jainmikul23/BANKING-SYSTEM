@@ -69,9 +69,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  font-size: 0.875rem;
+  gap: 10px;
+  padding: 12px 24px;
+  min-height: 44px;
+  font-size: 0.906rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   border-radius: var(--r-md);
@@ -147,28 +148,30 @@
 }
 
 .btn-sm {
-  padding: 6px 14px;
+  padding: 8px 18px;
+  min-height: 36px;
   font-size: 0.813rem;
   border-radius: var(--r-sm);
 }
 
 .btn-lg {
-  padding: 14px 28px;
-  font-size: 1rem;
+  padding: 16px 36px;
+  min-height: 52px;
+  font-size: 1.063rem;
   font-weight: 600;
   border-radius: var(--r-lg);
 }
 
 /* Form Controls with Polished Glass Elevation */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 9px;
 }
 
 .form-label {
-  font-size: 0.813rem;
+  font-size: 0.844rem;
   font-weight: 500;
   color: var(--muted);
   letter-spacing: 0.01em;
@@ -178,13 +181,14 @@
 .form-select,
 .form-textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;
+  min-height: 48px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--stroke);
   border-radius: var(--r-md);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.938rem;
+  font-size: 0.969rem;
   backdrop-filter: blur(16px);
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s var(--ease);
   outline: none;

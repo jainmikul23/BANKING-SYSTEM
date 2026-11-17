@@ -59,11 +59,11 @@ def favicon_ico(request):
 
 def security_txt(request):
     """RFC 9116 compliant security disclosure information."""
-    content = """Contact: security@apexbank.in
-Encryption: https://apexbank.in/pgp-key.txt
+    content = """Contact: security@aetheriareserve.in
+Encryption: https://aetheriareserve.in/pgp-key.txt
 Preferred-Languages: en
-Policy: https://apexbank.in/security-policy.html
-Acknowledgments: https://apexbank.in/hall-of-fame.html
+Policy: https://aetheriareserve.in/security-policy.html
+Acknowledgments: https://aetheriareserve.in/hall-of-fame.html
 Expires: 2027-12-31T23:59:59.000Z
 """
     return HttpResponse(content, content_type='text/plain')
