@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGSAPScrollAnimations();
   initCardStackScroll();
   initCellDivisionObserver();
+  initRevealObserver();
   initSmoothAnchorLinks();
   initThemeToggle();
   initGlassSpecularTracking();
@@ -200,6 +201,30 @@ function initSmoothAnchorLinks() {
       }
     });
   });
+}
+
+// 2e. Apple Glass Reveal Observer (Toggles .in via IntersectionObserver)
+function initRevealObserver() {
+  const reveals = document.querySelectorAll('.reveal');
+  if (!reveals.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    reveals.forEach((el) => el.classList.add('in'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  reveals.forEach((el) => observer.observe(el));
 }
 
 // 3. Dynamic Specular Lighting for Glass Surfaces

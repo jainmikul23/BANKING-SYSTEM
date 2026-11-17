@@ -33,7 +33,7 @@
 {% block root %}
 <div class="landing-viewport">
   <!-- Floating Frosted Glass Navigation Pill -->
-  <header class="landing-nav glass-panel" role="banner">
+  <header class="landing-nav glass-nav glass-panel" role="banner">
     <a href="/" class="brand" aria-label="Atheria Reserve Bank Home">
       <div class="brand-icon" aria-hidden="true">
         <img src="/static/img/logo-emblem.png" alt="Atheria Emblem" width="42" height="42">
@@ -46,8 +46,8 @@
       <a href="#concurrency" class="nav-item">ACID Engine</a>
       <a href="#customers" class="nav-item">Customer Reserves</a>
       <a href="#audit" class="nav-item">Audit Trails</a>
-      <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm">Portal Access</a>
-      <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">Open Account</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm glass-btn">Portal Access</a>
+      <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm glass-btn">Open Account</a>
     </nav>
   </header>
 
@@ -254,7 +254,7 @@
       </div>
 
       <div class="customer-grid">
-        <div class="customer-card glass-panel">
+        <div class="customer-card glass-panel glass-card reveal">
           <div class="customer-badge">Institutional Treasury</div>
           <blockquote class="customer-quote">
             "Atheria Reserve's two-phase atomic clearing eliminated multi-bank reconciliation overhead entirely. Our cross-entity fund settlements execute with absolute mathematical certainty."
@@ -268,7 +268,7 @@
           </div>
         </div>
 
-        <div class="customer-card glass-panel">
+        <div class="customer-card glass-panel glass-card reveal">
           <div class="customer-badge">Sovereign Asset Fund</div>
           <blockquote class="customer-quote">
             "The deterministic row-level locking architecture guarantees zero race conditions during peak month-end salary and vendor disbursements across all our group entities."
@@ -282,7 +282,7 @@
           </div>
         </div>
 
-        <div class="customer-card glass-panel">
+        <div class="customer-card glass-panel glass-card reveal">
           <div class="customer-badge">Enterprise Technology</div>
           <blockquote class="customer-quote">
             "Direct access to cryptographic PDF statements and automated audit triggers has transformed our statutory compliance filings and audit turnarounds."
