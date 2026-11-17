@@ -30,7 +30,7 @@ class Command(BaseCommand):
         admin_user, _ = User.objects.get_or_create(
             username='admin',
             defaults={
-                'email': 'admin@aetheriareserve.in',
+                'email': 'admin@atheriareserve.in',
                 'first_name': 'System',
                 'last_name': 'Administrator',
                 'role': 'admin',

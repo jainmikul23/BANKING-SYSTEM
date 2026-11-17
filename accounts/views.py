@@ -131,7 +131,7 @@ def register_view(request):
                     )
 
                     login(request, user)
-                    messages.success(request, f"Welcome to Aetheria Reserve! Account {account.account_number} has been created.")
+                    messages.success(request, f"Welcome to Atheria Reserve! Account {account.account_number} has been created.")
                     return redirect('accounts:dashboard')
             except Exception as e:
                 messages.error(request, f"Registration failed: {str(e)}")

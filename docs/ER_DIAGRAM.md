@@ -1,4 +1,4 @@
-# Aetheria Reserve Bank Management System - Entity Relationship (ER) Diagram
+# Atheria Reserve Bank Management System - Entity Relationship (ER) Diagram
 
 This document contains the Entity-Relationship specifications and Mermaid schema visualization for the Banking Management System.
 

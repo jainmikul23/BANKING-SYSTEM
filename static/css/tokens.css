@@ -49,24 +49,38 @@
   --warning: #F59E0B;                              /* Escrow / Pending Amber */
   --warning-bg: rgba(245, 158, 11, 0.12);
 
-  /* Apple Corner Radii */
+  /* Precision Corner Radii */
+  --r-3xl: 32px;
+  --r-2xl: 28px;
   --r-xl: 22px;
   --r-lg: 16px;
   --r-md: 12px;
   --r-sm: 8px;
   --r-full: 9999px;
 
-  /* Apple Rhythmic Spacing Scale (8pt grid) */
-  --space-2xs: 4px;
-  --space-xs: 8px;
-  --space-sm: 12px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
-  --space-3xl: 64px;
-  --space-4xl: 96px;
-  --space-5xl: 128px;
+  /* Standard System Spacing Scale (4px - 128px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Aliases */
+  --space-2xs: var(--space-1);
+  --space-xs: var(--space-2);
+  --space-sm: var(--space-3);
+  --space-md: var(--space-4);
+  --space-lg: var(--space-5);
+  --space-xl: var(--space-6);
+  --space-2xl: var(--space-7);
+  --space-3xl: var(--space-8);
+  --space-4xl: var(--space-9);
+  --space-5xl: var(--space-10);
 
   /* Shadows (Natural Optical Softness) */
   --blur: 24px;

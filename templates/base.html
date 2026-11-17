@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Aetheria Reserve Bank{% endblock %}</title>
+  <title>{% block title %}{{ BANK_NAME|default:"Atheria Reserve Bank" }}{% endblock %}</title>
 
   <!-- SEO & Search Engine Metadata -->
-  <meta name="description" content="{% block meta_description %}Aetheria Reserve Bank - 3NF Normalized core banking engine with pessimistic row-locked atomic transfers, real-time passbook ledger, and visionOS glassmorphism.{% endblock %}">
+  <meta name="description" content="{% block meta_description %}{{ BANK_NAME|default:"Atheria Reserve Bank" }} - 3NF Normalized core banking engine with pessimistic row-locked atomic transfers, real-time passbook ledger, and visionOS glassmorphism.{% endblock %}">
   <meta name="keywords" content="banking management system, DBMS project, 3NF normalization, ACID transactions, atomic transfers, SQL triggers, core banking">
-  <meta name="author" content="Aetheria Reserve Bank">
+  <meta name="author" content="{{ BANK_NAME|default:"Atheria Reserve Bank" }}">
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Aetheria Reserve Bank | Relational Core Banking Architecture">
-  <meta property="og:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and Apple visionOS design.">
-  <meta property="og:site_name" content="Aetheria Reserve Bank">
+  <meta property="og:title" content="{{ BANK_NAME|default:"Atheria Reserve Bank" }} | Relational Core Banking Architecture">
+  <meta property="og:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and visionOS design.">
+  <meta property="og:site_name" content="{{ BANK_NAME|default:"Atheria Reserve Bank" }}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Aetheria Reserve Bank | Relational Core Banking Architecture">
-  <meta name="twitter:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and Apple visionOS design.">
+  <meta name="twitter:title" content="{{ BANK_NAME|default:"Atheria Reserve Bank" }} | Relational Core Banking Architecture">
+  <meta name="twitter:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and visionOS design.">
 
   <!-- Favicon (Institutional Sapphire SVG) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%232563EB'/><text y='70' font-size='65' font-family='-apple-system,system-ui' font-weight='bold' fill='%23FFFFFF' text-anchor='middle' x='50'>A</text></svg>">
@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="/static/css/tokens.css">
   <link rel="stylesheet" href="/static/css/glass.css">
   <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components/cellDivision.css">
   {% block extra_css %}{% endblock %}
 
   <!-- External Libraries: Three.js, Lenis Smooth Scroll, GSAP & ScrollTrigger, Chart.js -->
@@ -68,6 +69,7 @@
   {% include "partials/toast.html" %}
 
   <!-- Application Scripts -->
+  <script src="/static/js/constants.js"></script>
   <script src="/static/js/app.js"></script>
   <script src="/static/js/api.js"></script>
   <script src="/static/js/three/bgScene.js"></script>

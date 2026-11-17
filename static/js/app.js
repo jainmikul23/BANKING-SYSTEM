@@ -1,5 +1,5 @@
 /**
- * Aetheria Reserve Bank - VisionOS Micro-Interactions & Super-Smooth Motion Engine
+ * Atheria Reserve Bank - VisionOS Micro-Interactions & Super-Smooth Motion Engine
  * Features: Lenis Smooth Scrolling, GSAP ScrollTrigger Integration, 3D Card Parallax,
  * Scroll-Driven Section Reveals, and Reactive Specular Lighting
  */
@@ -7,6 +7,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   initLenisSmoothScroll();
   initGSAPScrollAnimations();
+  initCardStackScroll();
+  initCellDivisionObserver();
+  initSmoothAnchorLinks();
   initThemeToggle();
   initGlassSpecularTracking();
   init3DCardParallaxHover();
@@ -130,6 +133,75 @@ function initGSAPScrollAnimations() {
   }
 }
 
+// 2b. Card-Based Scrolling Stacking Controller
+function initCardStackScroll() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 768) return;
+
+  const stackCards = gsap.utils.toArray('.stack-card');
+  if (stackCards.length < 2) return;
+
+  stackCards.forEach((card, index) => {
+    if (index === stackCards.length - 1) return; // Topmost card does not get covered
+    const nextCard = stackCards[index + 1];
+
+    ScrollTrigger.create({
+      trigger: nextCard,
+      start: 'top 85%',
+      end: 'top 104px',
+      scrub: true,
+      onUpdate: (self) => {
+        const p = self.progress;
+        const scale = 1 - p * 0.06; // Scales down to 0.94
+        const brightness = 1 - p * 0.35; // Dims slightly for depth
+        const yOffset = p * 12;
+        card.style.transform = `scale(${scale}) translateY(${yOffset}px)`;
+        card.style.filter = `brightness(${brightness})`;
+        card.style.opacity = `${1 - p * 0.22}`;
+      }
+    });
+  });
+}
+
+// 2c. Mitotic Cell Division Observer (Only animates when in viewport)
+function initCellDivisionObserver() {
+  const cellDivisions = document.querySelectorAll('.cell-division');
+  if (!cellDivisions.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-animating');
+      } else {
+        entry.target.classList.remove('is-animating');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cellDivisions.forEach((el) => observer.observe(el));
+}
+
+// 2d. Smooth Anchor Link Handler (Preserves Lenis momentum scroll)
+function initSmoothAnchorLinks() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#') {
+        const targetElem = document.querySelector(targetId);
+        if (targetElem) {
+          e.preventDefault();
+          if (lenis) {
+            lenis.scrollTo(targetElem, { offset: -90 });
+          } else {
+            targetElem.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }
+    });
+  });
+}
+
 // 3. Dynamic Specular Lighting for Glass Surfaces
 function initGlassSpecularTracking() {
   const glassElements = document.querySelectorAll('.glass-panel, .glass-card, .bank-card, .feature-card');
@@ -192,7 +264,7 @@ function initNavbarScrollState() {
 // 6. Theme Management
 function initThemeToggle() {
   const themeToggleBtn = document.getElementById('theme-toggle-btn');
-  const savedTheme = localStorage.getItem('aetheria_theme') || 'dark';
+  const savedTheme = localStorage.getItem('atheria_theme') || localStorage.getItem('aetheria_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
   if (themeToggleBtn) {
@@ -200,7 +272,7 @@ function initThemeToggle() {
       const current = document.documentElement.getAttribute('data-theme') || 'dark';
       const nextTheme = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', nextTheme);
-      localStorage.setItem('aetheria_theme', nextTheme);
+      localStorage.setItem('atheria_theme', nextTheme);
     });
   }
 }
