@@ -5,6 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initAdaptivePerformance();
   initLenisSmoothScroll();
   initGSAPScrollAnimations();
   initCardStackScroll();
@@ -154,12 +155,10 @@ function initCardStackScroll() {
       scrub: true,
       onUpdate: (self) => {
         const p = self.progress;
-        const scale = 1 - p * 0.06; // Scales down to 0.94
-        const brightness = 1 - p * 0.35; // Dims slightly for depth
-        const yOffset = p * 12;
-        card.style.transform = `scale(${scale}) translateY(${yOffset}px)`;
-        card.style.filter = `brightness(${brightness})`;
-        card.style.opacity = `${1 - p * 0.22}`;
+        const scale = 1 - p * 0.05; // Scales down smoothly to 0.95
+        const yOffset = p * 10;
+        card.style.transform = `translate3d(0, ${yOffset}px, 0) scale(${scale})`;
+        card.style.opacity = `${1 - p * 0.32}`;
       }
     });
   });
@@ -220,70 +219,140 @@ function initRevealObserver() {
       }
     });
   }, {
-    threshold: 0.12,
+    threshold: 0.08,
     rootMargin: '0px 0px -40px 0px'
   });
 
   reveals.forEach((el) => observer.observe(el));
 }
 
-// 3. Dynamic Specular Lighting for Glass Surfaces
+// 3. Dynamic Specular Lighting for Glass Surfaces (Event Delegation, zero layout thrashing)
 function initGlassSpecularTracking() {
-  const glassElements = document.querySelectorAll('.glass-panel, .glass-card, .bank-card, .feature-card');
-  glassElements.forEach((el) => {
-    el.addEventListener('mousemove', (e) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      el.style.setProperty('--mouse-x', `${x}px`);
-      el.style.setProperty('--mouse-y', `${y}px`);
+  if (window.matchMedia('(hover: none)').matches) return;
+  let ticking = false;
+
+  document.addEventListener('mousemove', (e) => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const el = e.target.closest('.glass-panel, .glass-card, .bank-card, .feature-card');
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        el.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        el.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      }
+      ticking = false;
     });
-  });
+  }, { passive: true });
 }
 
-// 4. Apple Wallet 3D Card Tilt Interaction
+// 4. Apple Wallet 3D Card Tilt Interaction (Cached Rectangles, zero reflow per frame)
 function init3DCardParallaxHover() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const cards = document.querySelectorAll('.bank-card');
   cards.forEach((card) => {
+    let rect = null;
+
+    card.addEventListener('mouseenter', () => {
+      rect = card.getBoundingClientRect();
+      card.style.transition = 'none';
+    }, { passive: true });
+
     card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
+      if (!rect) rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
 
       const rotX = -(y / (rect.height / 2)) * 10;
       const rotY = (x / (rect.width / 2)) * 12;
 
-      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-6px) scale3d(1.02, 1.02, 1.02)`;
-    });
+      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+    }, { passive: true });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale3d(1, 1, 1)`;
-      card.style.transition = 'transform 0.5s var(--ease)';
-    });
-
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'none';
-    });
+      rect = null;
+      card.style.transition = 'transform 0.4s var(--ease)';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+    }, { passive: true });
   });
 }
 
-// 5. Navbar Floating Glass Dynamic State on Scroll
+// 5. Navbar Floating Glass Dynamic State on Scroll (Batched via Lenis/rAF)
 function initNavbarScrollState() {
   const nav = document.querySelector('.landing-nav');
   if (!nav) return;
 
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY || window.pageYOffset;
-    if (scrollY > 50) {
-      nav.style.top = '16px';
-      nav.style.boxShadow = '0 24px 50px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
-    } else {
-      nav.style.top = '28px';
-      nav.style.boxShadow = '0 20px 44px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14)';
+  let isScrolled = false;
+  function updateNav(y) {
+    const shouldBeScrolled = y > 50;
+    if (shouldBeScrolled !== isScrolled) {
+      isScrolled = shouldBeScrolled;
+      if (isScrolled) {
+        nav.classList.add('is-scrolled');
+      } else {
+        nav.classList.remove('is-scrolled');
+      }
     }
-  }, { passive: true });
+  }
+
+  if (lenis) {
+    lenis.on('scroll', ({ scroll }) => updateNav(scroll));
+  } else {
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateNav(window.scrollY || window.pageYOffset);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+}
+
+// 6. Adaptive Performance & Low-Power Engine (120 FPS Enforcer)
+function initAdaptivePerformance() {
+  const isLowCore = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+
+  function enableLowPowerMode() {
+    if (!document.documentElement.hasAttribute('data-perf')) {
+      document.documentElement.setAttribute('data-perf', 'low-power');
+      window.IS_LOW_POWER_MODE = true;
+    }
+  }
+
+  if (isLowCore) {
+    enableLowPowerMode();
+  }
+
+  // Adaptive FPS Tracker: detects sub-40 FPS sustained drops and adapts automatically
+  let frameCount = 0;
+  let lastTime = performance.now();
+  let subTargetCount = 0;
+
+  function monitorFPS() {
+    frameCount++;
+    const now = performance.now();
+    const elapsed = now - lastTime;
+
+    if (elapsed >= 1000) {
+      const currentFps = (frameCount * 1000) / elapsed;
+      if (currentFps < 40) {
+        subTargetCount++;
+        if (subTargetCount >= 2) {
+          enableLowPowerMode();
+        }
+      } else {
+        subTargetCount = 0;
+      }
+      frameCount = 0;
+      lastTime = now;
+    }
+    requestAnimationFrame(monitorFPS);
+  }
+  requestAnimationFrame(monitorFPS);
 }
 
 // 6. Theme Management

@@ -6,6 +6,12 @@
   const canvas = document.getElementById('webgl-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
+  // On pages where the 3D Atheria Card is active (landing page), pause background canvas to ensure 120 FPS
+  if (document.getElementById('hero-3d-canvas-wrap')) {
+    canvas.style.display = 'none';
+    return;
+  }
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.z = 18;

@@ -9,7 +9,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -18,25 +18,14 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: var(--font-sans);
-  /* Colorful backdrop so the glass has something to blur */
-  background:
-    radial-gradient(60vmax 60vmax at 15% 10%, #4f7cff55, transparent 60%),
-    radial-gradient(50vmax 50vmax at 85% 20%, #b05cff44, transparent 60%),
-    radial-gradient(60vmax 60vmax at 50% 95%, #20d4c040, transparent 60%),
-    #0b1020;
-  background-attachment: fixed;
+  background-color: #0b1020;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 [data-theme="light"] body {
-  background:
-    radial-gradient(60vmax 60vmax at 15% 10%, rgba(79, 124, 255, 0.25), transparent 60%),
-    radial-gradient(50vmax 50vmax at 85% 20%, rgba(176, 92, 255, 0.20), transparent 60%),
-    radial-gradient(60vmax 60vmax at 50% 95%, rgba(32, 212, 192, 0.22), transparent 60%),
-    #f4f6fb;
-  background-attachment: fixed;
+  background-color: #f4f6fb;
 }
 
 /* 3D WebGL Canvas Layer */
@@ -141,7 +130,7 @@ body {
   text-decoration: none;
   font-size: 0.906rem;
   font-weight: 500;
-  transition: all var(--transition-fast);
+  transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
 }
 
 .nav-link:hover {

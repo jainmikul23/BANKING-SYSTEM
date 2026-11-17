@@ -16,8 +16,8 @@
   --glass-border: rgba(255, 255, 255, 0.28);
   --glass-highlight: rgba(255, 255, 255, 0.55);
   --glass-shadow: 0 8px 32px rgba(10, 20, 40, 0.18);
-  --glass-blur: 24px;
-  --glass-saturate: 180%;
+  --glass-blur: 16px;
+  --glass-saturate: 160%;
 
   --glass-base: rgba(255, 255, 255, 0.14);
   --glass-card: rgba(255, 255, 255, 0.14);
@@ -94,7 +94,7 @@
   --space-5xl: var(--space-10);
 
   /* Shadows (Natural Optical Softness) */
-  --blur: 24px;
+  --blur: 16px;
   --shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--stroke);
   --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--stroke-subtle);
   --shadow-floating: 0 20px 44px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--stroke-highlight);

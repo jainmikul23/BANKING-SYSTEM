@@ -82,7 +82,9 @@
       }
 
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      const isMobile = window.innerWidth < 768;
+      const pixelRatioCap = isMobile ? 1.5 : 1.75;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
       if (THREE.ACESFilmicToneMapping) renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.35;
       if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
@@ -478,14 +480,17 @@
         requestAnimationFrame(animate);
         if (!isIntersecting || !isTabVisible) return;
 
+        const dt = Math.min(clock.getDelta(), 0.08); // Delta time
         const time = clock.getElapsedTime();
 
-        // Buttery exponential spring easing
+        // Frame-rate independent exponential decay (identical at 60Hz, 120Hz, 144Hz)
+        const lerpFactor = 1 - Math.exp(-6.5 * dt);
+
         const effectiveTargetY = targetRotY + Math.sin(time * 0.7) * 0.14 - (scrollTilt * 0.4);
         const effectiveTargetX = targetRotX + Math.cos(time * 0.55) * 0.09 + (scrollTilt * 0.35);
 
-        currentRotY += (effectiveTargetY - currentRotY) * 0.045;
-        currentRotX += (effectiveTargetX - currentRotX) * 0.045;
+        currentRotY += (effectiveTargetY - currentRotY) * lerpFactor;
+        currentRotX += (effectiveTargetX - currentRotX) * lerpFactor;
 
         cardGroup.rotation.y = currentRotY;
         cardGroup.rotation.x = currentRotX;

@@ -1,7 +1,7 @@
 /* =====================================================================
-   ATHERIA RESERVE - MITOTIC CELL DIVISION COMPONENT
-   Pure CSS Border-Radius Morphing & Organic Cellular Division
-   Zero images - Strictly transform, opacity & 8-value border-radius
+   ATHERIA RESERVE - MITOTIC CELL DIVISION COMPONENT (120 FPS Compositor)
+   Compositor-only animations: transform & opacity ONLY.
+   Zero real-time backdrop-filter rasterization, zero border-radius keyframing.
    ===================================================================== */
 
 .cell-division-wrap {
@@ -15,9 +15,8 @@
 
 .cell-division {
   --cell-size: 140px;
-  --cell-color: radial-gradient(circle at 35% 35%, rgba(96, 165, 250, 0.42) 0%, rgba(37, 99, 235, 0.32) 45%, rgba(15, 23, 42, 0.08) 80%, transparent 100%);
+  --cell-color: radial-gradient(circle at 35% 35%, rgba(96, 165, 250, 0.38) 0%, rgba(37, 99, 235, 0.24) 45%, rgba(15, 23, 42, 0.05) 80%, transparent 100%);
   --cell-duration: 4.8s;
-  --cell-blur: 14px;
 
   position: relative;
   width: var(--cell-size);
@@ -25,9 +24,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  contain: layout paint;
 }
 
-/* Individual organic cell bodies */
+/* Individual organic cell bodies: pre-rounded organic shapes */
 .cell-division .cell-mother,
 .cell-division .cell-daughter-left,
 .cell-division .cell-daughter-right {
@@ -35,24 +35,27 @@
   width: 100%;
   height: 100%;
   background: var(--cell-color);
-  backdrop-filter: blur(var(--cell-blur));
-  -webkit-backdrop-filter: blur(var(--cell-blur));
-  box-shadow: 0 0 32px -4px rgba(37, 99, 235, 0.25), inset 0 0 16px rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  will-change: transform, border-radius, opacity;
+  box-shadow: 0 0 24px -4px rgba(37, 99, 235, 0.20), inset 0 0 12px rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  transform: translateZ(0);
 }
 
 /* Resting State: Single spherical/ovoid mother cell */
 .cell-division .cell-mother {
-  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  opacity: 0.95;
+  opacity: 0.92;
   transform: scale(1) translate3d(0, 0, 0);
 }
 
-.cell-division .cell-daughter-left,
+.cell-division .cell-daughter-left {
+  opacity: 0;
+  border-radius: 54% 46% 40% 60% / 58% 42% 58% 42%;
+  transform: scale(0.6) translate3d(0, 0, 0);
+}
+
 .cell-division .cell-daughter-right {
   opacity: 0;
-  border-radius: 50%;
+  border-radius: 46% 54% 60% 40% / 42% 58% 42% 58%;
   transform: scale(0.6) translate3d(0, 0, 0);
 }
 
@@ -69,30 +72,26 @@
   animation: mitosisDaughterRight var(--cell-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
-/* Keyframes: Mother Cell Elongates, Pinches and Severs */
+/* Keyframes: Mother Cell Elongates, Pinches and Severs (Compositor-Only: transform & opacity) */
 @keyframes mitosisMother {
   0% {
-    opacity: 0.95;
+    opacity: 0.92;
     transform: scale(1) translate3d(0, 0, 0);
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
   20% {
     /* Elongation / Anaphase Stretch */
-    opacity: 0.95;
-    transform: scaleX(1.48) scaleY(0.72) translate3d(0, 0, 0);
-    border-radius: 40% 60% 70% 30% / 50% 60% 40% 50%;
+    opacity: 0.92;
+    transform: scale(1.45, 0.75) translate3d(0, 0, 0);
   }
   38% {
     /* Cleavage Furrow Pinch */
-    opacity: 0.9;
-    transform: scaleX(1.65) scaleY(0.55) translate3d(0, 0, 0);
-    border-radius: 68% 32% 32% 68% / 38% 62% 38% 62%;
+    opacity: 0.88;
+    transform: scale(1.60, 0.58) translate3d(0, 0, 0);
   }
   48% {
     /* Cytokinesis Breakpoint */
     opacity: 0.15;
-    transform: scaleX(0.4) scaleY(0.2) translate3d(0, 0, 0);
-    border-radius: 50%;
+    transform: scale(0.4, 0.25) translate3d(0, 0, 0);
   }
   50%, 82% {
     /* Complete Seizure into Daughters */
@@ -101,14 +100,12 @@
   }
   92% {
     /* Daughters Re-coalescing */
-    opacity: 0.6;
+    opacity: 0.60;
     transform: scale(0.85) translate3d(0, 0, 0);
-    border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%;
   }
   100% {
-    opacity: 0.95;
+    opacity: 0.92;
     transform: scale(1) translate3d(0, 0, 0);
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
 }
 
@@ -117,30 +114,25 @@
   0%, 30% {
     opacity: 0;
     transform: scale(0.4) translate3d(0, 0, 0);
-    border-radius: 50%;
   }
   42% {
     opacity: 0.85;
     transform: scale(0.75) translate3d(-18px, 0, 0);
-    border-radius: 65% 35% 35% 65% / 55% 45% 55% 45%;
   }
   56% {
     /* Maximum Autonomous Separation */
-    opacity: 0.92;
-    transform: scale(0.86) translate3d(-54px, -6px, 0);
-    border-radius: 52% 48% 62% 38% / 46% 58% 42% 54%;
+    opacity: 0.90;
+    transform: scale(0.86) translate3d(-52px, -6px, 0);
   }
   72% {
     /* Independent Float */
-    opacity: 0.9;
-    transform: scale(0.84) translate3d(-48px, 4px, 0);
-    border-radius: 44% 56% 40% 60% / 58% 42% 58% 42%;
+    opacity: 0.88;
+    transform: scale(0.84) translate3d(-46px, 4px, 0);
   }
   86% {
     /* Returning to Confluence */
-    opacity: 0.55;
-    transform: scale(0.7) translate3d(-12px, 0, 0);
-    border-radius: 50%;
+    opacity: 0.50;
+    transform: scale(0.70) translate3d(-12px, 0, 0);
   }
   100% {
     opacity: 0;
@@ -153,30 +145,25 @@
   0%, 30% {
     opacity: 0;
     transform: scale(0.4) translate3d(0, 0, 0);
-    border-radius: 50%;
   }
   42% {
     opacity: 0.85;
     transform: scale(0.75) translate3d(18px, 0, 0);
-    border-radius: 35% 65% 65% 35% / 45% 55% 45% 55%;
   }
   56% {
     /* Maximum Autonomous Separation */
-    opacity: 0.92;
-    transform: scale(0.86) translate3d(54px, 6px, 0);
-    border-radius: 46% 54% 38% 62% / 54% 44% 56% 46%;
+    opacity: 0.90;
+    transform: scale(0.86) translate3d(52px, 6px, 0);
   }
   72% {
     /* Independent Float */
-    opacity: 0.9;
-    transform: scale(0.84) translate3d(48px, -4px, 0);
-    border-radius: 58% 42% 58% 42% / 42% 58% 42% 58%;
+    opacity: 0.88;
+    transform: scale(0.84) translate3d(46px, -4px, 0);
   }
   86% {
     /* Returning to Confluence */
-    opacity: 0.55;
-    transform: scale(0.7) translate3d(12px, 0, 0);
-    border-radius: 50%;
+    opacity: 0.50;
+    transform: scale(0.70) translate3d(12px, 0, 0);
   }
   100% {
     opacity: 0;
@@ -185,35 +172,28 @@
 }
 
 /* ---------------------------------------------------------------------
-   APPLICATION VARIANT A: Section Divider
+   APPLICATION VARIANT A: Fluid Section Divider
    --------------------------------------------------------------------- */
 .cell-division-divider {
   width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: var(--space-8) 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-6);
+  padding: var(--space-4) 0;
+  margin: var(--space-5) 0;
   position: relative;
-}
-
-.cell-division-divider::before,
-.cell-division-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--stroke-highlight), transparent);
+  overflow: visible;
+  pointer-events: none;
+  contain: layout paint;
 }
 
 .cell-division-divider .cell-division {
-  --cell-size: 72px;
-  --cell-blur: 10px;
+  --cell-size: 96px;
+  --cell-duration: 5.2s;
 }
 
 /* ---------------------------------------------------------------------
-   APPLICATION VARIANT B: Background Accent Behind 3D Card
+   APPLICATION VARIANT B: Living Accent Behind 3D Card
    --------------------------------------------------------------------- */
 .cell-division-bg {
   position: absolute;
@@ -222,13 +202,13 @@
   transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
+  contain: layout paint;
 }
 
 .cell-division-bg .cell-division {
-  --cell-size: 340px;
-  --cell-blur: 36px;
+  --cell-size: 320px;
   --cell-duration: 6.4s;
-  --cell-color: radial-gradient(circle at 35% 35%, rgba(96, 165, 250, 0.28) 0%, rgba(37, 99, 235, 0.20) 45%, rgba(15, 23, 42, 0.05) 75%, transparent 100%);
+  --cell-color: radial-gradient(circle at 35% 35%, rgba(96, 165, 250, 0.22) 0%, rgba(37, 99, 235, 0.14) 45%, rgba(15, 23, 42, 0.02) 75%, transparent 100%);
 }
 
 /* ---------------------------------------------------------------------
@@ -243,11 +223,9 @@
   justify-content: center;
   gap: var(--space-4);
   z-index: 10;
-  background: rgba(7, 9, 14, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(7, 9, 14, 0.70);
   border-radius: var(--r-2xl);
-  transition: opacity 0.6s var(--ease), visibility 0.6s var(--ease);
+  transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
 }
 
 .cell-division-loader.is-loaded {
@@ -258,9 +236,8 @@
 }
 
 .cell-division-loader .cell-division {
-  --cell-size: 80px;
-  --cell-blur: 8px;
-  --cell-duration: 3.2s;
+  --cell-size: 72px;
+  --cell-duration: 2.8s;
 }
 
 .cell-loader-text {
@@ -273,8 +250,18 @@
 }
 
 /* ---------------------------------------------------------------------
-   ACCESSIBILITY: prefers-reduced-motion
+   Low Power Mode & Reduced Motion
    --------------------------------------------------------------------- */
+[data-perf="low-power"] .cell-division.is-animating .cell-mother,
+[data-perf="low-power"] .cell-division.is-animating .cell-daughter-left,
+[data-perf="low-power"] .cell-division.is-animating .cell-daughter-right {
+  animation: none !important;
+}
+
+[data-perf="low-power"] .cell-division-bg {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cell-division.is-animating .cell-mother,
   .cell-division.is-animating .cell-daughter-left,
