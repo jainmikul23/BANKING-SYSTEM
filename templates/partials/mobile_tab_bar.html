@@ -1,4 +1,4 @@
-<nav class="mobile-tab-bar">
+<nav class="mobile-tab-bar glass-tab-bar">
   {% if is_customer %}
     <a href="{% url 'accounts:dashboard' %}" class="mobile-tab-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>

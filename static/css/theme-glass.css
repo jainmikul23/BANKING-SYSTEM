@@ -1,56 +1,32 @@
-/* ============================================================
-   Apple-style Ultra-Fluid Glass Theme (120 FPS Optimized)
-   Compositor-only animations, zero layout thrashing,
-   budgeted backdrop blur (nav & modals only), GPU layer isolation.
-   ============================================================ */
+/* ==========================================================================
+   Apple "Liquid Glass" Design System (iOS 26 / macOS Tahoe / visionOS)
+   High-Precision Layered Glass, Spring Physics, Fluid Moving Lens,
+   Adaptive Transparency, and GPU-budgeted 120 FPS Rendering.
+   ========================================================================== */
+
+@import url('./liquid-glass-tokens.css');
 
 :root {
-  /* Glass tokens */
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-bg-card: rgba(18, 24, 38, 0.82);
-  --glass-bg-strong: rgba(255, 255, 255, 0.16);
-  --glass-border: rgba(255, 255, 255, 0.20);
-  --glass-highlight: rgba(255, 255, 255, 0.40);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  --glass-blur: 16px;
-  --glass-saturate: 160%;
-
+  /* Core theme tokens */
   --text: #f5f7ff;
   --text-muted: rgba(245, 247, 255, 0.68);
-  --accent: #7aa7ff;
+  --accent: #2563EB;
+  --accent-light: #7aa7ff;
 
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-
-  /* Apple-like fluid easing */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 350ms;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --glass-bg: rgba(255, 255, 255, 0.45);
-    --glass-bg-card: rgba(255, 255, 255, 0.88);
-    --glass-bg-strong: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.7);
-    --glass-shadow: 0 8px 32px rgba(60, 80, 120, 0.12);
-    --text: #14181f;
-    --text-muted: rgba(20, 24, 31, 0.62);
-  }
-}
-
 [data-theme="light"] {
-  --glass-bg: rgba(255, 255, 255, 0.45);
-  --glass-bg-card: rgba(255, 255, 255, 0.88);
-  --glass-bg-strong: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 8px 32px rgba(60, 80, 120, 0.12);
-  --text: #14181f;
-  --text-muted: rgba(20, 24, 31, 0.62);
+  --text: #0F172A;
+  --text-muted: rgba(15, 23, 42, 0.65);
+  --accent: #1D4ED8;
+  --accent-light: #3B82F6;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 /* Lenis manages smooth scrolling; native scroll-behavior must be auto to avoid conflict */
 html {
@@ -63,7 +39,7 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
-  background-color: #0b1020;
+  background-color: #07090e;
   overflow-x: hidden;
 }
 
@@ -73,212 +49,415 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(60vmax 60vmax at 15% 10%, rgba(79, 124, 255, 0.28), transparent 60%),
-    radial-gradient(50vmax 50vmax at 85% 20%, rgba(176, 92, 255, 0.20), transparent 60%),
-    radial-gradient(60vmax 60vmax at 50% 95%, rgba(32, 212, 192, 0.18), transparent 60%),
-    #0b1020;
+    radial-gradient(60vmax 60vmax at 15% 10%, rgba(37, 99, 235, 0.22), transparent 60%),
+    radial-gradient(50vmax 50vmax at 85% 20%, rgba(122, 167, 255, 0.16), transparent 60%),
+    radial-gradient(60vmax 60vmax at 50% 95%, rgba(16, 185, 129, 0.12), transparent 60%),
+    #07090e;
   z-index: -2;
   pointer-events: none;
   transform: translateZ(0);
 }
 
 [data-theme="light"] body {
-  background-color: #f4f6fb;
+  background-color: #f8fafc;
 }
 
 [data-theme="light"] body::before {
   background:
-    radial-gradient(60vmax 60vmax at 15% 10%, rgba(79, 124, 255, 0.18), transparent 60%),
-    radial-gradient(50vmax 50vmax at 85% 20%, rgba(176, 92, 255, 0.12), transparent 60%),
-    radial-gradient(60vmax 60vmax at 50% 95%, rgba(32, 212, 192, 0.14), transparent 60%),
-    #f4f6fb;
+    radial-gradient(60vmax 60vmax at 15% 10%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(50vmax 50vmax at 85% 20%, rgba(122, 167, 255, 0.08), transparent 60%),
+    radial-gradient(60vmax 60vmax at 50% 95%, rgba(16, 185, 129, 0.08), transparent 60%),
+    #f8fafc;
 }
 
-/* ---------- High-Performance Glass Surface (Cards: Zero Blur Cost) ---------- */
-.glass {
+/* ==========================================================================
+   1. GLASS SURFACE (5-Layer Optical Architecture)
+   ========================================================================== */
+.glass-surface {
   position: relative;
-  background: var(--glass-bg-card);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  /* Layer 1: Backdrop blur (budgeted to max 2-3 surfaces) */
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  backdrop-filter: var(--glass-backdrop-filter);
+  /* Layer 2: Tint */
+  background: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
+  /* Layer 3: Specular edge highlight */
+  border: 1px solid var(--glass-specular-bottom);
+  border-top-color: var(--glass-specular-top);
   box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 var(--glass-highlight),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    /* Layer 4: Inner glow and depth */
+    var(--glass-highlight-top),
+    var(--glass-inner-glow),
+    var(--glass-depth-shadow);
+  border-radius: var(--radius-card);
+  transition:
+    transform var(--dur-card) var(--spring-card),
+    background 300ms var(--ease),
+    border-color 300ms var(--ease),
+    box-shadow 300ms var(--ease);
+  transform: translateZ(0);
 }
 
-.glass-card {
-  position: relative;
-  background: var(--glass-bg-card);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-
-/* Static specular sheen across top border */
-.glass::before,
+/* Layer 5: Dynamic specular sheen */
+.glass-surface::before,
 .glass-card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 45%, rgba(255, 255, 255, 0.03));
+  background: radial-gradient(
+    500px circle at var(--glass-sheen-x, 50%) var(--glass-sheen-y, 50%),
+    rgba(255, 255, 255, var(--glass-sheen-intensity, 0.12)),
+    transparent 65%
+  );
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
+  z-index: 1;
 }
 
 @media (hover: hover) {
-  .glass:hover, .glass-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.35);
+  .glass-surface:hover::before,
+  .glass-card:hover::before {
+    opacity: 1;
   }
 }
 
-.glass:active, .glass-card:active {
-  transform: scale(0.99);
-}
-
-/* ---------- Navbar (Budgeted blur: single element on screen) ---------- */
-.glass-nav {
-  position: sticky;
-  top: 12px;
-  margin: 12px auto;
-  width: min(1100px, calc(100% - 24px));
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 999px;
-  background: rgba(14, 20, 32, 0.82);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
-  z-index: 50;
+/* ==========================================================================
+   2. GLASS CARD (Concentric Radii, Spring Hover Lift & Cheap Glass Fallback)
+   ========================================================================== */
+.glass,
+.glass-card {
+  position: relative;
+  /* Cheap glass optimization: Solid dark translucent background (0 blur cost in scrolling lists) */
+  background: rgba(19, 24, 36, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-top-color: var(--glass-specular-top);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow:
+    var(--glass-highlight-top),
+    var(--glass-inner-glow),
+    var(--glass-depth-shadow);
+  transition:
+    transform var(--dur-card) var(--spring-card),
+    border-color 250ms var(--ease),
+    filter 250ms var(--ease);
+  overflow: hidden;
   transform: translateZ(0);
 }
 
-[data-theme="light"] .glass-nav {
-  background: rgba(255, 255, 255, 0.82);
+[data-theme="light"] .glass,
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.90);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-top-color: var(--glass-specular-top);
 }
 
-/* ---------- Button ---------- */
-.glass-btn {
+/* Concentric radii for nested card containers */
+.glass-card > *,
+.glass > * {
+  border-radius: var(--radius-inner-md);
+}
+
+@media (hover: hover) {
+  .glass:hover,
+  .glass-card:hover {
+    border-color: rgba(122, 167, 255, 0.40);
+    filter: brightness(1.03);
+  }
+}
+
+/* ==========================================================================
+   3. GLASS BUTTONS (Spring Squash & Overshoot, Interruptible, VisionOS Focus)
+   ========================================================================== */
+.glass-btn,
+.btn-glass {
   appearance: none;
   cursor: pointer;
-  padding: 10px 20px;
-  color: var(--text);
-  font: 600 14px/1 inherit;
-  border-radius: 999px;
-  background: var(--glass-bg-strong);
-  border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: transform 200ms var(--ease), background 200ms var(--ease);
+  padding: 10px 22px;
+  min-height: 42px;
+  color: var(--glass-text-color);
+  font: 600 0.875rem/1.2 var(--font-sans, inherit);
+  border-radius: var(--radius-pill);
+  background: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
+  border: 1px solid var(--glass-specular-bottom);
+  border-top-color: var(--glass-specular-top);
+  box-shadow:
+    var(--glass-highlight-top),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
+    0 2px 10px rgba(0, 0, 0, 0.15);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   text-decoration: none;
+  user-select: none;
+  transform: translateZ(0);
+  transition:
+    transform var(--dur-press) var(--spring-press),
+    background 200ms var(--ease),
+    border-color 200ms var(--ease),
+    filter 200ms var(--ease);
 }
 
 @media (hover: hover) {
-  .glass-btn:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.25);
+  .glass-btn:hover,
+  .btn-glass:hover {
+    transform: translateY(-2px);
+    background: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) + 0.08));
+    border-color: rgba(255, 255, 255, 0.35);
+    filter: brightness(1.05);
   }
 }
 
-.glass-btn:active {
-  transform: scale(0.97);
+/* Press: squashes instantly to scale(0.94), alpha drops 30%, brightness lifts */
+.glass-btn:active,
+.btn-glass:active,
+.btn:active,
+.is-pressed {
+  transform: scale(0.94) !important;
+  background: var(--glass-tint-active) !important;
+  filter: brightness(1.15) !important;
+  transition-duration: 60ms !important;
 }
 
-.glass-btn:focus-visible, .glass-input:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* Release overshoot spring wobble */
+.is-released {
+  animation: glass-press-wobble var(--dur-press) var(--spring-press) both;
 }
 
-/* ---------- Input ---------- */
-.glass-input {
-  width: 100%;
-  padding: 12px 16px;
-  color: var(--text);
-  font: inherit;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--glass-border);
-  transition: border-color 200ms var(--ease), background 200ms var(--ease);
+/* VisionOS eye-tracking-like focus ring on :focus-visible */
+.glass-btn:focus-visible,
+.btn:focus-visible,
+.glass-input:focus-visible,
+.nav-item:focus-visible,
+.mobile-tab-item:focus-visible {
+  outline: none;
+  animation: glass-focus-pulse 400ms var(--spring-press) both;
 }
 
-.glass-input::placeholder {
+/* ==========================================================================
+   4. GLASS TAB BAR & MOVING GLASS LENS (Fluid indicator, stretch & squash)
+   ========================================================================== */
+.glass-tab-bar,
+.landing-nav .nav-menu,
+.mobile-tab-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(var(--glass-tint-rgb), 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  user-select: none;
+}
+
+/* The single raised drop of glass lens indicator */
+.glass-lens {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transform-origin: center center;
+  will-change: transform, width;
+}
+
+[data-theme="light"] .glass-lens {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.90);
+  box-shadow:
+    0 4px 14px rgba(60, 80, 120, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Arrival jelly landing jiggle wobble */
+.glass-lens.lens-jiggle {
+  animation: glass-landing-jiggle 420ms var(--spring-wobble) both;
+}
+
+/* Tab bar items */
+.nav-item,
+.mobile-tab-item,
+.glass-tab-item {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
   color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  transition:
+    transform 300ms var(--spring-press),
+    color 200ms var(--ease),
+    filter 200ms var(--ease);
 }
 
-.glass-input:focus {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: var(--accent);
+.nav-item:hover,
+.mobile-tab-item:hover,
+.glass-tab-item:hover {
+  color: var(--text);
 }
 
-/* ---------- Modal (Budgeted blur: visible only when modal active) ---------- */
+/* Active tab item icon & label gentle scale-up (~1.06) + brightness boost */
+.nav-item.active,
+.mobile-tab-item.active,
+.glass-tab-item.active {
+  color: var(--text);
+  font-weight: 600;
+  transform: scale(1.06);
+  filter: brightness(1.15);
+}
+
+.nav-item.active svg,
+.mobile-tab-item.active svg,
+.glass-tab-item.active svg {
+  stroke: var(--accent-light);
+  transform: scale(1.08);
+  transition: transform 300ms var(--spring-press), stroke 200ms var(--ease);
+}
+
+/* ==========================================================================
+   5. NAVBAR (Adaptive scroll-driven tint saturation)
+   ========================================================================== */
+.glass-nav {
+  position: sticky;
+  top: 16px;
+  margin: 16px auto;
+  width: min(1120px, calc(100% - 32px));
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 20, 32, var(--nav-scroll-alpha, 0.82));
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top-color: var(--glass-specular-top);
+  box-shadow:
+    var(--glass-highlight-top),
+    var(--glass-inner-glow),
+    var(--glass-floating-shadow);
+  z-index: 100;
+  transform: translateZ(0);
+  transition:
+    background 200ms var(--ease),
+    border-color 200ms var(--ease),
+    box-shadow 300ms var(--ease);
+}
+
+.glass-nav.nav-scrolled {
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow:
+    var(--glass-highlight-top),
+    var(--glass-inner-glow),
+    0 24px 48px -6px rgba(0, 0, 0, 0.50);
+}
+
+[data-theme="light"] .glass-nav {
+  background: rgba(255, 255, 255, var(--nav-scroll-alpha, 0.82));
+  border-color: rgba(15, 23, 42, 0.10);
+  border-top-color: rgba(255, 255, 255, 0.95);
+}
+
+/* ==========================================================================
+   6. APPLE SHEETS & MODALS (Spring Entrance & Background Scale-Down)
+   ========================================================================== */
+.modal-overlay,
 .glass-overlay {
   position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgba(5, 10, 25, 0.45);
+  background: rgba(5, 10, 25, 0.55);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  animation: fade-in 250ms var(--ease) both;
   z-index: 1000;
-}
-
-.glass-modal {
-  width: min(520px, calc(100% - 32px));
-  padding: 28px;
-  border-radius: var(--radius-lg);
-  background: rgba(18, 24, 38, 0.95);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 var(--glass-highlight);
-  animation: pop-in 300ms var(--ease) both;
-}
-
-/* ---------- Smooth entrance (Compositor-only: opacity & transform) ---------- */
-.reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 500ms var(--ease), transform 500ms var(--ease);
+  pointer-events: none;
+  transition: opacity 300ms var(--ease);
 }
 
-.reveal.in {
+.modal-overlay.active,
+.glass-overlay.active {
   opacity: 1;
-  transform: none;
+  pointer-events: auto;
 }
 
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes pop-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: none; } }
+.modal-content,
+.glass-modal,
+.glass-sheet {
+  width: min(540px, calc(100% - 32px));
+  padding: 32px;
+  border-radius: var(--radius-card);
+  background: rgba(18, 24, 38, 0.95);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--glass-specular-top);
+  box-shadow:
+    var(--glass-highlight-top),
+    var(--glass-inner-glow),
+    0 32px 72px -12px rgba(0, 0, 0, 0.65);
+  transform: translateY(28px) scale(0.96);
+  opacity: 0;
+  transition:
+    transform var(--dur-card) var(--spring-card),
+    opacity 250ms var(--ease);
+}
 
-/* ---------- Low-Power & Battery Saver Mode ---------- */
+.modal-overlay.active .modal-content,
+.glass-overlay.active .glass-modal,
+.glass-sheet.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Underlying Page Container Scales Down and Dims (Apple Sheet Style) */
+.page-sheet-scaled {
+  transform: scale(0.96) !important;
+  border-radius: 16px !important;
+  opacity: 0.85 !important;
+  transition:
+    transform var(--dur-card) var(--spring-card),
+    border-radius var(--dur-card) var(--spring-card),
+    opacity 300ms var(--ease) !important;
+  overflow: hidden !important;
+}
+
+/* ==========================================================================
+   7. LOW-POWER & ADAPTIVE QUALITY OVERRIDES (Guaranteed 120 FPS)
+   ========================================================================== */
 [data-perf="low-power"] .glass-nav,
 [data-perf="low-power"] .glass-modal,
-[data-perf="low-power"] .modal-overlay {
+[data-perf="low-power"] .modal-overlay,
+[data-perf="low-power"] .glass-surface {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background: rgba(11, 16, 32, 0.96) !important;
 }
 
+[data-perf="low-power"] .glass-surface::before,
+[data-perf="low-power"] .glass-card::before {
+  display: none !important;
+}
+
 [data-perf="low-power"] * {
   box-shadow: none !important;
   text-shadow: none !important;
-}
-
-/* ---------- Accessibility: reduce motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-  .reveal { opacity: 1; transform: none; }
 }

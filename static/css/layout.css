@@ -2,7 +2,9 @@
    CORE LAYOUT & RESPONSIVE ARCHITECTURE
    ===================================================================== */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -275,9 +277,11 @@ body {
   .app-sidebar {
     width: 220px;
   }
+
   .app-main {
     margin-left: 220px;
   }
+
   .content-body {
     padding: 24px;
   }
@@ -287,19 +291,22 @@ body {
   .app-sidebar {
     display: none;
   }
+
   .app-main {
     margin-left: 0;
     margin-bottom: 64px;
   }
+
   .mobile-tab-bar {
     display: flex;
   }
+
   .app-topbar {
     padding: 0 16px;
     height: 60px;
   }
+
   .content-body {
     padding: 16px 16px 80px 16px;
   }
 }
-

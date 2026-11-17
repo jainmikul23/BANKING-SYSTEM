@@ -1,6 +1,7 @@
 /* =====================================================================
    APPLE visionOS & MACOS SONOMA GLASSMORPHISM ENGINE
    ===================================================================== */
+@import url('./liquid-glass-tokens.css');
 @import url('./theme-glass.css');
 
 /* Ultra-Refined High-Performance Glass Panels (Zero Backdrop Blur Cost) */
@@ -74,7 +75,7 @@
   }
 }
 
-/* Buttons with Smooth Physical Press and Sheen */
+/* Buttons with Apple Spring Physics Press and Release */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -85,20 +86,23 @@
   font-size: 0.906rem;
   font-weight: 500;
   letter-spacing: -0.01em;
-  border-radius: var(--r-md);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 0.15s var(--ease), background 0.2s, box-shadow 0.2s, border-color 0.2s;
+  transition: transform var(--dur-press) var(--spring-press), background 0.2s, box-shadow 0.2s, border-color 0.2s;
   text-decoration: none;
   font-family: inherit;
   line-height: 1.4;
   user-select: none;
   position: relative;
   overflow: hidden;
+  transform: translateZ(0);
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.94);
+  filter: brightness(1.15);
+  transition-duration: 60ms;
 }
 
 /* Button Sheen Wipe on Hover */
@@ -134,24 +138,28 @@
 }
 
 .btn-glass {
-  background: var(--glass-bg-strong);
+  background: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
   color: var(--text);
-  border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 2px 8px rgba(0, 0, 0, 0.12);
-  border-radius: 999px;
-  transition: transform 200ms var(--ease), background 200ms var(--ease);
+  border: 1px solid var(--glass-specular-bottom);
+  border-top-color: var(--glass-specular-top);
+  box-shadow: var(--glass-highlight-top), 0 2px 8px rgba(0, 0, 0, 0.12);
+  border-radius: var(--radius-pill);
+  transition: transform var(--dur-press) var(--spring-press), background 200ms var(--ease), border-color 200ms var(--ease);
 }
 
 .btn-glass:hover {
-  transform: translateY(-2px) scale(1.03);
-  background: rgba(255, 255, 255, 0.3);
-  border-color: var(--glass-border);
+  transform: translateY(-2px);
+  background: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) + 0.08));
+  border-color: rgba(255, 255, 255, 0.35);
   color: var(--text);
   box-shadow: 0 8px 24px rgba(10, 20, 40, 0.22), inset 0 1px 0 var(--glass-highlight);
 }
 
 .btn-glass:active {
-  transform: scale(0.97);
+  transform: scale(0.94);
+  background: var(--glass-tint-active);
+  filter: brightness(1.15);
+  transition-duration: 60ms;
 }
 
 .btn-danger {
@@ -342,16 +350,17 @@
 }
 
 .modal-content {
-  width: min(520px, calc(100% - 32px));
-  padding: 28px;
-  border-radius: var(--radius-lg);
-  background: var(--glass-bg-strong);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-highlight);
-  transform: translateY(20px) scale(0.94);
-  transition: transform 500ms var(--ease);
+  width: min(540px, calc(100% - 32px));
+  padding: 32px;
+  border-radius: var(--radius-card);
+  background: rgba(18, 24, 38, 0.95);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--glass-specular-top);
+  box-shadow: 0 32px 72px -12px rgba(0, 0, 0, 0.65), var(--glass-highlight-top), var(--glass-inner-glow);
+  transform: translateY(28px) scale(0.96);
+  transition: transform var(--dur-card) var(--spring-card), opacity 250ms var(--ease);
 }
 
 .modal-overlay.active .modal-content {

@@ -71,18 +71,41 @@
 .landing-nav .nav-menu {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
+}
+
+.landing-nav .nav-links {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+}
+
+[data-theme="light"] .landing-nav .nav-links {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.landing-nav .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .landing-nav .nav-item {
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.938rem;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: color 0.2s var(--ease);
-  min-height: 44px;
+  min-height: 38px;
+  padding: 0 16px;
   display: inline-flex;
   align-items: center;
+  border-radius: var(--radius-pill);
 }
 
 .landing-nav .nav-item:hover {
@@ -451,26 +474,32 @@
     text-align: center;
     gap: var(--space-7);
   }
+
   .hero-content {
     max-width: 100%;
   }
+
   .hero-desc {
     margin-left: auto;
     margin-right: auto;
   }
+
   .hero-cta {
     justify-content: center;
   }
+
   .hero-stats {
     justify-content: center;
     margin: 0 auto;
     gap: var(--space-6);
   }
+
   .hero-3d-container {
     width: 100%;
     min-height: 440px;
     max-width: 520px;
   }
+
   .landing-nav .nav-menu .nav-item {
     display: none;
   }
@@ -480,6 +509,7 @@
   .card-stack-container {
     padding: 0 var(--space-4);
   }
+
   .stack-card {
     position: relative;
     top: auto;
@@ -489,27 +519,33 @@
     filter: none !important;
     opacity: 1 !important;
   }
+
   .landing-hero {
     padding: 110px var(--space-4) var(--space-6) var(--space-4);
   }
+
   .features-grid,
   .customer-grid {
     grid-template-columns: 1fr;
     gap: var(--space-5);
   }
+
   .hero-stats {
     flex-direction: column;
     gap: var(--space-4);
   }
+
   .hero-cta {
     flex-direction: column;
     width: 100%;
   }
+
   .hero-cta .btn {
     width: 100%;
     justify-content: center;
     min-height: 48px;
   }
+
   .hero-3d-container {
     min-height: 380px;
   }
@@ -522,15 +558,19 @@
     height: 64px;
     top: var(--space-3);
   }
+
   .landing-hero {
     padding: 96px var(--space-3) var(--space-5) var(--space-3);
   }
+
   .hero-3d-container {
     min-height: 320px;
   }
+
   .card-stack-container {
     padding: 0 var(--space-3);
   }
+
   .stack-card {
     padding: var(--space-5) var(--space-4);
   }

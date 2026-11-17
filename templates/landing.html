@@ -42,12 +42,16 @@
     </a>
 
     <nav class="nav-menu" role="navigation" aria-label="Main Navigation">
-      <a href="#architecture" class="nav-item">3NF Architecture</a>
-      <a href="#concurrency" class="nav-item">ACID Engine</a>
-      <a href="#customers" class="nav-item">Customer Reserves</a>
-      <a href="#audit" class="nav-item">Audit Trails</a>
-      <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm glass-btn">Portal Access</a>
-      <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm glass-btn">Open Account</a>
+      <div class="nav-links glass-tab-bar">
+        <a href="#architecture" class="nav-item">3NF Architecture</a>
+        <a href="#concurrency" class="nav-item">ACID Engine</a>
+        <a href="#customers" class="nav-item">Customer Reserves</a>
+        <a href="#audit" class="nav-item">Audit Trails</a>
+      </div>
+      <div class="nav-actions">
+        <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm glass-btn">Portal Access</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm glass-btn">Open Account</a>
+      </div>
     </nav>
   </header>
 
