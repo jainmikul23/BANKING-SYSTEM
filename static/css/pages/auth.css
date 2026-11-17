@@ -31,8 +31,8 @@
   width: 48px;
   height: 48px;
   border-radius: var(--r-md);
-  background: linear-gradient(135deg, var(--accent) 0%, #0F766E 100%);
-  color: #060B16;
+  background: linear-gradient(135deg, var(--accent) 0%, #1D4ED8 100%);
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;

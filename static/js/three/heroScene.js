@@ -33,8 +33,8 @@
   const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.6);
   scene.add(ambientLight);
 
-  // Key directional light with subtle Apple Cash mint reflection
-  const keyLight = new THREE.DirectionalLight(0x34D399, 3.2);
+  // Key directional light with subtle sapphire reflection
+  const keyLight = new THREE.DirectionalLight(0x93C5FD, 2.8);
   keyLight.position.set(5, 6, 6);
   scene.add(keyLight);
 
@@ -49,7 +49,7 @@
   scene.add(specularLight);
 
   // Rim back-light for glass edge definition
-  const rimLight = new THREE.PointLight(0x38BDF8, 2.5, 12);
+  const rimLight = new THREE.PointLight(0x2563EB, 3.2, 12);
   rimLight.position.set(0, 4, -3);
   scene.add(rimLight);
 
@@ -60,12 +60,12 @@
     canvas.height = 1292; // Exact ISO/IEC 7810 ID-1 ratio (1.586)
     const ctx = canvas.getContext('2d');
 
-    // Luxury Space Black Titanium Brushed Texture
+    // Luxury Obsidian Slate Titanium Brushed Texture
     const grad = ctx.createLinearGradient(0, 0, 2048, 1292);
-    grad.addColorStop(0, '#1E2129');
-    grad.addColorStop(0.35, '#13151A');
-    grad.addColorStop(0.7, '#0C0D11');
-    grad.addColorStop(1, '#08090C');
+    grad.addColorStop(0, '#161D2B');
+    grad.addColorStop(0.35, '#0E1420');
+    grad.addColorStop(0.7, '#0A0E17');
+    grad.addColorStop(1, '#07090E');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 2048, 1292);
 
@@ -94,7 +94,7 @@
     ctx.letterSpacing = '-1px';
     ctx.fillText('AETHERIA', 120, 160);
 
-    ctx.fillStyle = '#34D399';
+    ctx.fillStyle = '#60A5FA';
     ctx.font = '600 36px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
     ctx.letterSpacing = '6px';
     ctx.fillText('RESERVE', 530, 160);
@@ -254,7 +254,7 @@
   ];
 
   const tokenMat = new THREE.MeshPhysicalMaterial({
-    color: 0x34D399,
+    color: 0x3B82F6,
     metalness: 0.3,
     roughness: 0.1,
     transmission: 0.85,

@@ -60,7 +60,7 @@ def generate_pdf_statement(account, transactions, start_date=None, end_date=None
 
     # Custom typography styles
     primary_color = colors.HexColor('#0B1426')
-    accent_color = colors.HexColor('#0F766E')
+    accent_color = colors.HexColor('#1D4ED8')
     text_dark = colors.HexColor('#1E293B')
     text_muted = colors.HexColor('#64748B')
     border_color = colors.HexColor('#E2E8F0')

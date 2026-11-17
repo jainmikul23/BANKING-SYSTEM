@@ -46,13 +46,13 @@
 }
 
 .bank-card-savings {
-  background: linear-gradient(145deg, #18221E 0%, #111A16 50%, #0A100E 100%);
-  border: 1px solid rgba(52, 211, 153, 0.28);
+  background: linear-gradient(145deg, #131E33 0%, #0D1424 50%, #070B14 100%);
+  border: 1px solid rgba(59, 130, 246, 0.35);
 }
 
 .bank-card-current {
-  background: linear-gradient(145deg, #1C1E24 0%, #121418 50%, #0A0B0E 100%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(145deg, #181C26 0%, #10131A 50%, #080A0F 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .card-top {

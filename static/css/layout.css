@@ -92,7 +92,7 @@ body::before {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 14px var(--accent-glow);
-  color: #08090C;
+  color: #FFFFFF;
 }
 
 .brand-title {
