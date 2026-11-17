@@ -200,7 +200,7 @@
       ctx.fillStyle = '#FFFFFF';
       ctx.fillText('09 / 31', 1140, 1035);
 
-      // Metallic Hologram Medallion
+      // Metallic Hologram Medallion with Atheria Emblem
       const holoX = 1760;
       const holoY = 1010;
       const holoR = 90;
@@ -222,6 +222,20 @@
       const texture = new THREE.CanvasTexture(canvas);
       texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
       texture.needsUpdate = true;
+
+      // Stamp high-res Atheria Emblem onto Hologram Seal
+      const emblemImg = new Image();
+      emblemImg.src = '/static/img/logo-emblem.png';
+      emblemImg.onload = () => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(holoX, holoY, holoR, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(emblemImg, holoX - holoR, holoY - holoR, holoR * 2, holoR * 2);
+        ctx.restore();
+        texture.needsUpdate = true;
+      };
+
       return texture;
     }
 

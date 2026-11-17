@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import os
+from django.conf import settings
+from django.http import HttpResponse, FileResponse
 from django.utils import timezone
 
 def sitemap_xml(request):
@@ -51,9 +53,21 @@ Sitemap: {base_url}/sitemap.xml
 
 
 def favicon_ico(request):
-    """Serve a clean SVG favicon with HTTP 200."""
-    svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='#2563EB'/><text y='70' font-size='65' font-family='-apple-system,system-ui' font-weight='bold' fill='#FFFFFF' text-anchor='middle' x='50'>A</text></svg>"
-    return HttpResponse(svg, content_type='image/svg+xml')
+    """Serve the Atheria Reserve multi-resolution favicon.ico."""
+    ico_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'favicon.ico')
+    if os.path.exists(ico_path):
+        with open(ico_path, 'rb') as f:
+            return HttpResponse(f.read(), content_type='image/x-icon')
+    return HttpResponse(b'', content_type='image/x-icon', status=200)
+
+
+def apple_touch_icon(request):
+    """Serve the Atheria Reserve 180x180 Apple Touch Icon."""
+    icon_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'apple-touch-icon.png')
+    if os.path.exists(icon_path):
+        with open(icon_path, 'rb') as f:
+            return HttpResponse(f.read(), content_type='image/png')
+    return HttpResponse(b'', content_type='image/png', status=200)
 
 
 def security_txt(request):
