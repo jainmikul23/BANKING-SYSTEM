@@ -8,6 +8,7 @@ from adminpanel import views as adminpanel_views
 
 urlpatterns = [
     # SEO & Security Standards (XML Sitemap, Robots, RFC 9116)
+    path('favicon.ico', seo_views.favicon_ico, name='favicon_ico'),
     path('sitemap.xml', seo_views.sitemap_xml, name='sitemap_xml'),
     path('robots.txt', seo_views.robots_txt, name='robots_txt'),
     path('.well-known/security.txt', seo_views.security_txt, name='security_txt'),

@@ -50,6 +50,13 @@ Sitemap: {base_url}/sitemap.xml
     return HttpResponse(content, content_type='text/plain')
 
 
+def favicon_ico(request):
+    """Serve a clean SVG favicon with HTTP 200."""
+    svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='#34D399'/><text y='70' font-size='65' font-family='-apple-system,system-ui' font-weight='bold' fill='#08090C' text-anchor='middle' x='50'>A</text></svg>"
+    return HttpResponse(svg, content_type='image/svg+xml')
+
+
+
 def security_txt(request):
     """RFC 9116 compliant security disclosure information."""
     content = """Contact: security@apexbank.in
@@ -60,4 +67,11 @@ Acknowledgments: https://apexbank.in/hall-of-fame.html
 Expires: 2027-12-31T23:59:59.000Z
 """
     return HttpResponse(content, content_type='text/plain')
+
+
+def favicon_ico(request):
+    """Serve a clean SVG favicon with HTTP 200."""
+    svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='#34D399'/><text y='70' font-size='65' font-family='-apple-system,system-ui' font-weight='bold' fill='#08090C' text-anchor='middle' x='50'>A</text></svg>"
+    return HttpResponse(svg, content_type='image/svg+xml')
+
 
