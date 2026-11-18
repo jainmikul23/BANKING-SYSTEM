@@ -2,41 +2,41 @@
 
 :root {
   /* =====================================================================
-     INSTITUTIONAL RESERVE PALETTE (Midnight Obsidian, Titanium & Sapphire)
+     INSTITUTIONAL RESERVE PALETTE (Executive Slate & Royal Sapphire)
      Zero AI neon/purple, calibrated optical contrast, executive typography
      ===================================================================== */
-  --bg-0: #07090E;
-  /* Deep Midnight Obsidian canvas */
-  --bg-1: #0D111A;
-  /* Institutional Inset Slate */
-  --bg-surface: #131824;
+  --bg-0: #0B0E14;
+  /* Premium Slate-Charcoal canvas */
+  --bg-1: #0F131D;
+  /* Institutional Sidebar / Nav Surface */
+  --bg-surface: #151926;
   /* Elevated Executive Card */
-  --bg-card: rgba(255, 255, 255, 0.035);
-  --bg-card-hover: rgba(255, 255, 255, 0.065);
-  --bg-input: rgba(255, 255, 255, 0.045);
+  --bg-card: #151926;
+  --bg-card-hover: #1B2030;
+  --bg-input: #0A0D13;
 
-  /* Frosted Glass Layers (Multi-pass architectural blur) */
-  --glass-bg: rgba(255, 255, 255, 0.14);
-  --glass-bg-strong: rgba(255, 255, 255, 0.22);
-  --glass-border: rgba(255, 255, 255, 0.28);
-  --glass-highlight: rgba(255, 255, 255, 0.55);
-  --glass-shadow: 0 8px 32px rgba(10, 20, 40, 0.18);
+  /* Frosted Glass Layers (Subtle, refined, non-glossy) */
+  --glass-bg: rgba(21, 25, 38, 0.85);
+  --glass-bg-strong: rgba(27, 32, 48, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.40);
   --glass-blur: 16px;
-  --glass-saturate: 160%;
+  --glass-saturate: 140%;
 
-  --glass-base: rgba(255, 255, 255, 0.14);
-  --glass-card: rgba(255, 255, 255, 0.14);
-  --glass-panel: rgba(255, 255, 255, 0.14);
-  --glass-strong: rgba(255, 255, 255, 0.22);
-  --glass-interactive: rgba(255, 255, 255, 0.18);
+  --glass-base: rgba(15, 19, 29, 0.90);
+  --glass-card: #151926;
+  --glass-panel: #151926;
+  --glass-strong: #1B2030;
+  --glass-interactive: rgba(255, 255, 255, 0.05);
 
-  /* Precision Hairline Strokes */
-  --stroke: rgba(255, 255, 255, 0.08);
+  /* Precision Hairline Strokes (Calm, uniform, zero specular glare) */
+  --stroke: rgba(255, 255, 255, 0.07);
   --stroke-subtle: rgba(255, 255, 255, 0.04);
-  --stroke-highlight: rgba(255, 255, 255, 0.16);
-  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --highlight-inner: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  --shadow-occlusion: inset 0 -1px 0 0 rgba(0, 0, 0, 0.45);
+  --stroke-highlight: rgba(255, 255, 255, 0.10);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --highlight-inner: none;
+  --shadow-occlusion: 0 2px 8px rgba(0, 0, 0, 0.25);
 
   /* Executive Typography Tokens */
   --text: #F8FAFC;
@@ -204,4 +204,11 @@
 
   --shadow-glass: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.06);
   --shadow-card: 0 4px 14px -2px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.05);
+
+  --danger: #DC2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  --danger-border: rgba(220, 38, 38, 0.20);
+  --ok: #059669;
+  --ok-bg: rgba(5, 150, 105, 0.08);
+  --ok-border: rgba(5, 150, 105, 0.20);
 }

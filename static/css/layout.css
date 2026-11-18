@@ -20,7 +20,7 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: var(--font-sans);
-  background-color: #0b1020;
+  background-color: var(--bg-0);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -52,9 +52,7 @@ body {
 /* Sidebar Navigation */
 .app-sidebar {
   width: 280px;
-  background: var(--glass-base);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: var(--bg-1);
   border-right: 1px solid var(--stroke);
   display: flex;
   flex-direction: column;
@@ -64,11 +62,12 @@ body {
   left: 0;
   z-index: 100;
   padding: var(--space-6) var(--space-5);
-  box-shadow: var(--shadow-glass);
+  box-shadow: none;
 }
 
 [data-theme="light"] .app-sidebar {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(15, 23, 42, 0.08);
 }
 
 .sidebar-brand {
@@ -130,9 +129,9 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-4);
+  padding: 10px var(--space-4);
   border-radius: var(--radius-sm);
-  color: var(--muted);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.906rem;
   font-weight: 500;
@@ -141,15 +140,21 @@ body {
 
 .nav-link:hover {
   color: var(--text);
-  background: var(--glass);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .nav-link.active {
-  color: var(--text);
-  background: var(--glass-strong);
-  border: 1px solid var(--stroke);
-  box-shadow: var(--highlight);
+  color: #60A5FA;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  box-shadow: none;
   font-weight: 600;
+}
+
+[data-theme="light"] .nav-link.active {
+  color: #1D4ED8;
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.20);
 }
 
 .nav-link.active svg {
@@ -170,7 +175,7 @@ body {
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  background: var(--glass);
+  background: var(--bg-surface);
   border: 1px solid var(--stroke);
 }
 
@@ -178,14 +183,14 @@ body {
   width: 34px;
   height: 34px;
   border-radius: var(--radius-pill);
-  background: var(--accent-glow);
-  color: var(--accent);
+  background: rgba(37, 99, 235, 0.15);
+  color: #60A5FA;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(37, 99, 235, 0.30);
 }
 
 /* Main Content Area */
@@ -198,6 +203,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  background-color: var(--bg-0);
 }
 
 .app-topbar {
@@ -206,18 +212,17 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--gutter);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--stroke);
+  box-shadow: none;
   position: sticky;
   top: 0;
   z-index: 50;
 }
 
 [data-theme="light"] .app-topbar {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(15, 23, 42, 0.08);
 }
 
 .topbar-title {
@@ -229,7 +234,19 @@ body {
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
+}
+
+.app-topbar .theme-toggle-btn,
+.app-topbar a.btn[title="Sign Out"] {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
 }
 
 .content-body {

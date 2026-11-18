@@ -39,18 +39,18 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
-  background-color: #07090e;
+  background-color: var(--bg-0);
   overflow-x: hidden;
 }
 
-/* Executive Architectural Dark Mode Canvas (Zero AI Blobs, Pure Institutional Obsidian) */
+/* Executive Architectural Dark Mode Canvas (Zero AI Blobs, Pure Institutional Slate) */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1100px 550px at 50% -60px, rgba(37, 99, 235, 0.09), transparent 70%),
-    #07090e;
+    radial-gradient(1200px 600px at 50% -80px, rgba(30, 41, 59, 0.25), transparent 70%),
+    var(--bg-0);
   z-index: -2;
   pointer-events: none;
   transform: translateZ(0);
@@ -62,34 +62,24 @@ body::before {
 
 [data-theme="light"] body::before {
   background:
-    radial-gradient(1100px 550px at 50% -60px, rgba(37, 99, 235, 0.05), transparent 70%),
+    radial-gradient(1100px 550px at 50% -60px, rgba(37, 99, 235, 0.04), transparent 70%),
     #f8fafc;
 }
 
 /* ==========================================================================
-   1. GLASS SURFACE (5-Layer Optical Architecture)
+   1. SURFACE ARCHITECTURE (Clean, Grounded Physical Surfaces)
    ========================================================================== */
 .glass-surface {
   position: relative;
-  /* Layer 1: Backdrop blur (budgeted to max 2-3 surfaces) */
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-  backdrop-filter: var(--glass-backdrop-filter);
-  /* Layer 2: Tint */
-  background: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
-  /* Layer 3: Specular edge highlight */
-  border: 1px solid var(--glass-specular-bottom);
-  border-top-color: var(--glass-specular-top);
-  box-shadow:
-    /* Layer 4: Inner glow and depth */
-    var(--glass-highlight-top),
-    var(--glass-inner-glow),
-    var(--glass-depth-shadow);
+  background: var(--bg-surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--glass-depth-shadow);
   border-radius: var(--radius-card);
   transition:
-    transform var(--dur-card) var(--spring-card),
-    background 300ms var(--ease),
-    border-color 300ms var(--ease),
-    box-shadow 300ms var(--ease);
+    transform 200ms ease,
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
   transform: translateZ(0);
 }
 
@@ -100,34 +90,29 @@ body::before {
 }
 
 /* ==========================================================================
-   2. GLASS CARD (Concentric Radii, Spring Hover Lift & Cheap Glass Fallback)
+   2. CARD ARCHITECTURE (Refined 16px Radius, Matte Finish, Zero White Glow)
    ========================================================================== */
 .glass,
 .glass-card {
   position: relative;
-  /* Cheap glass optimization: Solid dark translucent background (0 blur cost in scrolling lists) */
-  background: rgba(19, 24, 36, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-top-color: var(--glass-specular-top);
-  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-card);
   padding: var(--card-pad);
-  box-shadow:
-    var(--glass-highlight-top),
-    var(--glass-inner-glow),
-    var(--glass-depth-shadow);
+  box-shadow: var(--glass-depth-shadow);
   transition:
-    transform var(--dur-card) var(--spring-card),
-    border-color 250ms var(--ease),
-    filter 250ms var(--ease);
+    transform 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease;
   overflow: hidden;
   transform: translateZ(0);
 }
 
 [data-theme="light"] .glass,
 [data-theme="light"] .glass-card {
-  background: rgba(255, 255, 255, 0.90);
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  border-top-color: var(--glass-specular-top);
+  background: #FFFFFF;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 /* Concentric radii for nested card containers & media */
@@ -163,30 +148,26 @@ body::before {
 @media (hover: hover) {
   .glass:hover,
   .glass-card:hover {
-    border-color: rgba(122, 167, 255, 0.40);
-    filter: brightness(1.03);
+    border-color: rgba(255, 255, 255, 0.14);
+    background: var(--bg-card-hover);
   }
 }
 
 /* ==========================================================================
-   3. GLASS BUTTONS (Spring Squash & Overshoot, Interruptible, VisionOS Focus)
+   3. BUTTONS (Tactile, Crisp, Institutional)
    ========================================================================== */
 .glass-btn,
 .btn-glass {
   appearance: none;
   cursor: pointer;
-  padding: 10px 22px;
-  min-height: 42px;
-  color: var(--glass-text-color);
+  padding: 9px 18px;
+  min-height: 40px;
+  color: #E2E8F0;
   font: 600 0.875rem/1.2 var(--font-sans, inherit);
-  border-radius: var(--radius-pill);
-  background: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
-  border: 1px solid var(--glass-specular-bottom);
-  border-top-color: var(--glass-specular-top);
-  box-shadow:
-    var(--glass-highlight-top),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
-    0 2px 10px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -195,20 +176,35 @@ body::before {
   user-select: none;
   transform: translateZ(0);
   transition:
-    transform 180ms cubic-bezier(0.2, 0, 0, 1),
-    background 180ms ease,
-    border-color 180ms ease,
-    filter 180ms ease,
-    box-shadow 180ms ease;
+    transform 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
 }
 
 @media (hover: hover) {
   .glass-btn:hover,
   .btn-glass:hover {
-    transform: translateY(-1px);
-    background: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) + 0.08));
-    border-color: rgba(255, 255, 255, 0.35);
-    filter: brightness(1.05);
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #FFFFFF;
+  }
+}
+
+[data-theme="light"] .glass-btn,
+[data-theme="light"] .btn-glass {
+  background: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0F172A;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+@media (hover: hover) {
+  [data-theme="light"] .glass-btn:hover,
+  [data-theme="light"] .btn-glass:hover {
+    background: rgba(15, 23, 42, 0.09);
+    border-color: rgba(15, 23, 42, 0.20);
+    color: #020617;
   }
 }
 

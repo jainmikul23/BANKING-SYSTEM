@@ -373,42 +373,6 @@
       cardGroup.add(cardMesh);
       scene.add(cardGroup);
 
-      // 5. Orbiting Polyhedral Sapphire Crystal Particles
-      const tokens = [];
-      const tokenGeos = [
-        new THREE.IcosahedronGeometry(0.22, 0),
-        new THREE.OctahedronGeometry(0.20, 0),
-        new THREE.DodecahedronGeometry(0.24, 0)
-      ];
-
-      const tokenMat = new THREE.MeshPhysicalMaterial({
-        color: 0x60A5FA,
-        metalness: 0.2,
-        roughness: 0.1,
-        clearcoat: 1.0,
-        transparent: true,
-        opacity: 0.88,
-        reflectivity: 0.95
-      });
-
-      for (let i = 0; i < 6; i++) {
-        const geo = tokenGeos[i % tokenGeos.length];
-        const mesh = new THREE.Mesh(geo, tokenMat);
-        const angle = (i / 6) * Math.PI * 2;
-        const radius = 2.45 + (i % 2) * 0.45;
-        mesh.position.set(Math.cos(angle) * radius, Math.sin(angle) * 1.25, (Math.random() - 0.5) * 1.2);
-        mesh.userData = {
-          angle: angle,
-          radius: radius,
-          speed: 0.0035 + (i % 3) * 0.0015,
-          rotX: 0.012,
-          rotY: 0.015,
-          baseY: mesh.position.y
-        };
-        tokens.push(mesh);
-        scene.add(mesh);
-      }
-
       // 6. Interactive Physics & Input Tracking
       let targetRotX = 0;
       let targetRotY = 0;
@@ -499,15 +463,6 @@
         // Floating hover harmonic bobbing
         cardGroup.position.y = Math.sin(time * 0.9) * 0.12 + Math.cos(time * 1.5) * 0.03;
         cardGroup.position.z = -scrollTilt * 0.8;
-
-        // Orbit tokens
-        tokens.forEach((t) => {
-          t.userData.angle += t.userData.speed;
-          t.position.x = Math.cos(t.userData.angle) * t.userData.radius;
-          t.position.y = t.userData.baseY + Math.sin(time * 1.4 + t.userData.angle) * 0.22;
-          t.rotation.x += t.userData.rotX;
-          t.rotation.y += t.userData.rotY;
-        });
 
         renderer.render(scene, camera);
 

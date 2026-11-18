@@ -23,41 +23,39 @@
   --glass-tint-hover: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) + 0.06));
   --glass-tint-active: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) * 0.70)); /* Alpha drops 30% on press */
 
-  /* Layer 3: Specular Edge Highlight (1px light-bending gradient border) */
-  --glass-specular-top: rgba(255, 255, 255, 0.65);
-  --glass-specular-bottom: rgba(255, 255, 255, 0.08);
-  --glass-specular-border: linear-gradient(135deg, var(--glass-specular-top) 0%, var(--glass-specular-bottom) 100%);
-  --glass-highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.60);
+  /* Layer 3: Precision Architectural Hairline Border (Refined, Zero AI Gloss) */
+  --glass-specular-top: rgba(255, 255, 255, 0.09);
+  --glass-specular-bottom: rgba(255, 255, 255, 0.05);
+  --glass-specular-border: rgba(255, 255, 255, 0.07);
+  --glass-highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
-  /* Layer 4: Inner Glow & Optical Occlusion Depth */
-  --glass-inner-glow: inset 0 -8px 16px rgba(255, 255, 255, 0.06);
-  --glass-depth-shadow: 0 10px 30px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.12);
-  --glass-floating-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.18);
+  /* Layer 4: Grounded Elevation Shadows (Clean Physical Depth) */
+  --glass-inner-glow: none;
+  --glass-depth-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.40), 0 1px 3px rgba(0, 0, 0, 0.25);
+  --glass-floating-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.50), 0 2px 8px rgba(0, 0, 0, 0.30);
 
   /* Layer 5: Dynamic Pointer Sheen */
   --glass-sheen-x: 50%;
   --glass-sheen-y: 50%;
-  --glass-sheen-intensity: 0.12;
+  --glass-sheen-intensity: 0.04;
 
   /* Optical Text Contrast Tokens (Adaptive) */
   --glass-text-color: #F8FAFC;
-  --glass-text-muted: rgba(248, 250, 252, 0.70);
+  --glass-text-muted: #94A3B8;
 
   /* ------------------------------------------------------------------------
-     2. CONCENTRIC RADIUS SCALE
-     Rule: Inner radius = max(0px, Outer radius - Container padding)
-     Allowed token set: 12px, 20px, 28px, 999px
+     2. REFINED INSTITUTIONAL RADIUS SCALE (Clean, Professional, Non-Bulbous)
      ------------------------------------------------------------------------ */
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-pill: 999px;
 
   --radius-outer: var(--radius-lg);
   --pad: 12px;
-  --nested-radius-mode: concentric; /* 'concentric' or 'inherit' */
+  --nested-radius-mode: concentric;
   --radius-inner: max(0px, calc(var(--radius-outer) - var(--pad)));
-  --radius-card: var(--radius-lg);
+  --radius-card: 16px;
   --radius-card-inner: var(--radius-inner);
   --radius-control: var(--radius-sm);
 
