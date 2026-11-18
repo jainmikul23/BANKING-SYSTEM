@@ -314,17 +314,11 @@ function initNavbarScrollState() {
 
 // 6. Adaptive Performance & Low-Power Engine (120 FPS Enforcer)
 function initAdaptivePerformance() {
-  const isLowCore = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-
   function enableLowPowerMode() {
     if (!document.documentElement.hasAttribute('data-perf')) {
       document.documentElement.setAttribute('data-perf', 'low-power');
       window.IS_LOW_POWER_MODE = true;
     }
-  }
-
-  if (isLowCore) {
-    enableLowPowerMode();
   }
 
   // Adaptive FPS Tracker: detects sub-40 FPS sustained drops and adapts automatically
@@ -355,20 +349,82 @@ function initAdaptivePerformance() {
   requestAnimationFrame(monitorFPS);
 }
 
-// 6. Theme Management
-function initThemeToggle() {
-  const themeToggleBtn = document.getElementById('theme-toggle-btn');
-  const savedTheme = localStorage.getItem('atheria_theme') || localStorage.getItem('aetheria_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+// 6. Centralized Single-Source Theme Management
+window.AtheriaTheme = (function () {
+  const THEME_KEY = 'atheria_theme';
 
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
-      const nextTheme = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', nextTheme);
-      localStorage.setItem('atheria_theme', nextTheme);
+  function getTheme() {
+    return document.documentElement.getAttribute('data-theme') || localStorage.getItem(THEME_KEY) || 'dark';
+  }
+
+  function applyTheme(theme) {
+    if (theme !== 'dark' && theme !== 'light') theme = 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+      document.cookie = `${THEME_KEY}=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch (e) {}
+
+    updateToggleIcons(theme);
+
+    // Notify components (charts, WebGL, custom widgets)
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+  }
+
+  function toggle() {
+    const current = getTheme();
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    return next;
+  }
+
+  function updateToggleIcons(theme) {
+    const isLight = theme === 'light';
+    const toggles = document.querySelectorAll('#theme-toggle-btn, .theme-toggle-btn, [data-theme-toggle]');
+    toggles.forEach((btn) => {
+      btn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+      btn.setAttribute('title', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+      btn.innerHTML = isLight
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
     });
   }
+
+  let initialized = false;
+  function init() {
+    if (initialized) return;
+    initialized = true;
+    const current = getTheme();
+    applyTheme(current);
+
+    // Global click listener via delegation for all theme toggle buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('#theme-toggle-btn, .theme-toggle-btn, [data-theme-toggle]');
+      if (btn) {
+        e.preventDefault();
+        toggle();
+      }
+    });
+
+    // Cross-tab synchronization
+    window.addEventListener('storage', (e) => {
+      if (e.key === THEME_KEY && e.newValue) {
+        applyTheme(e.newValue);
+      }
+    });
+  }
+
+  return {
+    getTheme,
+    setTheme: applyTheme,
+    toggle,
+    init,
+    updateIcons: updateToggleIcons,
+  };
+})();
+
+function initThemeToggle() {
+  window.AtheriaTheme.init();
 }
 
 // 7. Currency Formatter (INR)

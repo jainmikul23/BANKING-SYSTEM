@@ -185,9 +185,6 @@
       const pressed = document.querySelectorAll('.is-pressed');
       pressed.forEach((el) => {
         el.classList.remove('is-pressed');
-        // Trigger subtle landing spring
-        el.classList.add('is-released');
-        setTimeout(() => el.classList.remove('is-released'), 400);
       });
       if (pressed.length > 0) {
         triggerHaptic(8);
@@ -204,7 +201,13 @@
   function initGlassTabBar(container) {
     if (!container) return null;
 
-    let lens = container.querySelector('.glass-lens');
+    // Remove any duplicate or rogue lenses to guarantee strictly 1 lens
+    const existingLenses = container.querySelectorAll(':scope > .glass-lens, .glass-lens');
+    existingLenses.forEach((l, idx) => {
+      if (idx > 0) l.remove();
+    });
+
+    let lens = container.querySelector(':scope > .glass-lens');
     if (!lens) {
       lens = document.createElement('div');
       lens.className = 'glass-lens';
@@ -215,198 +218,98 @@
     const items = Array.from(container.querySelectorAll('.nav-item, .mobile-tab-item, [role="tab"], .glass-tab-item'));
     if (items.length === 0) return null;
 
-    // Physics instances for lens position & dimensions
-    const springX = new Spring({ stiffness: 260, damping: 15 });
-    const springW = new Spring({ stiffness: 300, damping: 18 });
-    const springStretch = new Spring({ stiffness: 240, damping: 14 });
-
-    let activeItem = items.find((it) => it.classList.contains('active')) || items[0];
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragCurrentX = 0;
-    let isAnimating = false;
-    let unregisterRaf = null;
-
     function getContainerRelativeRect(elem) {
       const cRect = container.getBoundingClientRect();
       const eRect = elem.getBoundingClientRect();
+      const clientLeft = container.clientLeft || 0;
+      const clientTop = container.clientTop || 0;
       return {
-        left: eRect.left - cRect.left + container.scrollLeft,
-        top: eRect.top - cRect.top + container.scrollTop,
+        left: eRect.left - cRect.left - clientLeft + container.scrollLeft,
+        top: eRect.top - cRect.top - clientTop + container.scrollTop,
         width: eRect.width,
         height: eRect.height,
-        centerX: eRect.left - cRect.left + container.scrollLeft + eRect.width / 2,
       };
     }
 
-    function positionLensImmediately(target) {
+    let currentTarget = null;
+
+    function positionLens(target, animate = true) {
       if (!target) return;
-      const rect = getContainerRelativeRect(target);
-      springX.reset(rect.left);
-      springW.reset(rect.width);
-      springStretch.reset(0);
+      currentTarget = target;
 
-      lens.style.transform = `translate3d(${rect.left}px, 0, 0) scale(1, 1)`;
-      lens.style.width = `${rect.width}px`;
-      lens.style.height = `${rect.height}px`;
+      // Toggle active class before rect measurement so active typography applies
+      items.forEach((it) => {
+        it.classList.toggle('active', it === target);
+      });
+
+      const rect = getContainerRelativeRect(target);
+      if (animate && !prefersReducedMotion) {
+        lens.style.transition = 'transform 220ms cubic-bezier(0.2, 0, 0, 1), width 220ms cubic-bezier(0.2, 0, 0, 1), height 220ms cubic-bezier(0.2, 0, 0, 1), opacity 150ms ease';
+      } else {
+        lens.style.transition = 'none';
+      }
+      lens.style.transform = `translate3d(${rect.left.toFixed(2)}px, ${rect.top.toFixed(2)}px, 0)`;
+      lens.style.width = `${rect.width.toFixed(2)}px`;
+      lens.style.height = `${rect.height.toFixed(2)}px`;
       lens.style.opacity = '1';
+    }
 
-      items.forEach((it) => {
-        if (it === target) {
-          it.classList.add('active');
-        } else {
-          it.classList.remove('active');
-        }
+    // Initial placement on active or first item
+    const initialTarget = items.find((it) => it.classList.contains('active')) || items[0];
+    if (initialTarget) {
+      currentTarget = initialTarget;
+      requestAnimationFrame(() => {
+        positionLens(initialTarget, false);
       });
     }
 
-    function animateTo(target, withWobble = true) {
-      if (!target || prefersReducedMotion) {
-        positionLensImmediately(target);
-        return;
-      }
-
-      const rect = getContainerRelativeRect(target);
-      const currentPos = springX.val;
-      const dx = rect.left - currentPos;
-
-      // Calculate directional stretch (up to 1.25 scaleX, 0.92 scaleY)
-      const maxDistance = Math.max(container.clientWidth * 0.5, 120);
-      const stretchAmount = Math.min(Math.abs(dx) / maxDistance, 1) * 0.25;
-      springStretch.reset(stretchAmount);
-
-      springX.setTarget(rect.left);
-      springW.setTarget(rect.width);
-      springStretch.setTarget(0);
-
-      items.forEach((it) => {
-        if (it === target) {
-          it.classList.add('active');
-        } else {
-          it.classList.remove('active');
-        }
-      });
-      activeItem = target;
-
-      if (!isAnimating) {
-        isAnimating = true;
-        unregisterRaf = registerRaf((dt) => {
-          const movingX = springX.update(dt);
-          const movingW = springW.update(dt);
-          const movingS = springStretch.update(dt);
-
-          const curX = springX.val;
-          const curW = springW.val;
-          const curS = springStretch.val;
-
-          // Stretch along direction of motion
-          const scaleX = 1 + curS;
-          const scaleY = Math.max(0.92, 1 - curS * 0.32);
-
-          lens.style.width = `${curW}px`;
-          lens.style.transform = `translate3d(${curX}px, 0, 0) scale(${scaleX.toFixed(3)}, ${scaleY.toFixed(3)})`;
-
-          if (!movingX && !movingW && !movingS) {
-            isAnimating = false;
-            if (unregisterRaf) unregisterRaf();
-            unregisterRaf = null;
-
-            // Trigger arrival jelly landing jiggle
-            if (withWobble) {
-              lens.classList.remove('lens-jiggle');
-              void lens.offsetWidth; // trigger reflow
-              lens.classList.add('lens-jiggle');
-              triggerHaptic(8);
-            }
-          }
-        });
-      }
-    }
-
-    // Attach click/hover listeners
+    // HARD CLICK ONLY - Hover strictly disabled per user specification
     items.forEach((item) => {
       item.addEventListener('click', (e) => {
-        // If it's an internal tab button or hash link, animate smoothly
-        animateTo(item, true);
+        positionLens(item, true);
+        triggerHaptic(6);
       });
-
-      // Hover preview if device supports hover
-      if (!supportsTouch) {
-        item.addEventListener('mouseenter', () => {
-          if (!isDragging) {
-            animateTo(item, false);
-          }
-        });
-      }
     });
 
-    if (!supportsTouch) {
-      container.addEventListener('mouseleave', () => {
-        if (!isDragging && activeItem) {
-          animateTo(activeItem, true);
-        }
-      });
+    function getActiveItem() {
+      return items.find((it) => it.classList.contains('active')) || currentTarget || items[0];
     }
 
-    // Drag / Touch gestures across the tab bar with rubber-band follow
-    container.addEventListener('pointerdown', (e) => {
-      // Ignore if clicking a button specifically with direct link
-      isDragging = true;
-      dragStartX = e.clientX;
-      dragCurrentX = e.clientX;
-    }, { passive: true });
-
-    window.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
-      dragCurrentX = e.clientX;
-
-      // Find closest item to cursor
-      const cRect = container.getBoundingClientRect();
-      const relativeX = dragCurrentX - cRect.left;
-
-      let closest = items[0];
-      let minDist = Infinity;
-      items.forEach((it) => {
-        const iRect = getContainerRelativeRect(it);
-        const dist = Math.abs(iRect.centerX - relativeX);
-        if (dist < minDist) {
-          minDist = dist;
-          closest = it;
-        }
-      });
-
-      if (closest && closest !== activeItem) {
-        animateTo(closest, false);
+    // Resize recalibration
+    window.addEventListener('resize', () => {
+      const active = getActiveItem();
+      if (active) {
+        positionLens(active, false);
       }
     }, { passive: true });
 
-    window.addEventListener('pointerup', () => {
-      if (isDragging) {
-        isDragging = false;
-        if (activeItem) {
-          animateTo(activeItem, true);
-        }
-      }
-    }, { passive: true });
-
-    // Initial positioning
-    requestAnimationFrame(() => {
-      positionLensImmediately(activeItem);
-    });
-
-    // ResizeObserver to recalibrate on window resize
+    // ResizeObserver to recalibrate on window/container resize
     if (typeof ResizeObserver !== 'undefined') {
       const ro = new ResizeObserver(() => {
-        if (activeItem) {
-          positionLensImmediately(activeItem);
+        const active = getActiveItem();
+        if (active) {
+          positionLens(active, false);
         }
       });
       ro.observe(container);
     }
 
+    // Fonts ready recalibration (ensures exact text bounding rect once fonts render)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        const active = getActiveItem();
+        if (active) {
+          positionLens(active, false);
+        }
+      });
+    }
+
     return {
-      setActive: (item) => animateTo(item, true),
-      recalculate: () => positionLensImmediately(activeItem),
+      setActive: (item) => positionLens(item, true),
+      recalculate: () => {
+        const active = getActiveItem();
+        if (active) positionLens(active, false);
+      },
     };
   }
 
@@ -587,7 +490,7 @@
     initAdaptiveTransparency();
 
     // Tab bars (Navbars, segmented controls, mobile tab bar)
-    const tabBars = document.querySelectorAll('.glass-tab-bar, .landing-nav .nav-menu, .mobile-tab-bar');
+    const tabBars = document.querySelectorAll('.glass-tab-bar, .mobile-tab-bar');
     const tabBarInstances = [];
     tabBars.forEach((tb) => {
       const inst = initGlassTabBar(tb);

@@ -5,14 +5,14 @@
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
-  <div class="glass-panel" style="padding: 36px; border-radius: var(--r-xl);">
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-      <div style="width: 44px; height: 44px; border-radius: var(--r-md); background: var(--ok-bg); border: 1px solid rgba(74,222,128,0.3); display: flex; align-items: center; justify-content: center; color: var(--ok);">
+  <div class="glass-panel">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-5);">
+      <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--ok-bg); border: 1px solid rgba(74,222,128,0.3); display: flex; align-items: center; justify-content: center; color: var(--ok);">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </div>
       <div>
-        <h2 style="font-size: 1.375rem; font-weight: 700;">Deposit to Account</h2>
-        <p style="color: var(--muted); font-size: 0.813rem;">Add funds into your verified bank account</p>
+        <h2 style="font-size: 1.375rem; font-weight: 700; line-height: 1.2;">Deposit to Account</h2>
+        <p style="color: var(--muted); font-size: 0.813rem; line-height: 1.4;">Add funds into your verified bank account</p>
       </div>
     </div>
 
@@ -51,7 +51,7 @@
         <input type="text" name="description" id="description" class="form-input" placeholder="e.g. Salary, Consulting fee, Cash savings">
       </div>
 
-      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 16px;">
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-4);">
         <span>Process Deposit</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
       </button>

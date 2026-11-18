@@ -45,16 +45,21 @@
 
   /* ------------------------------------------------------------------------
      2. CONCENTRIC RADIUS SCALE
-     Rule: Inner radius = Outer radius - Container padding
+     Rule: Inner radius = max(0px, Outer radius - Container padding)
+     Allowed token set: 12px, 20px, 28px, 999px
      ------------------------------------------------------------------------ */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
   --radius-pill: 999px;
-  --radius-hero: 34px;
-  --radius-card: 28px;
-  --radius-card-sm: 22px;
-  --radius-inner-md: calc(var(--radius-card) - 16px);  /* 12px for 16px padding */
-  --radius-inner-lg: calc(var(--radius-card) - 20px);  /* 8px for 20px padding */
-  --radius-control: 14px;
-  --radius-badge: 999px;
+
+  --radius-outer: var(--radius-lg);
+  --pad: 12px;
+  --nested-radius-mode: concentric; /* 'concentric' or 'inherit' */
+  --radius-inner: max(0px, calc(var(--radius-outer) - var(--pad)));
+  --radius-card: var(--radius-lg);
+  --radius-card-inner: var(--radius-inner);
+  --radius-control: var(--radius-sm);
 
   /* ------------------------------------------------------------------------
      3. STANDARDIZED SPRING PHYSICS (CSS linear() generator curves)
@@ -104,69 +109,20 @@
 /* ------------------------------------------------------------------------
    LIGHT MODE OVERRIDES
    ------------------------------------------------------------------------ */
-[data-theme="light"],
-@media (prefers-color-scheme: light) {
-  :root {
-    --glass-tint-alpha: 0.55;
-    --glass-tint-rgb: 255, 255, 255;
-    --glass-specular-top: rgba(255, 255, 255, 0.95);
-    --glass-specular-bottom: rgba(15, 23, 42, 0.08);
-    --glass-inner-glow: inset 0 -8px 16px rgba(15, 23, 42, 0.03);
-    --glass-depth-shadow: 0 8px 24px rgba(60, 80, 120, 0.12), 0 1px 3px rgba(60, 80, 120, 0.06);
-    --glass-floating-shadow: 0 16px 36px -6px rgba(60, 80, 120, 0.18), 0 3px 12px rgba(60, 80, 120, 0.08);
-    --glass-text-color: #0F172A;
-    --glass-text-muted: rgba(15, 23, 42, 0.65);
-    --glass-sheen-intensity: 0.18;
-  }
+[data-theme="light"] {
+  --glass-tint-alpha: 0.55;
+  --glass-tint-rgb: 255, 255, 255;
+  --glass-specular-top: rgba(255, 255, 255, 0.95);
+  --glass-specular-bottom: rgba(15, 23, 42, 0.08);
+  --glass-inner-glow: inset 0 -8px 16px rgba(15, 23, 42, 0.03);
+  --glass-depth-shadow: 0 8px 24px rgba(60, 80, 120, 0.12), 0 1px 3px rgba(60, 80, 120, 0.06);
+  --glass-floating-shadow: 0 16px 36px -6px rgba(60, 80, 120, 0.18), 0 3px 12px rgba(60, 80, 120, 0.08);
+  --glass-text-color: #0F172A;
+  --glass-text-muted: rgba(15, 23, 42, 0.65);
+  --glass-sheen-intensity: 0.18;
 }
 
-/* ------------------------------------------------------------------------
-   KEYFRAME ANIMATIONS: JELLY LANDING JIGGLE & PRESS SQUASH
-   ------------------------------------------------------------------------ */
-@keyframes glass-landing-jiggle {
-  0% {
-    transform: scale(1, 1);
-  }
-  25% {
-    transform: scale(1.08, 0.94);
-  }
-  50% {
-    transform: scale(0.97, 1.03);
-  }
-  75% {
-    transform: scale(1.02, 0.99);
-  }
-  100% {
-    transform: scale(1, 1);
-  }
-}
 
-@keyframes glass-press-wobble {
-  0% {
-    transform: scale(0.94);
-  }
-  45% {
-    transform: scale(1.05);
-  }
-  75% {
-    transform: scale(0.99);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes glass-focus-pulse {
-  0% {
-    box-shadow: 0 0 0 0px rgba(122, 167, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  }
-  50% {
-    box-shadow: 0 0 0 4px rgba(122, 167, 255, 0.4), 0 0 20px rgba(122, 167, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 1);
-  }
-  100% {
-    box-shadow: var(--glass-focus-ring);
-  }
-}
 
 /* ------------------------------------------------------------------------
    ACCESSIBILITY: PREFERS-REDUCED-MOTION & PREFERS-REDUCED-TRANSPARENCY
@@ -196,11 +152,8 @@
     --glass-tint-alpha: 1 !important;
   }
 
-  [data-theme="light"],
-  @media (prefers-color-scheme: light) {
-    :root {
-      --glass-tint: #FFFFFF !important;
-    }
+  [data-theme="light"] {
+    --glass-tint: #FFFFFF !important;
   }
 
   .glass, .glass-card, .glass-panel, .glass-nav, .glass-modal, .glass-surface {

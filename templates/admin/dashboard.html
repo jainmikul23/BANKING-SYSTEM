@@ -37,9 +37,9 @@
 
 <!-- Charts & Trends Section -->
 <div class="admin-charts-grid">
-  <div class="glass-panel" style="padding: 24px; border-radius: var(--r-xl);">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h3 style="font-size: 1.125rem; font-weight: 700;">7-Day System Cashflow Dynamics</h3>
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">7-Day System Cashflow Dynamics</h3>
       <span style="font-size: 0.75rem; color: var(--muted);">Credits vs Debits</span>
     </div>
     <div style="height: 240px;">
@@ -48,20 +48,20 @@
   </div>
 
   <!-- Pending Approvals Action Queue -->
-  <div class="glass-panel" style="padding: 24px; border-radius: var(--r-xl); display: flex; flex-direction: column;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <h3 style="font-size: 1.125rem; font-weight: 700;">Pending Loans Action</h3>
+  <div class="glass-panel" style="display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">Pending Loans Action</h3>
       <a href="{% url 'adminpanel:loans' %}" class="btn btn-glass btn-sm">View All</a>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
+    <div style="display: flex; flex-direction: column; gap: var(--space-2); flex: 1;">
       {% for loan in pending_loans %}
-        <div style="padding: 12px; border-radius: var(--r-md); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
+        <div style="padding: var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div style="font-size: 0.875rem; font-weight: 600;">{{ loan.customer.full_name }}</div>
             <div style="font-size: 0.75rem; color: var(--accent);">{{ loan.get_loan_type_display }} &bull; ₹{{ loan.principal|floatformat:2 }}</div>
           </div>
-          <div style="display: flex; gap: 6px;">
+          <div style="display: flex; gap: var(--space-2);">
             <button type="button" class="btn btn-primary btn-sm" onclick="adminDecision({{ loan.id }}, 'approve')">Approve</button>
             <button type="button" class="btn btn-danger btn-sm" onclick="adminDecision({{ loan.id }}, 'reject')">Reject</button>
           </div>
@@ -76,17 +76,17 @@
 </div>
 
 <!-- Pending KYC & Global Ledger Bottom Grid -->
-<div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: var(--grid-gap);">
   <!-- KYC Queue -->
-  <div class="glass-panel" style="padding: 24px; border-radius: var(--r-xl);">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <h3 style="font-size: 1.125rem; font-weight: 700;">KYC Verifications</h3>
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">KYC Verifications</h3>
       <a href="{% url 'adminpanel:customers' %}?kyc=pending" class="btn btn-glass btn-sm">Queue</a>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
       {% for c in pending_kyc %}
-        <div style="padding: 12px; border-radius: var(--r-md); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
+        <div style="padding: var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div style="font-size: 0.875rem; font-weight: 600;">{{ c.full_name }}</div>
             <div style="font-size: 0.75rem; color: var(--muted);">{{ c.city }} &bull; {{ c.phone }}</div>
@@ -98,7 +98,7 @@
           </form>
         </div>
       {% empty %}
-        <div style="text-align: center; padding: 30px; color: var(--muted); font-size: 0.875rem;">
+        <div style="text-align: center; padding: var(--space-6); color: var(--muted); font-size: 0.875rem;">
           All customer KYCs are verified.
         </div>
       {% endfor %}
@@ -106,9 +106,9 @@
   </div>
 
   <!-- Recent Ledger Entries -->
-  <div class="glass-panel" style="padding: 24px; border-radius: var(--r-xl);">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <h3 style="font-size: 1.125rem; font-weight: 700;">Recent Ledger Transactions</h3>
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">Recent Ledger Transactions</h3>
       <a href="{% url 'adminpanel:transactions' %}" class="btn btn-glass btn-sm">Full Ledger</a>
     </div>
 

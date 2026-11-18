@@ -3,6 +3,10 @@
 {% block title %}Manage Customers | Atheria Reserve Bank{% endblock %}
 {% block page_title %}Customer Administration{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/admin.css">
+{% endblock %}
+
 {% block content %}
 <div class="glass-panel filter-bar">
   <form method="get" style="display: flex; gap: 14px; flex-wrap: wrap; width: 100%; align-items: flex-end;">
@@ -28,7 +32,7 @@
   </form>
 </div>
 
-<div class="glass-panel" style="border-radius: var(--r-xl); overflow: hidden;">
+<div class="glass-panel" style="overflow: hidden;">
   <div class="table-wrapper">
     <table class="data-table">
       <thead>

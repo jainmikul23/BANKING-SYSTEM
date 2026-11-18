@@ -5,9 +5,9 @@
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
-  <div class="glass-panel" style="padding: 36px; border-radius: var(--r-xl);">
-    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Create an Additional Account</h2>
-    <p style="color: var(--muted); font-size: 0.875rem; margin-bottom: 28px;">Instantly open a supplementary Savings or Current account mapped to your customer profile.</p>
+  <div class="glass-panel">
+    <h2 style="font-size: 1.5rem; font-weight: 700; line-height: 1.2; margin-bottom: var(--space-2);">Create an Additional Account</h2>
+    <p style="color: var(--muted); font-size: 0.875rem; line-height: 1.5; margin-bottom: var(--space-6);">Instantly open a supplementary Savings or Current account mapped to your customer profile.</p>
 
     <form method="post">
       {% csrf_token %}
@@ -29,9 +29,9 @@
         </select>
       </div>
 
-      <div style="padding: 16px; border-radius: var(--r-md); background: rgba(94,234,212,0.06); border: 1px solid rgba(94,234,212,0.2); margin: 24px 0;">
-        <div style="font-size: 0.813rem; font-weight: 600; color: var(--accent); margin-bottom: 4px;">Opening Deposit Benefit</div>
-        <div style="font-size: 0.75rem; color: var(--muted);">An initial promotional deposit of ₹1,000 for Savings or ₹5,000 for Current will be automatically credited to start your new account.</div>
+      <div style="padding: var(--space-4); border-radius: var(--radius-sm); background: rgba(94,234,212,0.06); border: 1px solid rgba(94,234,212,0.2); margin: var(--space-5) 0;">
+        <div style="font-size: 0.813rem; font-weight: 600; color: var(--accent); margin-bottom: var(--space-1);">Opening Deposit Benefit</div>
+        <div style="font-size: 0.75rem; color: var(--muted); line-height: 1.4;">An initial promotional deposit of ₹1,000 for Savings or ₹5,000 for Current will be automatically credited to start your new account.</div>
       </div>
 
       <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">

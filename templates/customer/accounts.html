@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-5);">
   <div>
     <h2 style="font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;">Digital Wallet & Accounts</h2>
     <p style="color: var(--muted); font-size: 0.875rem;">Manage all your linked deposit and transaction accounts</p>
@@ -21,7 +21,7 @@
 
 <div class="wallet-stack">
   {% for acc in accounts %}
-    <div class="glass-panel" style="padding: 24px; border-radius: var(--r-xl);">
+    <div class="glass-panel">
       <!-- Apple Wallet Style Card Graphic -->
       <div class="bank-card bank-card-{{ acc.type }}">
         <div class="card-top">

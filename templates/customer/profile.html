@@ -5,19 +5,19 @@
 
 {% block content %}
 <div style="max-width: 720px; margin: 0 auto;">
-  <div class="glass-panel" style="padding: 36px; border-radius: var(--r-xl); margin-bottom: 24px;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <div style="width: 56px; height: 56px; border-radius: var(--r-full); background: var(--accent-glow); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+  <div class="glass-panel" style="margin-bottom: var(--space-5);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-6);">
+      <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <div style="width: 56px; height: 56px; border-radius: var(--radius-pill); background: var(--accent-glow); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
           {{ customer.full_name|make_list|first|upper }}
         </div>
         <div>
-          <h2 style="font-size: 1.375rem; font-weight: 700;">{{ customer.full_name }}</h2>
-          <div style="font-size: 0.813rem; color: var(--muted);">Customer ID: #{{ customer.id }} &bull; Username: @{{ customer.user.username }}</div>
+          <h2 style="font-size: 1.375rem; font-weight: 700; line-height: 1.2;">{{ customer.full_name }}</h2>
+          <div style="font-size: 0.813rem; color: var(--muted); margin-top: var(--space-1);">Customer ID: #{{ customer.id }} &bull; Username: @{{ customer.user.username }}</div>
         </div>
       </div>
       <div>
-        <span class="badge badge-{{ customer.kyc_status }}" style="font-size: 0.813rem; padding: 6px 14px;">
+        <span class="badge badge-{{ customer.kyc_status }}" style="font-size: 0.813rem; padding: var(--space-1) var(--space-3);">
           KYC {{ customer.get_kyc_status_display }}
         </span>
       </div>

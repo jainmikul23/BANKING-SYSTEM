@@ -189,7 +189,7 @@ Apple sheet pattern with background page scaling down to `scale(0.96)`, `border-
 
 ## 6. Motion Helper Module API (`window.LiquidMotion`)
 
-Located in [static/js/liquidMotion.js](file:///Users/mikuljain09/Desktop/DBMS%20_PROJECT/static/js/liquidMotion.js):
+Located in `static/js/liquidMotion.js`:
 
 ```javascript
 // Register a callback to the master delta-time rAF loop

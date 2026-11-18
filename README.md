@@ -1,4 +1,4 @@
-# Atheria Reserve Bank — Next-Gen Banking Management System
+# BANKING-SYSTEM — Atheria Reserve Bank
 
 A production-grade, 3NF-normalized web Banking Management System engineered with **Python 3.11+ / Django 5.x**, **MySQL 8 (InnoDB)**, **Three.js (r128)**, **GSAP**, and **ReportLab**. Designed for college DBMS project submissions and viva defense with rigorous ACID transaction atomicity, pessimistic row locks, database triggers, analytical views, and an Apple visionOS glassmorphism design system.
 

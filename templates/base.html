@@ -1,7 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="{{ request.COOKIES.atheria_theme|default:'dark' }}">
 
 <head>
+  <!-- Immediate Theme Initializer (prevents FOUC / flash of theme before CSS is parsed) -->
+  <script>
+    (function () {
+      try {
+        var m = document.cookie.match(/(?:^|; )atheria_theme=([^;]+)/);
+        var cookieTheme = m ? decodeURIComponent(m[1]) : null;
+        var saved = localStorage.getItem('atheria_theme') || cookieTheme || 'dark';
+        if (saved !== 'dark' && saved !== 'light') saved = 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        if (cookieTheme !== saved) {
+          document.cookie = 'atheria_theme=' + saved + '; path=/; max-age=31536000; SameSite=Lax';
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{{ BANK_NAME|default:"Atheria Reserve Bank" }}{% endblock %}</title>

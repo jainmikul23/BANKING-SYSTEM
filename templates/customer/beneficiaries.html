@@ -4,7 +4,7 @@
 {% block page_title %}Beneficiary Management{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-5);">
   <div>
     <h2 style="font-size: 1.5rem; font-weight: 700;">Saved Beneficiaries</h2>
     <p style="color: var(--muted); font-size: 0.875rem;">Whitelist trusted accounts for faster one-click fund transfers</p>
@@ -15,7 +15,7 @@
   </button>
 </div>
 
-<div class="glass-panel" style="border-radius: var(--r-xl); overflow: hidden;">
+<div class="glass-panel" style="overflow: hidden;">
   <div class="table-wrapper">
     <table class="data-table">
       <thead>
@@ -60,9 +60,9 @@
 
 <!-- Add Beneficiary Modal -->
 <div class="modal-overlay" id="addBeneficiaryModal">
-  <div class="modal-content glass-panel-strong" style="padding: 32px; border-radius: var(--r-xl);">
-    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 6px;">Add New Beneficiary</h3>
-    <p style="font-size: 0.813rem; color: var(--muted); margin-bottom: 20px;">Save an Atheria Reserve account for recurring payments</p>
+  <div class="modal-content glass-panel-strong">
+    <h3 style="font-size: 1.25rem; font-weight: 700; line-height: 1.2; margin-bottom: var(--space-2);">Add New Beneficiary</h3>
+    <p style="font-size: 0.813rem; color: var(--muted); line-height: 1.4; margin-bottom: var(--space-5);">Save an Atheria Reserve account for recurring payments</p>
 
     <form method="post">
       {% csrf_token %}
@@ -78,9 +78,9 @@
         <input type="text" name="nickname" id="b_nickname" class="form-input" placeholder="e.g. Priya Home, Landlord, Office" required>
       </div>
 
-      <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <button type="button" class="btn btn-glass" style="flex: 1;" data-modal-close>Cancel</button>
-        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Beneficiary</button>
+      <div style="display: flex; gap: var(--space-3); margin-top: var(--space-5);">
+        <button type="button" class="btn btn-glass" style="flex: 1; min-height: 44px;" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" style="flex: 1; min-height: 44px;">Save Beneficiary</button>
       </div>
     </form>
   </div>
