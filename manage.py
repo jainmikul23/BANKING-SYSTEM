@@ -1,7 +1,17 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+"""Root Django launcher proxy: delegates directly to backend/."""
 import os
 import sys
+from pathlib import Path
+
+# Add backend directory to sys.path so config and apps resolve automatically
+BASE_DIR = Path(__file__).resolve().parent
+backend_path = BASE_DIR / 'backend'
+if str(backend_path) not in sys.path:
+    sys.path.insert(0, str(backend_path))
+
+# Set working directory to backend for seamless test discovery and execution
+os.chdir(backend_path)
 
 def main():
     """Run administrative tasks."""

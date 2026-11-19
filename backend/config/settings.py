@@ -4,10 +4,18 @@ from decimal import Decimal
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR points to backend/ (where config, apps, and manage.py live)
 BASE_DIR = Path(__file__).resolve().parent.parent
+# ROOT_DIR points to repository root (where .env, docs, frontend/ live)
+ROOT_DIR = BASE_DIR.parent
+# FRONTEND_DIR points to frontend/ (where static, templates, and UI assets live)
+FRONTEND_DIR = ROOT_DIR / 'frontend'
 
-# Load environment variables from .env file
-load_dotenv(BASE_DIR / '.env')
+# Load environment variables from .env file (root first, fallback to backend)
+env_file = ROOT_DIR / '.env'
+if not env_file.exists():
+    env_file = BASE_DIR / '.env'
+load_dotenv(env_file)
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-banking-system-secret-key-change-in-production-123456')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
@@ -48,7 +56,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            FRONTEND_DIR / 'templates',
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,12 +126,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    FRONTEND_DIR / 'static',
+]
+STATIC_ROOT = FRONTEND_DIR / 'staticfiles'
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = ROOT_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

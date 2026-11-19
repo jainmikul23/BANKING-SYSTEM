@@ -54,6 +54,11 @@ Sitemap: {base_url}/sitemap.xml
 
 def favicon_ico(request):
     """Serve the Atheria Reserve multi-resolution favicon.ico."""
+    for s_dir in getattr(settings, 'STATICFILES_DIRS', []):
+        ico_path = os.path.join(s_dir, 'img', 'favicon.ico')
+        if os.path.exists(ico_path):
+            with open(ico_path, 'rb') as f:
+                return HttpResponse(f.read(), content_type='image/x-icon')
     ico_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'favicon.ico')
     if os.path.exists(ico_path):
         with open(ico_path, 'rb') as f:
@@ -63,6 +68,11 @@ def favicon_ico(request):
 
 def apple_touch_icon(request):
     """Serve the Atheria Reserve 180x180 Apple Touch Icon."""
+    for s_dir in getattr(settings, 'STATICFILES_DIRS', []):
+        icon_path = os.path.join(s_dir, 'img', 'apple-touch-icon.png')
+        if os.path.exists(icon_path):
+            with open(icon_path, 'rb') as f:
+                return HttpResponse(f.read(), content_type='image/png')
     icon_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'apple-touch-icon.png')
     if os.path.exists(icon_path):
         with open(icon_path, 'rb') as f:
