@@ -97,11 +97,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database configuration (MySQL 8 with Railway/Render environment fallbacks, SQLite for quick local test)
-DB_NAME = os.getenv('DB_NAME') or os.getenv('MYSQLDATABASE', 'banking_system')
-DB_USER = os.getenv('DB_USER') or os.getenv('MYSQLUSER', 'root')
-DB_PASSWORD = os.getenv('DB_PASSWORD') or os.getenv('MYSQLPASSWORD', '')
-DB_HOST = os.getenv('DB_HOST') or os.getenv('MYSQLHOST', '127.0.0.1')
-DB_PORT = os.getenv('DB_PORT') or os.getenv('MYSQLPORT', '3306')
+db_url = os.getenv('DATABASE_URL') or os.getenv('MYSQL_URL')
+if db_url and (db_url.startswith('mysql://') or db_url.startswith('mysqlclient://')):
+    from urllib.parse import urlparse, unquote
+    parsed = urlparse(db_url)
+    DB_NAME = parsed.path.lstrip('/') or 'railway'
+    DB_USER = unquote(parsed.username) if parsed.username else 'root'
+    DB_PASSWORD = unquote(parsed.password) if parsed.password else ''
+    DB_HOST = parsed.hostname or '127.0.0.1'
+    DB_PORT = str(parsed.port or 3306)
+else:
+    DB_NAME = os.getenv('DB_NAME') or os.getenv('MYSQLDATABASE', 'banking_system')
+    DB_USER = os.getenv('DB_USER') or os.getenv('MYSQLUSER', 'root')
+    DB_PASSWORD = os.getenv('DB_PASSWORD') or os.getenv('MYSQLPASSWORD', '')
+    DB_HOST = os.getenv('DB_HOST') or os.getenv('MYSQLHOST', '127.0.0.1')
+    DB_PORT = os.getenv('DB_PORT') or os.getenv('MYSQLPORT', '3306')
 
 if os.getenv('USE_SQLITE', 'false').lower() in ('true', '1') or os.getenv('DB_ENGINE', '').lower() == 'sqlite':
     DATABASES = {
