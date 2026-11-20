@@ -73,24 +73,6 @@
       </button>
     </form>
 
-    <!-- 1-Click Demo Profiles (Clean SVG, No Emojis) -->
-    <div class="demo-accounts">
-      <div class="demo-title">
-        <span>Instant Credentials</span>
-        <span style="color: var(--accent); font-size: 0.688rem; font-family: var(--font-mono);">ONE-CLICK</span>
-      </div>
-      <div class="demo-chips">
-        <button type="button" class="demo-chip" onclick="fillLogin('customer1', 'Customer@123')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 4px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          Customer Portal
-        </button>
-        <button type="button" class="demo-chip" onclick="fillLogin('admin', 'Admin@123')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          System Admin
-        </button>
-      </div>
-    </div>
-
     <div class="auth-footer">
       <span>Require a new bank account?</span>
       <a href="{% url 'accounts:register' %}">Open Account</a>
@@ -100,14 +82,6 @@
     </div>
   </div>
 </div>
-
-<script>
-function fillLogin(u, p) {
-  document.getElementById('id_username').value = u;
-  document.getElementById('id_password').value = p;
-  showToast(`Loaded ${u} credentials`, 'info');
-}
-</script>
 {% endblock %}
 
 {% block extra_js %}
