@@ -1,0 +1,214 @@
+@import url('./liquid-glass-tokens.css');
+
+:root {
+  /* =====================================================================
+     INSTITUTIONAL RESERVE PALETTE (Executive Slate & Royal Sapphire)
+     Zero AI neon/purple, calibrated optical contrast, executive typography
+     ===================================================================== */
+  --bg-0: #0B0E14;
+  /* Premium Slate-Charcoal canvas */
+  --bg-1: #0F131D;
+  /* Institutional Sidebar / Nav Surface */
+  --bg-surface: #151926;
+  /* Elevated Executive Card */
+  --bg-card: #151926;
+  --bg-card-hover: #1B2030;
+  --bg-input: #0A0D13;
+
+  /* Frosted Glass Layers (Subtle, refined, non-glossy) */
+  --glass-bg: rgba(21, 25, 38, 0.85);
+  --glass-bg-strong: rgba(27, 32, 48, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.40);
+  --glass-blur: 16px;
+  --glass-saturate: 140%;
+
+  --glass-base: rgba(15, 19, 29, 0.90);
+  --glass-card: #151926;
+  --glass-panel: #151926;
+  --glass-strong: #1B2030;
+  --glass-interactive: rgba(255, 255, 255, 0.05);
+
+  /* Precision Hairline Strokes (Calm, uniform, zero specular glare) */
+  --stroke: rgba(255, 255, 255, 0.07);
+  --stroke-subtle: rgba(255, 255, 255, 0.04);
+  --stroke-highlight: rgba(255, 255, 255, 0.10);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --highlight-inner: none;
+  --shadow-occlusion: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  /* Executive Typography Tokens */
+  --text: #F8FAFC;
+  /* Platinum Crisp White */
+  --text-secondary: #94A3B8;
+  /* Cool Slate */
+  --muted: #64748B;
+  /* Slate Muted */
+  --muted-light: #475569;
+  /* Slate Quaternary */
+
+  /* Institutional Banking Accent: Precision Royal Sapphire */
+  --accent: #2563EB;
+  /* Royal Sapphire Blue */
+  --accent-rgb: 37, 99, 235;
+  --accent-glow: rgba(37, 99, 235, 0.22);
+  --accent-hover: #1D4ED8;
+  /* Deep Royal Hover */
+  --accent-surface: rgba(37, 99, 235, 0.10);
+  --accent-border: rgba(37, 99, 235, 0.32);
+
+  /* Financial Status Colors */
+  --danger: #EF4444;
+  /* Institutional Red */
+  --danger-bg: rgba(239, 68, 68, 0.12);
+  --danger-border: rgba(239, 68, 68, 0.28);
+  --ok: #10B981;
+  /* Verified Asset Green */
+  --ok-bg: rgba(16, 185, 129, 0.12);
+  --ok-border: rgba(16, 185, 129, 0.28);
+  --warning: #F59E0B;
+  /* Escrow / Pending Amber */
+  --warning-bg: rgba(245, 158, 11, 0.12);
+
+  /* =====================================================================
+     STEP 1: SPACING SYSTEM & STEP 2: CONCENTRIC RADIUS SYSTEM
+     ===================================================================== */
+  /* Spacing Scale (4px - 128px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Global Layout Tokens */
+  --section-y: clamp(64px, 10vw, 128px);
+  /* section top/bottom padding */
+  --gutter: clamp(16px, 4vw, 48px);
+  /* page side padding */
+  --grid-gap: clamp(16px, 2.5vw, 32px);
+  /* gap between cells/cards */
+  --container: min(1200px, 100% - 2 * var(--gutter));
+  --card-pad: clamp(20px, 3vw, 32px);
+  --nav-h: 72px;
+
+  /* Radius System (Concentric: inner = max(0, outer - pad)) */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --radius-outer: var(--radius-lg);
+  --pad: 12px;
+  --nested-radius-mode: concentric;
+  --radius-inner: max(0px, calc(var(--radius-outer) - var(--pad)));
+
+  /* Mapped legacy aliases strictly locked to token set */
+  --r-3xl: var(--radius-lg);
+  --r-2xl: var(--radius-lg);
+  --r-xl: var(--radius-md);
+  --r-lg: var(--radius-md);
+  --r-md: var(--radius-sm);
+  --r-sm: var(--radius-sm);
+  --r-full: var(--radius-pill);
+
+  /* Aliases */
+  --space-2xs: var(--space-1);
+  --space-xs: var(--space-2);
+  --space-sm: var(--space-3);
+  --space-md: var(--space-4);
+  --space-lg: var(--space-5);
+  --space-xl: var(--space-6);
+  --space-2xl: var(--space-7);
+  --space-3xl: var(--space-8);
+  --space-4xl: var(--space-9);
+  --space-5xl: var(--space-10);
+
+  /* Shadows (Natural Optical Softness) */
+  --blur: 16px;
+  --shadow-glass: 0 12px 32px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--stroke);
+  --shadow-card: 0 6px 20px -4px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--stroke-subtle);
+  --shadow-floating: 0 20px 44px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--stroke-highlight);
+
+  /* Smooth Physics */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Apple standard spring ease */
+  --dur: 450ms;
+
+  --text-muted: rgba(245, 247, 255, 0.68);
+
+  /* Apple SF Typography Stack */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.45);
+    --glass-bg-strong: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.7);
+    --glass-shadow: 0 8px 32px rgba(60, 80, 120, 0.15);
+    --text: #14181f;
+    --text-muted: rgba(20, 24, 31, 0.62);
+  }
+}
+
+[data-theme="light"] {
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-strong: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 8px 32px rgba(60, 80, 120, 0.15);
+  --text: #14181f;
+  --text-muted: rgba(20, 24, 31, 0.62);
+  --bg-0: #F8FAFC;
+  /* Architectural Slate 50 */
+  --bg-1: #FFFFFF;
+  /* Pure White Canvas */
+  --bg-surface: #FFFFFF;
+  --bg-card: rgba(15, 23, 42, 0.025);
+  --bg-card-hover: rgba(15, 23, 42, 0.045);
+  --bg-input: #F1F5F9;
+
+  --glass-base: rgba(255, 255, 255, 0.65);
+  --glass-card: rgba(255, 255, 255, 0.45);
+  --glass-panel: rgba(255, 255, 255, 0.55);
+  --glass-strong: rgba(255, 255, 255, 0.75);
+  --glass-interactive: rgba(241, 245, 249, 0.85);
+
+  --stroke: rgba(15, 23, 42, 0.08);
+  --stroke-subtle: rgba(15, 23, 42, 0.04);
+  --stroke-highlight: rgba(37, 99, 235, 0.20);
+  --highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --highlight-inner: inset 0 0 0 1px rgba(15, 23, 42, 0.03);
+  --shadow-occlusion: inset 0 -1px 0 0 rgba(15, 23, 42, 0.03);
+
+  --text: #0F172A;
+  /* Slate 900 */
+  --text-secondary: #475569;
+  /* Slate 600 */
+  --muted: #64748B;
+  /* Slate 500 */
+  --muted-light: #94A3B8;
+
+  --accent: #1D4ED8;
+  /* Royal Blue */
+  --accent-glow: rgba(29, 78, 216, 0.14);
+  --accent-hover: #1E40AF;
+  --accent-surface: rgba(29, 78, 216, 0.08);
+  --accent-border: rgba(29, 78, 216, 0.22);
+
+  --shadow-glass: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 4px 14px -2px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.05);
+
+  --danger: #DC2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  --danger-border: rgba(220, 38, 38, 0.20);
+  --ok: #059669;
+  --ok-bg: rgba(5, 150, 105, 0.08);
+  --ok-border: rgba(5, 150, 105, 0.20);
+}

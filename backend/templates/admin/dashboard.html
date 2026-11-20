@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Executive Dashboard | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Core Administration Overview{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/admin.css">
+{% endblock %}
+
+{% block content %}
+<!-- KPI Metrics Grid -->
+<div class="kpi-grid">
+  <div class="kpi-card glass-panel">
+    <div class="kpi-title">Total Customers</div>
+    <div class="kpi-val" data-counter="{{ total_customers }}">{{ total_customers }}</div>
+    <div class="kpi-sub">Verified Retail Entities</div>
+  </div>
+
+  <div class="kpi-card glass-panel">
+    <div class="kpi-title">Active Bank Accounts</div>
+    <div class="kpi-val" data-counter="{{ total_accounts }}">{{ total_accounts }}</div>
+    <div class="kpi-sub">Savings & Current Accounts</div>
+  </div>
+
+  <div class="kpi-card glass-panel">
+    <div class="kpi-title">Total System Deposits</div>
+    <div class="kpi-val money" data-counter="{{ total_deposits }}" data-is-currency>₹{{ total_deposits|floatformat:2 }}</div>
+    <div class="kpi-sub" style="color: var(--ok);">Liquid Bank Capital</div>
+  </div>
+
+  <div class="kpi-card glass-panel">
+    <div class="kpi-title">Pending Loans Queue</div>
+    <div class="kpi-val" style="color: var(--warning);" data-counter="{{ pending_loans_count }}">{{ pending_loans_count }}</div>
+    <div class="kpi-sub">Awaiting Decision</div>
+  </div>
+</div>
+
+<!-- Charts & Trends Section -->
+<div class="admin-charts-grid">
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">7-Day System Cashflow Dynamics</h3>
+      <span style="font-size: 0.75rem; color: var(--muted);">Credits vs Debits</span>
+    </div>
+    <div style="height: 240px;">
+      <canvas id="adminVolumeChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Pending Approvals Action Queue -->
+  <div class="glass-panel" style="display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">Pending Loans Action</h3>
+      <a href="{% url 'adminpanel:loans' %}" class="btn btn-glass btn-sm">View All</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-2); flex: 1;">
+      {% for loan in pending_loans %}
+        <div style="padding: var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 0.875rem; font-weight: 600;">{{ loan.customer.full_name }}</div>
+            <div style="font-size: 0.75rem; color: var(--accent);">{{ loan.get_loan_type_display }} &bull; ₹{{ loan.principal|floatformat:2 }}</div>
+          </div>
+          <div style="display: flex; gap: var(--space-2);">
+            <button type="button" class="btn btn-primary btn-sm" onclick="adminDecision({{ loan.id }}, 'approve')">Approve</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="adminDecision({{ loan.id }}, 'reject')">Reject</button>
+          </div>
+        </div>
+      {% empty %}
+        <div style="text-align: center; padding: 40px; color: var(--muted); font-size: 0.875rem;">
+          No loan applications awaiting decision.
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Pending KYC & Global Ledger Bottom Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: var(--grid-gap);">
+  <!-- KYC Queue -->
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">KYC Verifications</h3>
+      <a href="{% url 'adminpanel:customers' %}?kyc=pending" class="btn btn-glass btn-sm">Queue</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+      {% for c in pending_kyc %}
+        <div style="padding: var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 0.875rem; font-weight: 600;">{{ c.full_name }}</div>
+            <div style="font-size: 0.75rem; color: var(--muted);">{{ c.city }} &bull; {{ c.phone }}</div>
+          </div>
+          <form method="post" action="{% url 'adminpanel:update_kyc' c.id %}" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="verified">
+            <button type="submit" class="btn btn-primary btn-sm">Verify KYC</button>
+          </form>
+        </div>
+      {% empty %}
+        <div style="text-align: center; padding: var(--space-6); color: var(--muted); font-size: 0.875rem;">
+          All customer KYCs are verified.
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Recent Ledger Entries -->
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+      <h3 style="font-size: 1.125rem; font-weight: 700; line-height: 1.2;">Recent Ledger Transactions</h3>
+      <a href="{% url 'adminpanel:transactions' %}" class="btn btn-glass btn-sm">Full Ledger</a>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Ref No</th>
+            <th>Account</th>
+            <th>Type</th>
+            <th style="text-align: right;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in recent_transactions %}
+            <tr>
+              <td style="color: var(--muted); font-size: 0.75rem;">{{ t.created_at|date:"H:i:s" }}</td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent);">{{ t.reference_no }}</td>
+              <td style="font-family: var(--font-mono); font-size: 0.75rem;">{{ t.account.account_number }}</td>
+              <td><span class="badge {% if t.type in 'deposit transfer_in loan_credit' %}badge-active{% else %}badge-frozen{% endif %}" style="font-size: 0.688rem;">{{ t.get_type_display }}</span></td>
+              <td style="text-align: right; font-weight: 700;" class="money">₹{{ t.amount|floatformat:2 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ days_labels|json_script:"admin-days-labels" }}
+{{ credits_data|json_script:"admin-credits-data" }}
+{{ debits_data|json_script:"admin-debits-data" }}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('adminVolumeChart');
+  if (!ctx) return;
+
+  const labels = JSON.parse(document.getElementById('admin-days-labels').textContent || '[]');
+  const credits = JSON.parse(document.getElementById('admin-credits-data').textContent || '[]');
+  const debits = JSON.parse(document.getElementById('admin-debits-data').textContent || '[]');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Credits (₹)',
+          data: credits,
+          borderColor: '#10B981',
+          backgroundColor: 'rgba(16, 185, 129, 0.12)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 2,
+        },
+        {
+          label: 'Debits (₹)',
+          data: debits,
+          borderColor: '#EF4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.10)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: '#94A3B8', font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 11, weight: '500' } }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: '#94A3B8', font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 10 } }
+        },
+        y: {
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: '#94A3B8', font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 10 } }
+        }
+      }
+    }
+  });
+});
+
+async function adminDecision(loanId, decision) {
+  if (!confirm(`Are you sure you want to ${decision} loan #${loanId}?`)) return;
+  try {
+    const res = await BankingAPI.adminLoanDecision(loanId, decision);
+    showToast(res.message, 'success');
+    setTimeout(() => location.reload(), 800);
+  } catch (e) {
+    // handled by apiRequest
+  }
+}
+</script>
+{% endblock %}
+

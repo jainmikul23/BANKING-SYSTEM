@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Funds | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Instant Fund Transfer{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 0 auto;">
+  <div class="glass-panel">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-5);">
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(94,234,212,0.15); border: 1px solid rgba(94,234,212,0.3); display: flex; align-items: center; justify-content: center; color: var(--accent);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+        </div>
+        <div>
+          <h2 style="font-size: 1.375rem; font-weight: 700; line-height: 1.2;">Atomic Transfer (ACID)</h2>
+          <p style="color: var(--muted); font-size: 0.813rem; line-height: 1.4;">Pessimistic row-locked settlement in real-time</p>
+        </div>
+      </div>
+      <a href="{% url 'banking:beneficiaries' %}" class="btn btn-glass btn-sm">Manage Beneficiaries</a>
+    </div>
+
+    <!-- Quick Beneficiary Selection Bar -->
+    {% if beneficiaries %}
+      <div style="margin-bottom: var(--space-5);">
+        <div class="form-label" style="margin-bottom: var(--space-2);">Quick Pay to Saved Beneficiaries</div>
+        <div style="display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-2);">
+          {% for b in beneficiaries %}
+            <button type="button" class="btn btn-glass btn-sm" onclick="selectBeneficiary('{{ b.beneficiary_account.account_number }}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+              <span>{{ b.nickname }}</span>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <form method="post" id="transferForm">
+      {% csrf_token %}
+
+      <!-- Step 1: Source Account -->
+      <div class="form-group">
+        <label class="form-label" for="from_account">Debit From Account</label>
+        <select name="from_account" id="from_account" class="form-select" required>
+          {% for acc in accounts %}
+            <option value="{{ acc.account_number }}" {% if request.GET.from == acc.account_number %}selected{% endif %}>
+              {{ acc.account_number }} &bull; {{ acc.get_type_display }} (Available: ₹{{ acc.balance|floatformat:2 }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Step 2: Destination Account -->
+      <div class="form-group">
+        <label class="form-label" for="to_account">Beneficiary 12-Digit Account Number</label>
+        <input type="text" name="to_account" id="to_account" class="form-input" placeholder="e.g. 502003456781" maxlength="20" style="font-family: var(--font-mono); font-size: 1.063rem; letter-spacing: 0.05em;" required>
+      </div>
+
+      <!-- Step 3: Amount -->
+      <div class="form-group">
+        <label class="form-label" for="amount">Transfer Amount (INR)</label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.25rem; font-weight: 600; color: var(--muted);">₹</span>
+          <input type="number" step="0.01" min="1" max="100000" name="amount" id="amount" class="form-input" style="padding-left: 36px; font-size: 1.5rem; font-weight: 700; height: 56px;" placeholder="0.00" required>
+        </div>
+
+        <div class="quick-chips">
+          <button type="button" class="chip" onclick="setTransferAmount(1000)">₹1,000</button>
+          <button type="button" class="chip" onclick="setTransferAmount(5000)">₹5,000</button>
+          <button type="button" class="chip" onclick="setTransferAmount(10000)">₹10,000</button>
+          <button type="button" class="chip" onclick="setTransferAmount(25000)">₹25,000</button>
+          <button type="button" class="chip" onclick="setTransferAmount(50000)">₹50,000</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Remarks / Purpose</label>
+        <input type="text" name="description" id="description" class="form-input" placeholder="e.g. Rent, College Fee, Family support">
+      </div>
+
+      <div style="padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); background: rgba(94,234,212,0.06); border: 1px solid rgba(94,234,212,0.2); font-size: 0.75rem; color: var(--muted); margin-bottom: var(--space-5);">
+        <span style="color: var(--accent); font-weight: 600;">Daily Limit:</span> ₹1,00,000.00 per account. Fund transfers are processed in atomic transaction isolation with zero chance of intermediate partial failure.
+      </div>
+
+      <button type="button" class="btn btn-primary btn-lg" style="width: 100%; min-height: 48px;" onclick="openConfirmModal()">
+        <span>Review & Transfer</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Confirmation OTP/PIN Modal Sheet -->
+<div class="modal-overlay" id="confirmTransferModal">
+  <div class="modal-content glass-panel-strong">
+    <div style="text-align: center; margin-bottom: var(--space-5);">
+      <div style="width: 48px; height: 48px; border-radius: var(--radius-pill); background: var(--accent-glow); color: var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-3) auto;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+      </div>
+      <h3 style="font-size: 1.25rem; font-weight: 700; line-height: 1.2;">Confirm Fund Transfer</h3>
+      <p style="font-size: 0.813rem; color: var(--muted); line-height: 1.4;">Please verify the recipient details before executing transaction</p>
+    </div>
+
+    <div style="padding: var(--space-4); border-radius: var(--radius-sm); background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); margin-bottom: var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); font-size: 0.875rem;">
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--muted);">Debit Account:</span>
+        <span id="modalFromAcc" style="font-weight: 600; font-family: var(--font-mono);"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--muted);">Beneficiary Account:</span>
+        <span id="modalToAcc" style="font-weight: 600; font-family: var(--font-mono); color: var(--accent);"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--stroke); padding-top: 8px;">
+        <span style="color: var(--muted);">Transfer Amount:</span>
+        <span id="modalAmount" style="font-weight: 700; font-size: 1.125rem; color: var(--text);"></span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 12px;">
+      <button type="button" class="btn btn-glass" style="flex: 1;" onclick="closeConfirmModal()">Cancel</button>
+      <button type="button" class="btn btn-primary" style="flex: 1;" onclick="submitTransfer()">Authorize & Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectBeneficiary(accNo) {
+  document.getElementById('to_account').value = accNo;
+}
+
+function setTransferAmount(val) {
+  document.getElementById('amount').value = val.toFixed(2);
+}
+
+function openConfirmModal() {
+  const fromAcc = document.getElementById('from_account').value;
+  const toAcc = document.getElementById('to_account').value.trim();
+  const amt = parseFloat(document.getElementById('amount').value) || 0;
+
+  if (!toAcc) {
+    showToast('Please enter beneficiary account number.', 'error');
+    return;
+  }
+  if (amt <= 0) {
+    showToast('Please enter a valid transfer amount.', 'error');
+    return;
+  }
+
+  document.getElementById('modalFromAcc').textContent = fromAcc;
+  document.getElementById('modalToAcc').textContent = toAcc;
+  document.getElementById('modalAmount').textContent = '₹' + amt.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+  document.getElementById('confirmTransferModal').classList.add('active');
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirmTransferModal').classList.remove('active');
+}
+
+function submitTransfer() {
+  closeConfirmModal();
+  document.getElementById('transferForm').submit();
+}
+</script>
+{% endblock %}
+

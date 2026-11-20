@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/dashboard.css">
+{% endblock %}
+
+{% block content %}
+<!-- Top Row: Balance Hero & Active Profile Card -->
+<div class="dashboard-hero-grid">
+  <!-- Balance Hero Card -->
+  <div class="balance-hero-card glass-panel">
+    <div>
+      <div class="balance-label">Total Liquid Portfolio</div>
+      <div class="balance-amount money" data-counter="{{ total_balance }}" data-is-currency>₹{{ total_balance|floatformat:2 }}</div>
+      <div class="balance-meta">
+        <span class="badge badge-active">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg>
+          {{ active_accounts_count }} Active Account{{ active_accounts_count|pluralize }}
+        </span>
+        <span class="badge badge-verified">KYC {{ customer.get_kyc_status_display }}</span>
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <a href="{% url 'banking:transfer' %}" class="btn btn-primary btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+        <span>Instant Transfer</span>
+      </a>
+      <a href="{% url 'banking:statement' %}" class="btn btn-glass btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span>Download Statement</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Primary Account Mini-Card -->
+  {% if accounts.first %}
+  {% with prime=accounts.first %}
+  <div class="glass-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase;">Primary Account</div>
+        <div style="font-size: 1.125rem; font-weight: 700; margin-top: var(--space-1);">{{ prime.get_type_display }} Account</div>
+        <div style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent); margin-top: var(--space-1);">{{ prime.account_number }}</div>
+      </div>
+      <span class="badge badge-{{ prime.type }}">{{ prime.get_type_display }}</span>
+    </div>
+
+    <div style="margin: var(--space-4) 0; padding: var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke);">
+      <div style="font-size: 0.688rem; color: var(--muted); text-transform: uppercase;">Available Balance</div>
+      <div style="font-size: 1.375rem; font-weight: 700; color: var(--text);" class="money">₹{{ prime.balance|floatformat:2 }}</div>
+      <div style="font-size: 0.688rem; color: var(--muted-light); margin-top: var(--space-1);">Branch: {{ prime.branch.name }} ({{ prime.branch.ifsc_code }})</div>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <a href="{% url 'banking:deposit' %}" class="btn btn-glass btn-sm" style="flex: 1;">Deposit</a>
+      <a href="{% url 'banking:withdraw' %}" class="btn btn-glass btn-sm" style="flex: 1;">Withdraw</a>
+    </div>
+  </div>
+  {% endwith %}
+  {% endif %}
+</div>
+
+<!-- Quick Actions Strip -->
+<div class="quick-actions-bar">
+  <a href="{% url 'banking:accounts_list' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+    </div>
+    <div class="action-name">My Cards</div>
+  </a>
+
+  <a href="{% url 'banking:transfer' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+    </div>
+    <div class="action-name">Transfer</div>
+  </a>
+
+  <a href="{% url 'banking:deposit' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </div>
+    <div class="action-name">Deposit</div>
+  </a>
+
+  <a href="{% url 'banking:withdraw' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </div>
+    <div class="action-name">Withdraw</div>
+  </a>
+
+  <a href="{% url 'banking:statement' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+    </div>
+    <div class="action-name">Statement</div>
+  </a>
+
+  <a href="{% url 'loans:dashboard' %}" class="action-tile glass-card">
+    <div class="action-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+    </div>
+    <div class="action-name">Apply Loan</div>
+  </a>
+</div>
+
+<!-- Bottom Row: Recent Activity & Monthly Analytics -->
+<div class="dashboard-sections-grid">
+  <!-- Recent Activity -->
+  <div class="section-card glass-panel">
+    <div class="section-header">
+      <h3 class="section-heading">Recent Transactions</h3>
+      <a href="{% url 'banking:transactions' %}" class="btn btn-glass btn-sm">View All</a>
+    </div>
+
+    <div class="txn-list">
+      {% for txn in recent_transactions %}
+        <div class="txn-item">
+          <div class="txn-left">
+            <div class="txn-icon {% if txn.type in 'deposit transfer_in loan_credit' %}credit{% else %}debit{% endif %}">
+              {% if txn.type in 'deposit transfer_in loan_credit' %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+              {% else %}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+              {% endif %}
+            </div>
+            <div>
+              <div class="txn-title">{{ txn.description|default:txn.get_type_display }}</div>
+              <div class="txn-sub">{{ txn.reference_no }} &bull; A/C {{ txn.account.account_number|slice:"-4:" }}</div>
+            </div>
+          </div>
+          <div class="txn-right">
+            <div class="txn-amount money {% if txn.type in 'deposit transfer_in loan_credit' %}credit{% else %}debit{% endif %}">
+              {% if txn.type in 'deposit transfer_in loan_credit' %}+{% else %}-{% endif %} ₹{{ txn.amount|floatformat:2 }}
+            </div>
+            <div class="txn-time">{{ txn.created_at|date:"d M, H:i" }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div style="text-align: center; padding: 40px; color: var(--muted);">
+          <p>No recent activity found on your accounts.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Monthly Cashflow Analytics -->
+  <div class="section-card glass-panel">
+    <div class="section-header">
+      <h3 class="section-heading">Monthly Cashflow</h3>
+      <span style="font-size: 0.75rem; color: var(--muted);">Last 6 Months</span>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="monthlySpendingChart"></canvas>
+    </div>
+
+    <!-- Active Loan Widget if present -->
+    {% if active_loans %}
+      <div style="margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--stroke);">
+        <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-bottom: var(--space-2);">Active Loan Facility</div>
+        {% for loan in active_loans %}
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); margin-bottom: var(--space-2);">
+            <div>
+              <div style="font-size: 0.875rem; font-weight: 600;">{{ loan.get_loan_type_display }}</div>
+              <div style="font-size: 0.75rem; color: var(--muted);">EMI: ₹{{ loan.emi|floatformat:2 }} / month</div>
+            </div>
+            <a href="{% url 'loans:dashboard' %}" class="btn btn-glass btn-sm">Pay EMI</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ chart_labels|json_script:"customer-chart-labels" }}
+{{ chart_credits|json_script:"customer-chart-credits" }}
+{{ chart_debits|json_script:"customer-chart-debits" }}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('monthlySpendingChart');
+  if (!ctx) return;
+
+  const labels = JSON.parse(document.getElementById('customer-chart-labels').textContent || '[]');
+  const credits = JSON.parse(document.getElementById('customer-chart-credits').textContent || '[]');
+  const debits = JSON.parse(document.getElementById('customer-chart-debits').textContent || '[]');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Inflow (Credits)',
+          data: credits,
+          backgroundColor: 'rgba(16, 185, 129, 0.85)',
+          borderRadius: 6,
+        },
+        {
+          label: 'Outflow (Debits)',
+          data: debits,
+          backgroundColor: 'rgba(239, 68, 68, 0.80)',
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#94A3B8',
+            font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 11, weight: '500' }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: '#94A3B8', font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 10 } }
+        },
+        y: {
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          ticks: { color: '#94A3B8', font: { family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', size: 10 } }
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}
+

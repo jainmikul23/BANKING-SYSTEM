@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Apple "Liquid Glass" Design Tokens (iOS 26 / macOS Tahoe / visionOS)
+   Shared Design Tokens: 5-Layer Material, Spring Physics, Concentric Radii,
+   Adaptive Transparency, and GPU-budgeted Surfaces.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     1. GLASS MATERIAL TOKENS (Layered Optical Architecture)
+     ------------------------------------------------------------------------ */
+  /* Layer 1: Backdrop Blur & Saturation (Budgeted to max 2-3 surfaces) */
+  --glass-backdrop-blur: 14px;
+  --glass-backdrop-saturate: 160%;
+  --glass-backdrop-brightness: 1.05;
+  --glass-backdrop-filter: blur(var(--glass-backdrop-blur)) 
+                           saturate(var(--glass-backdrop-saturate)) 
+                           brightness(var(--glass-backdrop-brightness));
+
+  /* Layer 2: Adaptive Tint Fill (Reacts to backdrop luminance & interaction) */
+  --glass-tint-alpha: 0.10; /* Dark mode default: 0.06 - 0.12 */
+  --glass-tint-rgb: 255, 255, 255;
+  --glass-tint: rgba(var(--glass-tint-rgb), var(--glass-tint-alpha));
+  --glass-tint-hover: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) + 0.06));
+  --glass-tint-active: rgba(var(--glass-tint-rgb), calc(var(--glass-tint-alpha) * 0.70)); /* Alpha drops 30% on press */
+
+  /* Layer 3: Precision Architectural Hairline Border (Refined, Zero AI Gloss) */
+  --glass-specular-top: rgba(255, 255, 255, 0.09);
+  --glass-specular-bottom: rgba(255, 255, 255, 0.05);
+  --glass-specular-border: rgba(255, 255, 255, 0.07);
+  --glass-highlight-top: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  /* Layer 4: Grounded Elevation Shadows (Clean Physical Depth) */
+  --glass-inner-glow: none;
+  --glass-depth-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.40), 0 1px 3px rgba(0, 0, 0, 0.25);
+  --glass-floating-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.50), 0 2px 8px rgba(0, 0, 0, 0.30);
+
+  /* Layer 5: Dynamic Pointer Sheen */
+  --glass-sheen-x: 50%;
+  --glass-sheen-y: 50%;
+  --glass-sheen-intensity: 0.04;
+
+  /* Optical Text Contrast Tokens (Adaptive) */
+  --glass-text-color: #F8FAFC;
+  --glass-text-muted: #94A3B8;
+
+  /* ------------------------------------------------------------------------
+     2. REFINED INSTITUTIONAL RADIUS SCALE (Clean, Professional, Non-Bulbous)
+     ------------------------------------------------------------------------ */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --radius-outer: var(--radius-lg);
+  --pad: 12px;
+  --nested-radius-mode: concentric;
+  --radius-inner: max(0px, calc(var(--radius-outer) - var(--pad)));
+  --radius-card: 16px;
+  --radius-card-inner: var(--radius-inner);
+  --radius-control: var(--radius-sm);
+
+  /* ------------------------------------------------------------------------
+     3. STANDARDIZED SPRING PHYSICS (CSS linear() generator curves)
+     True mechanical spring simulation with mass, stiffness, and damping.
+     ------------------------------------------------------------------------ */
+  /* (a) Press & Release: stiffness ~500, damping ~18, mass 1 (quick squash & overshoot) */
+  --spring-press: linear(
+    0, 0.009, 0.035 1.1%, 0.141 2.4%, 0.315 4%, 0.536 5.8%, 0.778 7.9%, 
+    1.002 10.2%, 1.107 12.6%, 1.144 14.8%, 1.129 17.1%, 1.077 19.8%, 
+    1.021 23%, 0.985 26.7%, 0.974 30.6%, 0.983 35.3%, 1.001 41.5%, 
+    1.006 48.7%, 1 65%, 1
+  );
+
+  /* (b) Lens Travel Between Buttons: stiffness ~260, damping ~15 (6-10% overshoot, 2-3 decaying wobbles) */
+  --spring-lens: linear(
+    0, 0.006, 0.024 1.2%, 0.096 2.6%, 0.216 4.3%, 0.375 6.2%, 0.562 8.4%, 
+    0.762 10.9%, 0.957 13.7%, 1.085 16.5%, 1.127 18.9%, 1.118 21.6%, 
+    1.066 24.9%, 0.998 28.9%, 0.949 33.5%, 0.938 38.3%, 0.959 44.2%, 
+    0.992 51.5%, 1.014 60.1%, 1.011 70.3%, 1.001 82.5%, 1
+  );
+
+  /* (c) Cards and Modals: stiffness ~180, damping ~20 (smooth, gentle settling, minimal overshoot) */
+  --spring-card: linear(
+    0, 0.005, 0.02 1.4%, 0.079 3.1%, 0.177 5.1%, 0.308 7.4%, 0.463 10.1%, 
+    0.631 13.1%, 0.797 16.6%, 0.942 20.6%, 1.042 24.9%, 1.086 28.7%, 
+    1.083 33.1%, 1.048 38.1%, 1.006 44.1%, 0.982 51.2%, 0.981 59.5%, 
+    0.993 69.8%, 1.002 82.5%, 1
+  );
+
+  /* (d) Subtle Landing Wobble Decaying Curve */
+  --spring-wobble: linear(
+    0, 0.45 6%, 0.98 14%, 1.14 20%, 1.07 28%, 0.96 38%, 0.98 48%, 1.02 59%, 1 75%, 1
+  );
+
+  /* (e) VisionOS Eye-Tracking Glass Focus Ring */
+  --glass-focus-ring: 0 0 0 2px rgba(122, 167, 255, 0.85), 
+                      0 0 16px rgba(122, 167, 255, 0.50),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.80);
+
+  /* Durations */
+  --dur-press: 380ms;
+  --dur-lens: 460ms;
+  --dur-card: 480ms;
+  --dur-fade: 240ms;
+}
+
+/* ------------------------------------------------------------------------
+   LIGHT MODE OVERRIDES
+   ------------------------------------------------------------------------ */
+[data-theme="light"] {
+  --glass-tint-alpha: 0.55;
+  --glass-tint-rgb: 255, 255, 255;
+  --glass-specular-top: rgba(255, 255, 255, 0.95);
+  --glass-specular-bottom: rgba(15, 23, 42, 0.08);
+  --glass-inner-glow: inset 0 -8px 16px rgba(15, 23, 42, 0.03);
+  --glass-depth-shadow: 0 8px 24px rgba(60, 80, 120, 0.12), 0 1px 3px rgba(60, 80, 120, 0.06);
+  --glass-floating-shadow: 0 16px 36px -6px rgba(60, 80, 120, 0.18), 0 3px 12px rgba(60, 80, 120, 0.08);
+  --glass-text-color: #0F172A;
+  --glass-text-muted: rgba(15, 23, 42, 0.65);
+  --glass-sheen-intensity: 0.18;
+}
+
+
+
+/* ------------------------------------------------------------------------
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION & PREFERS-REDUCED-TRANSPARENCY
+   ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --spring-press: cubic-bezier(0.16, 1, 0.3, 1);
+    --spring-lens: cubic-bezier(0.16, 1, 0.3, 1);
+    --spring-card: cubic-bezier(0.16, 1, 0.3, 1);
+    --spring-wobble: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-press: 150ms;
+    --dur-lens: 150ms;
+    --dur-card: 150ms;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-backdrop-filter: none !important;
+    --glass-tint: #131824 !important;
+    --glass-tint-alpha: 1 !important;
+  }
+
+  [data-theme="light"] {
+    --glass-tint: #FFFFFF !important;
+  }
+
+  .glass, .glass-card, .glass-panel, .glass-nav, .glass-modal, .glass-surface {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--glass-tint) !important;
+  }
+}

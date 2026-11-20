@@ -70,13 +70,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+TEMPLATES_DIRS = []
+if (BASE_DIR / 'templates').exists():
+    TEMPLATES_DIRS.append(BASE_DIR / 'templates')
+if (FRONTEND_DIR / 'templates').exists():
+    TEMPLATES_DIRS.append(FRONTEND_DIR / 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            FRONTEND_DIR / 'templates',
-            BASE_DIR / 'templates',
-        ],
+        'DIRS': TEMPLATES_DIRS,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -151,10 +154,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    FRONTEND_DIR / 'static',
-]
-STATIC_ROOT = FRONTEND_DIR / 'staticfiles'
+STATIC_DIRS = []
+if (BASE_DIR / 'static').exists():
+    STATIC_DIRS.append(BASE_DIR / 'static')
+if (FRONTEND_DIR / 'static').exists():
+    STATIC_DIRS.append(FRONTEND_DIR / 'static')
+
+STATICFILES_DIRS = STATIC_DIRS
+STATIC_ROOT = (BASE_DIR / 'staticfiles') if (BASE_DIR / 'static').exists() else (FRONTEND_DIR / 'staticfiles')
 if HAS_WHITENOISE:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 

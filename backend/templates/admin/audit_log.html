@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}System Audit Trail | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Security & System Audit Log{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="glass-panel filter-bar">
+  <form method="get" style="display: flex; gap: 14px; align-items: flex-end;">
+    <div class="filter-item">
+      <label class="form-label">Filter by Action</label>
+      <select name="action" class="form-select">
+        <option value="">All Actions</option>
+        <option value="DEPOSIT" {% if action_filter == 'DEPOSIT' %}selected{% endif %}>Deposit</option>
+        <option value="WITHDRAWAL" {% if action_filter == 'WITHDRAWAL' %}selected{% endif %}>Withdrawal</option>
+        <option value="TRANSFER" {% if action_filter == 'TRANSFER' %}selected{% endif %}>Transfer</option>
+        <option value="ACCOUNT_STATUS_CHANGE" {% if action_filter == 'ACCOUNT_STATUS_CHANGE' %}selected{% endif %}>Account Status Change</option>
+        <option value="KYC_STATUS_UPDATE" {% if action_filter == 'KYC_STATUS_UPDATE' %}selected{% endif %}>KYC Update</option>
+        <option value="LOAN_APPROVED" {% if action_filter == 'LOAN_APPROVED' %}selected{% endif %}>Loan Approved</option>
+        <option value="LOAN_REJECTED" {% if action_filter == 'LOAN_REJECTED' %}selected{% endif %}>Loan Rejected</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a href="{% url 'adminpanel:audit_log' %}" class="btn btn-glass">Reset</a>
+  </form>
+</div>
+
+<div class="glass-panel" style="overflow: hidden;">
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Actor</th>
+          <th>Action</th>
+          <th>Table & Record ID</th>
+          <th>Old Value (Before)</th>
+          <th>New Value (After)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in page_obj %}
+          <tr>
+            <td style="color: var(--muted); font-size: 0.813rem;">{{ log.created_at|date:"d M Y, H:i:s" }}</td>
+            <td style="font-weight: 600;">{{ log.user.username|default:"Trigger / System" }}</td>
+            <td><span class="badge badge-savings" style="font-size: 0.688rem;">{{ log.action }}</span></td>
+            <td style="font-family: var(--font-mono); font-size: 0.813rem;">{{ log.table_name }} #{{ log.record_id }}</td>
+            <td>
+              {% if log.old_value %}
+                <div class="audit-json-box">{{ log.old_value }}</div>
+              {% else %}
+                <span style="color: var(--muted);">-</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if log.new_value %}
+                <div class="audit-json-box" style="border: 1px solid rgba(94,234,212,0.3); color: var(--accent);">{{ log.new_value }}</div>
+              {% else %}
+                <span style="color: var(--muted);">-</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 40px; color: var(--muted);">
+              No audit log entries found.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="pagination-nav">
+  <div style="font-size: 0.813rem; color: var(--muted);">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </div>
+  <div class="pagination-pages">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if action_filter %}&action={{ action_filter }}{% endif %}" class="btn btn-glass btn-sm">&larr; Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if action_filter %}&action={{ action_filter }}{% endif %}" class="btn btn-glass btn-sm">Next &rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+

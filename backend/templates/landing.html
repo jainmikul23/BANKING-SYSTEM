@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+
+{% block title %}Atheria Reserve Bank | Relational Core Banking Architecture{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/landing.css">
+
+<!-- Structured JSON-LD Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BankOrCreditUnion",
+  "name": "Atheria Reserve Bank",
+  "url": "http://127.0.0.1:8000/",
+  "description": "High-Precision Core Banking with 3NF Relational Integrity & ACID Transfers",
+  "currenciesAccepted": "INR",
+  "paymentAccepted": "Electronic Fund Transfer, IMPS, NEFT, RTGS",
+  "priceRange": "₹₹",
+  "openingHours": "Mo-Sa 09:00-18:00",
+  "telephone": "+91-98201-12345",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Nariman Point Flagship",
+    "addressLocality": "Mumbai",
+    "addressRegion": "MH",
+    "postalCode": "400021",
+    "addressCountry": "IN"
+  }
+}
+</script>
+{% endblock %}
+
+{% block root %}
+<div class="landing-viewport">
+  <!-- Floating Frosted Glass Navigation Pill -->
+  <header class="landing-nav glass-nav" role="banner">
+    <a href="/" class="brand" aria-label="Atheria Reserve Bank Home">
+      <div class="brand-icon" aria-hidden="true">
+        <img src="/static/img/logo-emblem.png" alt="Atheria Emblem" width="42" height="42">
+      </div>
+      <span>ATHERIA RESERVE</span>
+    </a>
+
+    <nav class="nav-menu" role="navigation" aria-label="Main Navigation">
+      <div class="nav-links glass-tab-bar">
+        <a href="#architecture" class="nav-item">3NF Architecture</a>
+        <a href="#concurrency" class="nav-item">ACID Engine</a>
+        <a href="#customers" class="nav-item">Customer Reserves</a>
+        <a href="#audit" class="nav-item">Audit Trails</a>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="btn btn-glass btn-sm theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-sm glass-btn">Portal Access</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm glass-btn">Open Account</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section with 3D Canvas & Cell Division Background -->
+  <section class="landing-hero" aria-label="Introduction">
+    <div class="hero-content">
+      <div class="hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>MySQL 8 Core &bull; Pessimistic Row-Locked Concurrency</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-title-main">High-Precision Banking.</span>
+        <span class="accent-text">Engineered for Absolute Trust.</span>
+      </h1>
+
+      <p class="hero-desc">
+        A relational core banking system built on normalized 3NF schema constraints, atomic fund clearing, automated audit triggers, and real-time passbook ledger reconciliation.
+      </p>
+
+      <div class="hero-cta">
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg" aria-label="Open a new digital bank account">
+          <span>Open Digital Account</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-glass btn-lg" aria-label="Sign in to your customer or administrative portal">
+          <span>Sign In to Portal</span>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">ACID Compliant</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">3NF</div>
+          <div class="hero-stat-label">Zero Relational Anomalies</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">&lt; 10ms</div>
+          <div class="hero-stat-label">Atomic Settlement</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Interactive WebGL Container with Mitotic Backplate & Loader -->
+    <div class="hero-3d-container" aria-label="Interactive 3D Atheria Reserve Titanium Card">
+      <!-- Variant B: Living Mitotic Cell Division Accent Behind 3D Card -->
+      <div class="cell-division-bg" aria-hidden="true">
+        <div class="cell-division" data-animate="mitosis">
+          <div class="cell-mother"></div>
+          <div class="cell-daughter-left"></div>
+          <div class="cell-daughter-right"></div>
+        </div>
+      </div>
+
+      <!-- Variant C: Cell Division Loader (Dismisses when Three.js renders) -->
+      <div class="cell-division-loader" id="hero-3d-loader" aria-live="polite">
+        <div class="cell-division" data-animate="mitosis">
+          <div class="cell-mother"></div>
+          <div class="cell-daughter-left"></div>
+          <div class="cell-daughter-right"></div>
+        </div>
+        <div class="cell-loader-text">Atheria Spatial Engine</div>
+      </div>
+
+      <!-- 3D Canvas Target -->
+      <div id="hero-3d-canvas-wrap"></div>
+    </div>
+  </section>
+
+  <!-- Variant A: Mitotic Cell Division Section Divider -->
+  <div class="cell-division-divider" aria-hidden="true">
+    <div class="cell-division" data-animate="mitosis">
+      <div class="cell-mother"></div>
+      <div class="cell-daughter-left"></div>
+      <div class="cell-daughter-right"></div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       CARD-BASED SCROLLING CONTAINER (Interactive Stacking Deck)
+       ===================================================================== -->
+  <main class="card-stack-container" role="main">
+
+    <!-- Stack Card 1: Relational Architecture -->
+    <article class="stack-card glass-panel" id="architecture" aria-labelledby="arch-title">
+      <div class="section-head">
+        <div class="section-tag">Relational Database Core</div>
+        <h2 class="section-title" id="arch-title">Institutional Financial Engineering</h2>
+        <p class="section-subtitle">Built to demonstrate strict normalization, referential integrity, and database triggers under concurrent transaction loads.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Two-Phase Atomic Clearing</h3>
+          <p class="feature-text">Debit and credit operations run in single atomic database blocks. If either side fails, <code>ROLLBACK</code> immediately restores the exact previous state with zero balance loss.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Apple Wallet Card Stack</h3>
+          <p class="feature-text">High-precision interactive debit and current cards. Hovering tilts the card in real 3D perspective with light-tracking specular highlights.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Dynamic Amortization Engine</h3>
+          <p class="feature-text">Live EMI computations powered by standard banking formulas. Approved credit facilities disburse funds automatically via internal atomic ledger transactions.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Official PDF Statements</h3>
+          <p class="feature-text">Generate official bank passbooks rendered through ReportLab with cryptographic reference codes, tabular balance histories, and clean accounting totals.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Automated Audit Triggers</h3>
+          <p class="feature-text">MySQL triggers capture before-and-after JSON diffs of account status shifts and customer KYC status updates for regulatory compliance.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Compiled Analytical Views</h3>
+          <p class="feature-text">Pre-compiled relational views (<code>v_account_summary</code>, <code>v_monthly_statement</code>, <code>v_loan_overview</code>) power analytics without repetitive application joins.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Stack Card 2: Concurrency & Pessimistic Locking -->
+    <article class="stack-card glass-panel" id="concurrency" aria-labelledby="concurrency-title">
+      <div class="section-head">
+        <div class="section-tag">Concurrency Mechanics</div>
+        <h2 class="section-title" id="concurrency-title">Pessimistic Row-Level Locking</h2>
+        <p class="section-subtitle">How Atheria Reserve protects against double-spending and simultaneous debit race conditions.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <h3 class="feature-code-title">SELECT ... FOR UPDATE</h3>
+          <p class="feature-text">When an account initiates a transfer, its database row is locked at the storage engine level. Concurrent transfers against the same account wait until the first lock commits.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <h3 class="feature-code-title">CHECK Constraints & Triggers</h3>
+          <p class="feature-text">Table-level <code>CHECK (balance >= 0)</code> and MySQL triggers ensure that even if application logic were bypassed, the database engine forbids negative balances.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <h3 class="feature-code-title">Deterministic Lock Ordering</h3>
+          <p class="feature-text">Transfer locks are always acquired in alphabetical order of account numbers (e.g. Account A before Account B), mathematically eliminating deadlock cycles.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Stack Card 3: Customer Section (Institutional Clientele & Private Wealth Reserves) -->
+    <article class="stack-card glass-panel" id="customers" aria-labelledby="customers-title">
+      <div class="section-head">
+        <div class="section-tag">Customer Reserves & Private Wealth</div>
+        <h2 class="section-title" id="customers-title">Trusted by Institutional Treasuries & High-Net-Worth Clients</h2>
+        <p class="section-subtitle">Over ₹480 Cr in verified liquid balances managed with absolute mathematical precision and zero reconciliation lag.</p>
+      </div>
+
+      <div class="customer-grid">
+        <div class="customer-card glass-panel glass-card reveal">
+          <div class="customer-badge">Institutional Treasury</div>
+          <blockquote class="customer-quote">
+            "Atheria Reserve's two-phase atomic clearing eliminated multi-bank reconciliation overhead entirely. Our cross-entity fund settlements execute with absolute mathematical certainty."
+          </blockquote>
+          <div class="customer-author">
+            <div class="customer-avatar" aria-hidden="true">SS</div>
+            <div>
+              <div class="customer-meta-name">Siddharth Singhania</div>
+              <div class="customer-meta-role">Managing Director &bull; Aura Capital Partners</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="customer-card glass-panel glass-card reveal">
+          <div class="customer-badge">Sovereign Asset Fund</div>
+          <blockquote class="customer-quote">
+            "The deterministic row-level locking architecture guarantees zero race conditions during peak month-end salary and vendor disbursements across all our group entities."
+          </blockquote>
+          <div class="customer-author">
+            <div class="customer-avatar" aria-hidden="true">AR</div>
+            <div>
+              <div class="customer-meta-name">Ananya Roy</div>
+              <div class="customer-meta-role">Chief Financial Officer &bull; Vertex Sovereign Fund</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="customer-card glass-panel glass-card reveal">
+          <div class="customer-badge">Enterprise Technology</div>
+          <blockquote class="customer-quote">
+            "Direct access to cryptographic PDF statements and automated audit triggers has transformed our statutory compliance filings and audit turnarounds."
+          </blockquote>
+          <div class="customer-author">
+            <div class="customer-avatar" aria-hidden="true">VM</div>
+            <div>
+              <div class="customer-meta-name">Vikram Malhotra</div>
+              <div class="customer-meta-role">Head of Corporate Treasury &bull; Nexis Technologies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Stack Card 4: Audit Trails & Autonomous Triggers -->
+    <article class="stack-card glass-panel" id="audit" aria-labelledby="audit-title">
+      <div class="section-head">
+        <div class="section-tag">Regulatory Compliance</div>
+        <h2 class="section-title" id="audit-title">Immutable Audit Trail & Ledger Logging</h2>
+        <p class="section-subtitle">Every ledger state change, privilege escalation, and KYC authorization is recorded with timestamped cryptographic hashes.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Before & After JSON Diffs</h3>
+          <p class="feature-text">MySQL triggers capture full JSON snapshots before and after any account status modification or administrative freeze, providing an immutable audit trail.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Role-Based Admin Revocation</h3>
+          <p class="feature-text">Granular role verification ensures customer sessions are strictly walled from administrative actions. Suspicious account behaviors can be frozen in a single atomic call.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Verified Bank Passbooks</h3>
+          <p class="feature-text">Statements feature dynamic reference verification codes and opening-closing mathematical reconciliation compliant with banking accounting protocols.</p>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Section Divider -->
+  <div class="cell-division-divider" aria-hidden="true">
+    <div class="cell-division" data-animate="mitosis">
+      <div class="cell-mother"></div>
+      <div class="cell-daughter-left"></div>
+      <div class="cell-daughter-right"></div>
+    </div>
+  </div>
+
+  <!-- Landing Footer -->
+  <footer class="landing-footer" role="contentinfo">
+    <p>&copy; 2026 Atheria Reserve Bank. College DBMS Project Master Implementation.</p>
+    <p>Demo Logins: <b>admin / Admin@123</b> &bull; <b>customer1 / Customer@123</b></p>
+  </footer>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/three/heroScene.js"></script>
+{% endblock %}

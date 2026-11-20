@@ -1,0 +1,106 @@
+/* Admin Panel Stylesheet */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--grid-gap);
+  margin-bottom: var(--space-6);
+  width: 100%;
+}
+
+.kpi-grid>*,
+.admin-charts-grid>* {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.kpi-card {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--bg-surface);
+  border: 1px solid var(--stroke);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.kpi-title {
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.kpi-val {
+  font-size: clamp(1.1rem, 1.35vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kpi-sub {
+  font-size: 0.75rem;
+  color: #60A5FA;
+  font-weight: 500;
+}
+
+.admin-charts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: var(--space-6);
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .admin-charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Audit Log Diff Prettifier */
+.audit-json-box {
+  max-width: 280px;
+  max-height: 80px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.688rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.4);
+  color: #94A3B8;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Light Mode Styles for Admin Panel */
+[data-theme="light"] .kpi-card {
+  background: var(--glass-card);
+  border-color: var(--stroke);
+  box-shadow: var(--shadow-card);
+}
+
+[data-theme="light"] .kpi-title {
+  color: var(--muted);
+}
+
+[data-theme="light"] .kpi-val {
+  color: var(--text);
+}
+
+[data-theme="light"] .kpi-sub {
+  color: var(--accent);
+}
+
+[data-theme="light"] .audit-json-box {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #334155;
+}

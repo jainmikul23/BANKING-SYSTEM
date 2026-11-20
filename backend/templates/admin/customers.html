@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Customers | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Customer Administration{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="glass-panel filter-bar">
+  <form method="get" style="display: flex; gap: 14px; flex-wrap: wrap; width: 100%; align-items: flex-end;">
+    <div class="filter-item" style="flex: 2;">
+      <label class="form-label">Search Customer (Name, Username, Phone, Email)</label>
+      <input type="text" name="q" value="{{ search|default:'' }}" placeholder="e.g. Aarav, 98201, aarav.sharma..." class="form-input">
+    </div>
+
+    <div class="filter-item">
+      <label class="form-label">KYC Status</label>
+      <select name="kyc" class="form-select">
+        <option value="">All KYC Statuses</option>
+        <option value="pending" {% if kyc_filter == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="verified" {% if kyc_filter == 'verified' %}selected{% endif %}>Verified</option>
+        <option value="rejected" {% if kyc_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+      </select>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="{% url 'adminpanel:customers' %}" class="btn btn-glass">Reset</a>
+    </div>
+  </form>
+</div>
+
+<div class="glass-panel" style="overflow: hidden;">
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer Name</th>
+          <th>Username & Email</th>
+          <th>Phone</th>
+          <th>City</th>
+          <th>KYC Status</th>
+          <th>Created Date</th>
+          <th style="text-align: right;">KYC Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in page_obj %}
+          <tr>
+            <td style="font-family: var(--font-mono); color: var(--muted);">#{{ c.id }}</td>
+            <td style="font-weight: 600; color: var(--text);">{{ c.full_name }}</td>
+            <td>
+              <div>@{{ c.user.username }}</div>
+              <div style="font-size: 0.75rem; color: var(--muted);">{{ c.user.email }}</div>
+            </td>
+            <td>{{ c.phone }}</td>
+            <td>{{ c.city }}</td>
+            <td><span class="badge badge-{{ c.kyc_status }}">{{ c.get_kyc_status_display }}</span></td>
+            <td style="color: var(--muted); font-size: 0.813rem;">{{ c.created_at|date:"d M Y" }}</td>
+            <td style="text-align: right;">
+              <form method="post" action="{% url 'adminpanel:update_kyc' c.id %}" style="display: inline-flex; gap: 6px;">
+                {% csrf_token %}
+                {% if c.kyc_status != 'verified' %}
+                  <button type="submit" name="status" value="verified" class="btn btn-primary btn-sm">Verify</button>
+                {% endif %}
+                {% if c.kyc_status != 'rejected' %}
+                  <button type="submit" name="status" value="rejected" class="btn btn-danger btn-sm">Reject</button>
+                {% endif %}
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">
+              No customers found.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="pagination-nav">
+  <div style="font-size: 0.813rem; color: var(--muted);">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </div>
+  <div class="pagination-pages">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if search %}&q={{ search }}{% endif %}{% if kyc_filter %}&kyc={{ kyc_filter }}{% endif %}" class="btn btn-glass btn-sm">&larr; Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if search %}&q={{ search }}{% endif %}{% if kyc_filter %}&kyc={{ kyc_filter }}{% endif %}" class="btn btn-glass btn-sm">Next &rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+

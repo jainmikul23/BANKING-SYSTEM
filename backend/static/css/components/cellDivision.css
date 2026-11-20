@@ -1,0 +1,280 @@
+/* =====================================================================
+   ATHERIA RESERVE - MITOTIC CELL DIVISION COMPONENT (120 FPS Compositor)
+   Compositor-only animations: transform & opacity ONLY.
+   Zero real-time backdrop-filter rasterization, zero border-radius keyframing.
+   ===================================================================== */
+
+.cell-division-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cell-division {
+  --cell-size: 140px;
+  --cell-color: radial-gradient(circle at 35% 35%, rgba(96, 165, 250, 0.38) 0%, rgba(37, 99, 235, 0.24) 45%, rgba(15, 23, 42, 0.05) 80%, transparent 100%);
+  --cell-duration: 4.8s;
+
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout paint;
+}
+
+/* Individual organic cell bodies: pre-rounded organic shapes */
+.cell-division .cell-mother,
+.cell-division .cell-daughter-left,
+.cell-division .cell-daughter-right {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--cell-color);
+  box-shadow: 0 0 24px -4px rgba(37, 99, 235, 0.20), inset 0 0 12px rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  transform: translateZ(0);
+}
+
+/* Resting State: Single spherical/ovoid mother cell */
+.cell-division .cell-mother {
+  opacity: 0.92;
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+.cell-division .cell-daughter-left {
+  opacity: 0;
+  border-radius: 54% 46% 40% 60% / 58% 42% 58% 42%;
+  transform: scale(0.6) translate3d(0, 0, 0);
+}
+
+.cell-division .cell-daughter-right {
+  opacity: 0;
+  border-radius: 46% 54% 60% 40% / 42% 58% 42% 58%;
+  transform: scale(0.6) translate3d(0, 0, 0);
+}
+
+/* Mitosis Active Animation Triggered by IntersectionObserver */
+.cell-division.is-animating .cell-mother {
+  animation: mitosisMother var(--cell-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.cell-division.is-animating .cell-daughter-left {
+  animation: mitosisDaughterLeft var(--cell-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.cell-division.is-animating .cell-daughter-right {
+  animation: mitosisDaughterRight var(--cell-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* Keyframes: Mother Cell Elongates, Pinches and Severs (Compositor-Only: transform & opacity) */
+@keyframes mitosisMother {
+  0% {
+    opacity: 0.92;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  20% {
+    /* Elongation / Anaphase Stretch */
+    opacity: 0.92;
+    transform: scale(1.45, 0.75) translate3d(0, 0, 0);
+  }
+  38% {
+    /* Cleavage Furrow Pinch */
+    opacity: 0.88;
+    transform: scale(1.60, 0.58) translate3d(0, 0, 0);
+  }
+  48% {
+    /* Cytokinesis Breakpoint */
+    opacity: 0.15;
+    transform: scale(0.4, 0.25) translate3d(0, 0, 0);
+  }
+  50%, 82% {
+    /* Complete Seizure into Daughters */
+    opacity: 0;
+    transform: scale(0.1) translate3d(0, 0, 0);
+  }
+  92% {
+    /* Daughters Re-coalescing */
+    opacity: 0.60;
+    transform: scale(0.85) translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+/* Left Daughter Cell: Drifts outward with fluid organic undulation */
+@keyframes mitosisDaughterLeft {
+  0%, 30% {
+    opacity: 0;
+    transform: scale(0.4) translate3d(0, 0, 0);
+  }
+  42% {
+    opacity: 0.85;
+    transform: scale(0.75) translate3d(-18px, 0, 0);
+  }
+  56% {
+    /* Maximum Autonomous Separation */
+    opacity: 0.90;
+    transform: scale(0.86) translate3d(-52px, -6px, 0);
+  }
+  72% {
+    /* Independent Float */
+    opacity: 0.88;
+    transform: scale(0.84) translate3d(-46px, 4px, 0);
+  }
+  86% {
+    /* Returning to Confluence */
+    opacity: 0.50;
+    transform: scale(0.70) translate3d(-12px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) translate3d(0, 0, 0);
+  }
+}
+
+/* Right Daughter Cell: Drifts opposite with harmonic phase shift */
+@keyframes mitosisDaughterRight {
+  0%, 30% {
+    opacity: 0;
+    transform: scale(0.4) translate3d(0, 0, 0);
+  }
+  42% {
+    opacity: 0.85;
+    transform: scale(0.75) translate3d(18px, 0, 0);
+  }
+  56% {
+    /* Maximum Autonomous Separation */
+    opacity: 0.90;
+    transform: scale(0.86) translate3d(52px, 6px, 0);
+  }
+  72% {
+    /* Independent Float */
+    opacity: 0.88;
+    transform: scale(0.84) translate3d(46px, -4px, 0);
+  }
+  86% {
+    /* Returning to Confluence */
+    opacity: 0.50;
+    transform: scale(0.70) translate3d(12px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) translate3d(0, 0, 0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   APPLICATION VARIANT A: Institutional Hairline Section Divider
+   --------------------------------------------------------------------- */
+.cell-division-divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1px;
+  padding: 0;
+  margin: var(--space-6) 0;
+  position: relative;
+  background: var(--stroke);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cell-division-divider .cell-division {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   APPLICATION VARIANT B: Living Accent Behind 3D Card
+   --------------------------------------------------------------------- */
+.cell-division-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 350px;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+}
+
+.cell-division-bg .cell-division {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   APPLICATION VARIANT C: Loader While 3D Model Initializes
+   --------------------------------------------------------------------- */
+.cell-division-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  z-index: 10;
+  background: rgba(7, 9, 14, 0.70);
+  border-radius: var(--r-2xl);
+  transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
+}
+
+.cell-division-loader.is-loaded {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
+.cell-division-loader .cell-division {
+  --cell-size: 72px;
+  --cell-duration: 2.8s;
+}
+
+.cell-loader-text {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* ---------------------------------------------------------------------
+   Low Power Mode & Reduced Motion
+   --------------------------------------------------------------------- */
+[data-perf="low-power"] .cell-division.is-animating .cell-mother,
+[data-perf="low-power"] .cell-division.is-animating .cell-daughter-left,
+[data-perf="low-power"] .cell-division.is-animating .cell-daughter-right {
+  animation: none !important;
+}
+
+[data-perf="low-power"] .cell-division-bg {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell-division.is-animating .cell-mother,
+  .cell-division.is-animating .cell-daughter-left,
+  .cell-division.is-animating .cell-daughter-right {
+    animation: none !important;
+  }
+  .cell-division .cell-mother {
+    border-radius: 50% !important;
+    transform: none !important;
+    opacity: 0.8 !important;
+  }
+  .cell-division .cell-daughter-left,
+  .cell-division .cell-daughter-right {
+    display: none !important;
+  }
+}

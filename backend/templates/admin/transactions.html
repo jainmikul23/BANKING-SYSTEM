@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Global Transaction Ledger | Atheria Reserve Bank{% endblock %}
+{% block page_title %}Global Transaction Ledger{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/transactions.css">
+{% endblock %}
+
+{% block content %}
+<div class="glass-panel filter-bar">
+  <form method="get" style="display: flex; gap: 14px; flex-wrap: wrap; width: 100%; align-items: flex-end;">
+    <div class="filter-item" style="flex: 2;">
+      <label class="form-label">Search Reference No. / Account / Description</label>
+      <input type="text" name="q" value="{{ search|default:'' }}" placeholder="e.g. TRF, 501002345671, Salary..." class="form-input">
+    </div>
+
+    <div class="filter-item">
+      <label class="form-label">Type</label>
+      <select name="type" class="form-select">
+        <option value="">All Types</option>
+        <option value="deposit" {% if selected_type == 'deposit' %}selected{% endif %}>Deposit</option>
+        <option value="withdraw" {% if selected_type == 'withdraw' %}selected{% endif %}>Withdrawal</option>
+        <option value="transfer_in" {% if selected_type == 'transfer_in' %}selected{% endif %}>Transfer In</option>
+        <option value="transfer_out" {% if selected_type == 'transfer_out' %}selected{% endif %}>Transfer Out</option>
+        <option value="loan_credit" {% if selected_type == 'loan_credit' %}selected{% endif %}>Loan Credit</option>
+        <option value="emi_debit" {% if selected_type == 'emi_debit' %}selected{% endif %}>EMI Debit</option>
+      </select>
+    </div>
+
+    <div class="filter-item">
+      <label class="form-label">From Date</label>
+      <input type="date" name="from" value="{{ from_date }}" class="form-input">
+    </div>
+
+    <div class="filter-item">
+      <label class="form-label">To Date</label>
+      <input type="date" name="to" value="{{ to_date }}" class="form-input">
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button type="submit" class="btn btn-primary">Filter</button>
+      <a href="{% url 'adminpanel:transactions' %}" class="btn btn-glass">Reset</a>
+    </div>
+  </form>
+</div>
+
+<div class="glass-panel" style="overflow: hidden;">
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Reference ID</th>
+          <th>Account No.</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th style="text-align: right;">Amount (INR)</th>
+          <th style="text-align: right;">Balance After</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in page_obj %}
+          <tr>
+            <td style="color: var(--muted); font-size: 0.813rem;">{{ t.created_at|date:"d M Y, H:i:s" }}</td>
+            <td style="font-family: var(--font-mono); font-size: 0.813rem; color: var(--accent);">{{ t.reference_no }}</td>
+            <td style="font-family: var(--font-mono); font-size: 0.813rem;">{{ t.account.account_number }}</td>
+            <td><span class="badge {% if t.type in 'deposit transfer_in loan_credit' %}badge-active{% else %}badge-frozen{% endif %}">{{ t.get_type_display }}</span></td>
+            <td>{{ t.description }}</td>
+            <td style="text-align: right; font-weight: 700;" class="money">
+              {% if t.type in 'deposit transfer_in loan_credit' %}
+                <span style="color: var(--ok);">+ ₹{{ t.amount|floatformat:2 }}</span>
+              {% else %}
+                <span style="color: var(--danger);">- ₹{{ t.amount|floatformat:2 }}</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">₹{{ t.balance_after|floatformat:2 }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: var(--muted);">
+              No transactions match the ledger query.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="pagination-nav">
+  <div style="font-size: 0.813rem; color: var(--muted);">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} ({{ page_obj.paginator.count }} records)
+  </div>
+  <div class="pagination-pages">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}{% if search %}&q={{ search }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" class="btn btn-glass btn-sm">&larr; Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if search %}&q={{ search }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" class="btn btn-glass btn-sm">Next &rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
