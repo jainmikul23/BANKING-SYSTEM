@@ -1,4 +1,5 @@
 import os
+import importlib.util
 from pathlib import Path
 from decimal import Decimal
 from dotenv import load_dotenv
@@ -17,12 +18,8 @@ if not env_file.exists():
     env_file = BASE_DIR / '.env'
 load_dotenv(env_file)
 
-# Check WhiteNoise availability
-try:
-    import whitenoise
-    HAS_WHITENOISE = True
-except ImportError:
-    HAS_WHITENOISE = False
+# Check WhiteNoise availability cleanly without triggering editor linter missing-import errors
+HAS_WHITENOISE = importlib.util.find_spec('whitenoise') is not None
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-banking-system-secret-key-change-in-production-123456')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
@@ -219,7 +216,14 @@ if (FRONTEND_DIR / 'static').exists():
 STATICFILES_DIRS = STATIC_DIRS
 STATIC_ROOT = (BASE_DIR / 'staticfiles') if (BASE_DIR / 'static').exists() else (FRONTEND_DIR / 'staticfiles')
 if HAS_WHITENOISE:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        },
+    }
 
 # Media files
 MEDIA_URL = '/media/'
