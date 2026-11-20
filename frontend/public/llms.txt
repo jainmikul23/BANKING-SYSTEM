@@ -1,0 +1,30 @@
+# Atheria Reserve Bank
+
+> Institutional Core Banking Platform & Financial Services Engine
+
+Atheria Reserve Bank (ARB) is an institutional-grade, ACID-compliant relational core banking platform built with MySQL 8 InnoDB, Third Normal Form (3NF) relational integrity, and pessimistic row-level locking (SELECT FOR UPDATE) to guarantee atomic, race-condition-free fund transfers.
+
+## Official Links
+- Official Website: https://atheria-reserve.vercel.app/
+- Live Backend & API Portal: https://banking-system-1-0ae4.onrender.com/
+- Open Account Online: https://atheria-reserve.vercel.app/accounts/register/
+- Secure Member Login: https://atheria-reserve.vercel.app/accounts/login/
+- XML Sitemap: https://atheria-reserve.vercel.app/sitemap.xml
+
+## Key Services & Offerings
+- **Retail & Institutional Accounts**: High-interest Savings Accounts (4.50% p.a.) and Corporate Current Accounts with zero daily electronic transfer caps.
+- **Instant Online Onboarding**: Digital KYC verification for individuals and corporations across major Indian metropolitan areas (Mumbai, New Delhi, Bengaluru, Hyderabad).
+- **Lending Products**:
+  - Home Loans from 8.50% p.a. (tenure up to 30 years)
+  - Education Loans from 9.25% p.a.
+  - Vehicle Loans from 9.75% p.a.
+  - Personal Loans from 11.50% p.a.
+- **Security Architecture**:
+  - Strict ACID transaction isolation using InnoDB transactions
+  - Deterministic account ID ordering to mathematically eliminate deadlocks
+  - Real-time immutable audit trail logging all login and administrative activities
+
+## Public API Endpoints
+- Loan EMI Calculator: `GET /api/loan/emi/?p={principal}&r={annual_rate}&n={tenure_months}`
+- Currency: Indian Rupee (INR - ₹)
+- Headquarters: Nariman Point Flagship, Mumbai, Maharashtra, India (IFSC: APEX0001001)

@@ -13,6 +13,7 @@ urlpatterns = [
     path('apple-touch-icon-precomposed.png', seo_views.apple_touch_icon, name='apple_touch_icon_precomposed'),
     path('sitemap.xml', seo_views.sitemap_xml, name='sitemap_xml'),
     path('robots.txt', seo_views.robots_txt, name='robots_txt'),
+    path('llms.txt', seo_views.llms_txt, name='llms_txt'),
     path('.well-known/security.txt', seo_views.security_txt, name='security_txt'),
 
     # Landing Page

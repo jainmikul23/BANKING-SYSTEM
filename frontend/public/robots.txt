@@ -3,17 +3,75 @@ Allow: /
 Allow: /accounts/login/
 Allow: /accounts/register/
 Allow: /static/
+Allow: /llms.txt
 Disallow: /portal-admin/
 Disallow: /banking/
 Disallow: /loans/
 Disallow: /api/
 Disallow: /django-admin/
 
+# Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
-Allow: /accounts/login/
-Allow: /accounts/register/
-Allow: /static/
+
+User-agent: Bingbot
+Allow: /
+
+# OpenAI / ChatGPT Retrieval & Search Bots
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+
+# Anthropic / Claude Web Crawlers
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /llms.txt
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /llms.txt
+
+# Perplexity AI Search Crawler
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+
+# Google Gemini / Extended AI Crawler
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+
+# Apple Intelligence & Siri Crawler
+User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
+
+# Meta AI / LLaMA Training & Assistant Agents
+User-agent: Meta-ExternalAgent
+Allow: /
+Allow: /llms.txt
+
+# Common Crawl (Foundation LLM Training Corpus)
+User-agent: CCBot
+Allow: /
+Allow: /llms.txt
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+Allow: /llms.txt
 
 Sitemap: https://atheria-reserve.vercel.app/sitemap.xml
 Sitemap: https://banking-system-1-0ae4.onrender.com/sitemap.xml
