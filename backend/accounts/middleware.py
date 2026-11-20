@@ -47,7 +47,7 @@ class BankingSecurityHeadersMiddleware:
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
             "font-src 'self' https://fonts.gstatic.com; "
             "img-src 'self' data: https:; "
-            "connect-src 'self' https://banking-system-1-0ae4.onrender.com; "
+            "connect-src 'self' https://banking-system-1-0ae4.onrender.com https://*.vercel.app https://atheria-reserve.vercel.app; "
             "frame-ancestors 'none';"
         )
 

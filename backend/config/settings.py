@@ -29,13 +29,40 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = list(set(
     [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()] +
-    ['localhost', '127.0.0.1', 'testserver', '.railway.app', '.up.railway.app', '.onrender.com', 'banking-system-1-0ae4.onrender.com', '*']
+    [
+        'localhost',
+        '127.0.0.1',
+        'testserver',
+        '.railway.app',
+        '.up.railway.app',
+        '.onrender.com',
+        'banking-system-1-0ae4.onrender.com',
+        '.vercel.app',
+        'atheria-reserve.vercel.app',
+        '*'
+    ]
 ))
 
 CSRF_TRUSTED_ORIGINS = list(set(
     [o.strip() for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()] +
-    ['https://*.railway.app', 'https://*.up.railway.app', 'https://*.onrender.com', 'https://banking-system-1-0ae4.onrender.com', 'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:3000', 'http://localhost:5173']
+    [
+        'https://*.vercel.app',
+        'https://atheria-reserve.vercel.app',
+        'https://*.railway.app',
+        'https://*.up.railway.app',
+        'https://*.onrender.com',
+        'https://banking-system-1-0ae4.onrender.com',
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'http://localhost:3000',
+        'http://localhost:5173',
+    ]
 ))
+
+# Reverse Proxy SSL & Host Forwarding (Essential for Render & Vercel Proxies)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -202,9 +229,18 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+if DEBUG:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
+else:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SAMESITE = 'None'
 
 # Custom Test Runner (defaults to discovering all project apps)
 TEST_RUNNER = 'config.runner.ApexTestRunner'
