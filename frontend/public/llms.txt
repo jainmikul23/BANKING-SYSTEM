@@ -1,6 +1,8 @@
 # Atheria Reserve Bank
 
-> Institutional Core Banking Platform & Financial Services Engine
+> Institutional Core Banking Platform & Financial Services Engine (College DBMS Academic Project)
+
+> **ACADEMIC DISCLAIMER**: This website of Atheria Reserve Bank is developed strictly as a College DBMS (Database Management Systems) project for academic presentation and demonstration purposes only. It is not an actual commercial bank, financial institution, or registered corporate entity. No real money or actual banking transactions are handled.
 
 Atheria Reserve Bank (ARB) is an institutional-grade, ACID-compliant relational core banking platform built with MySQL 8 InnoDB, Third Normal Form (3NF) relational integrity, and pessimistic row-level locking (SELECT FOR UPDATE) to guarantee atomic, race-condition-free fund transfers.
 
