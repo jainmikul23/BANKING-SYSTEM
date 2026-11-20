@@ -29,12 +29,12 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = list(set(
     [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()] +
-    ['localhost', '127.0.0.1', 'testserver', '.railway.app', '.up.railway.app', '.onrender.com', '*']
+    ['localhost', '127.0.0.1', 'testserver', '.railway.app', '.up.railway.app', '.onrender.com', 'banking-system-1-0ae4.onrender.com', '*']
 ))
 
 CSRF_TRUSTED_ORIGINS = list(set(
     [o.strip() for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()] +
-    ['https://*.railway.app', 'https://*.up.railway.app', 'https://*.onrender.com', 'http://localhost:8000', 'http://127.0.0.1:8000']
+    ['https://*.railway.app', 'https://*.up.railway.app', 'https://*.onrender.com', 'https://banking-system-1-0ae4.onrender.com', 'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:3000', 'http://localhost:5173']
 ))
 
 # Application definition

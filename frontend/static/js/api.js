@@ -1,6 +1,16 @@
 /**
  * API Service layer for banking AJAX operations
+ * Live Backend: https://banking-system-1-0ae4.onrender.com
  */
+
+const BACKEND_BASE_URL = "https://banking-system-1-0ae4.onrender.com";
+
+// Auto-determine base API URL:
+// - If already on Render live host, use relative paths ('')
+// - If running on a local or external frontend, route all calls to the live Render backend
+const API_BASE_URL = (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin.includes('banking-system-1-0ae4.onrender.com'))
+  ? ''
+  : BACKEND_BASE_URL;
 
 function getCookie(name) {
   let cookieValue = null;
@@ -17,7 +27,11 @@ function getCookie(name) {
   return cookieValue;
 }
 
-async function apiRequest(url, method = 'GET', data = null) {
+async function apiRequest(endpoint, method = 'GET', data = null) {
+  const fullUrl = endpoint.startsWith('http://') || endpoint.startsWith('https://')
+    ? endpoint
+    : `${API_BASE_URL}${endpoint}`;
+
   const token = getCookie('csrftoken') || '';
   const options = {
     method,
@@ -26,6 +40,7 @@ async function apiRequest(url, method = 'GET', data = null) {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
+    credentials: 'include',
   };
 
   if (data && (method === 'POST' || method === 'PUT')) {
@@ -33,14 +48,16 @@ async function apiRequest(url, method = 'GET', data = null) {
   }
 
   try {
-    const res = await fetch(url, options);
+    const res = await fetch(fullUrl, options);
     const json = await res.json();
     if (!res.ok || !json.ok) {
       throw new Error(json.message || 'An unexpected error occurred.');
     }
     return json;
   } catch (err) {
-    showToast(err.message, 'error');
+    if (typeof showToast === 'function') {
+      showToast(err.message, 'error');
+    }
     throw err;
   }
 }
@@ -65,4 +82,3 @@ const BankingAPI = {
   adminLoanDecision: (loanId, decision) => apiRequest(`/api/admin/loan/${loanId}/decision/`, 'POST', { decision }),
   adminAccountStatus: (accountId, status) => apiRequest(`/api/admin/account/${accountId}/status/`, 'POST', { status }),
 };
-

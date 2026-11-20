@@ -5,13 +5,33 @@ from django.shortcuts import redirect
 from django.conf import settings
 
 class BankingSecurityHeadersMiddleware:
-    """Injects high-security banking headers into all HTTP responses."""
+    """Injects high-security banking headers into all HTTP responses and enables cross-origin API access."""
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        origin = request.headers.get('Origin')
+
+        # Handle CORS preflight for frontend cross-origin API requests
+        if request.method == 'OPTIONS':
+            from django.http import HttpResponse
+            response = HttpResponse(status=200)
+            if origin:
+                response['Access-Control-Allow-Origin'] = origin
+                response['Access-Control-Allow-Credentials'] = 'true'
+                response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+                response['Access-Control-Allow-Headers'] = 'Content-Type, X-CSRFToken, X-Requested-With, Authorization'
+            return response
+
         response = self.get_response(request)
+
+        # CORS response headers for API requests
+        if origin:
+            response['Access-Control-Allow-Origin'] = origin
+            response['Access-Control-Allow-Credentials'] = 'true'
+            response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            response['Access-Control-Allow-Headers'] = 'Content-Type, X-CSRFToken, X-Requested-With, Authorization'
 
         # Anti-Clickjacking & Anti-MIME Sniffing
         response['X-Content-Type-Options'] = 'nosniff'
@@ -20,14 +40,14 @@ class BankingSecurityHeadersMiddleware:
         response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
         response['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=(), payment=()'
 
-        # Content Security Policy (strict script/style/font whitelists)
+        # Content Security Policy (strict script/style/font whitelists + live API connect-src)
         response['Content-Security-Policy'] = (
             "default-src 'self'; "
             "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
             "font-src 'self' https://fonts.gstatic.com; "
             "img-src 'self' data: https:; "
-            "connect-src 'self'; "
+            "connect-src 'self' https://banking-system-1-0ae4.onrender.com; "
             "frame-ancestors 'none';"
         )
 
