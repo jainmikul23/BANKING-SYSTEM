@@ -17,9 +17,25 @@ if not env_file.exists():
     env_file = BASE_DIR / '.env'
 load_dotenv(env_file)
 
+# Check WhiteNoise availability
+try:
+    import whitenoise
+    HAS_WHITENOISE = True
+except ImportError:
+    HAS_WHITENOISE = False
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-banking-system-secret-key-change-in-production-123456')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = list(set([h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()] + ['localhost', '127.0.0.1', 'testserver']))
+
+ALLOWED_HOSTS = list(set(
+    [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()] +
+    ['localhost', '127.0.0.1', 'testserver', '.railway.app', '.up.railway.app', '.onrender.com', '*']
+))
+
+CSRF_TRUSTED_ORIGINS = list(set(
+    [o.strip() for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()] +
+    ['https://*.railway.app', 'https://*.up.railway.app', 'https://*.onrender.com', 'http://localhost:8000', 'http://127.0.0.1:8000']
+))
 
 # Application definition
 INSTALLED_APPS = [
@@ -39,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    *(['whitenoise.middleware.WhiteNoiseMiddleware'] if HAS_WHITENOISE else []),
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,27 +93,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database configuration (MySQL 8)
-DB_NAME = os.getenv('DB_NAME', 'banking_system')
-DB_USER = os.getenv('DB_USER', 'root')
-DB_PASSWORD = os.getenv('DB_PASSWORD', '')
-DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
-DB_PORT = os.getenv('DB_PORT', '3306')
+# Database configuration (MySQL 8 with Railway/Render environment fallbacks, SQLite for quick local test)
+DB_NAME = os.getenv('DB_NAME') or os.getenv('MYSQLDATABASE', 'banking_system')
+DB_USER = os.getenv('DB_USER') or os.getenv('MYSQLUSER', 'root')
+DB_PASSWORD = os.getenv('DB_PASSWORD') or os.getenv('MYSQLPASSWORD', '')
+DB_HOST = os.getenv('DB_HOST') or os.getenv('MYSQLHOST', '127.0.0.1')
+DB_PORT = os.getenv('DB_PORT') or os.getenv('MYSQLPORT', '3306')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', time_zone='+05:30';",
-        },
+if os.getenv('USE_SQLITE', 'false').lower() in ('true', '1') or os.getenv('DB_ENGINE', '').lower() == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ROOT_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES', time_zone='+05:30';",
+            },
+        }
+    }
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
@@ -130,6 +155,8 @@ STATICFILES_DIRS = [
     FRONTEND_DIR / 'static',
 ]
 STATIC_ROOT = FRONTEND_DIR / 'staticfiles'
+if HAS_WHITENOISE:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
