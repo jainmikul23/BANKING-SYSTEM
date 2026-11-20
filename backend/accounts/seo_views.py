@@ -1,20 +1,37 @@
 import os
 from django.conf import settings
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse
 from django.utils import timezone
 
 def sitemap_xml(request):
-    """Generate dynamic XML sitemap conforming to sitemaps.org protocol."""
+    """Generate dynamic XML sitemap conforming to sitemaps.org & Google Image Sitemap protocols."""
     now_str = timezone.now().strftime('%Y-%m-%d')
-    base_url = request.build_absolute_uri('/').rstrip('/')
+    host = request.get_host()
+    scheme = 'https' if request.is_secure() or 'vercel' in host or 'onrender' in host else 'http'
+    base_url = f"{scheme}://{host}"
 
     xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
     <loc>{base_url}/</loc>
     <lastmod>{now_str}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>{base_url}/static/img/logo-emblem.png</image:loc>
+      <image:title>Atheria Reserve Bank Official Monogram</image:title>
+      <image:caption>Atheria Reserve High-Precision Core Institutional Banking Portal</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>{base_url}/accounts/register/</loc>
+    <lastmod>{now_str}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>{base_url}/accounts/login/</loc>
@@ -22,21 +39,14 @@ def sitemap_xml(request):
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>{base_url}/accounts/register/</loc>
-    <lastmod>{now_str}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
 </urlset>"""
 
-    return HttpResponse(xml_content, content_type='application/xml')
+    return HttpResponse(xml_content.strip(), content_type='application/xml; charset=utf-8')
 
 
 def robots_txt(request):
-    """Serve standard robots.txt prohibiting indexing of authenticated financial routes."""
-    base_url = request.build_absolute_uri('/').rstrip('/')
-    content = f"""User-agent: *
+    """Serve standard robots.txt with search crawler directives and sitemap declarations."""
+    content = """User-agent: *
 Allow: /
 Allow: /accounts/login/
 Allow: /accounts/register/
@@ -47,9 +57,16 @@ Disallow: /loans/
 Disallow: /api/
 Disallow: /django-admin/
 
-Sitemap: {base_url}/sitemap.xml
+User-agent: Googlebot
+Allow: /
+Allow: /accounts/login/
+Allow: /accounts/register/
+Allow: /static/
+
+Sitemap: https://atheria-reserve.vercel.app/sitemap.xml
+Sitemap: https://banking-system-1-0ae4.onrender.com/sitemap.xml
 """
-    return HttpResponse(content, content_type='text/plain')
+    return HttpResponse(content.strip(), content_type='text/plain; charset=utf-8')
 
 
 def favicon_ico(request):
@@ -89,6 +106,4 @@ Policy: https://atheriareserve.in/security-policy.html
 Acknowledgments: https://atheriareserve.in/hall-of-fame.html
 Expires: 2027-12-31T23:59:59.000Z
 """
-    return HttpResponse(content, content_type='text/plain')
-
-
+    return HttpResponse(content.strip(), content_type='text/plain; charset=utf-8')

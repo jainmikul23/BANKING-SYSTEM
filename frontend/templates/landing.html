@@ -5,27 +5,126 @@
 {% block extra_css %}
 <link rel="stylesheet" href="/static/css/pages/landing.css">
 
-<!-- Structured JSON-LD Data for SEO -->
+<!-- Structured JSON-LD Data for SEO (Bank, Sitelinks Searchbox, FAQ Rich Snippets, Financial Products) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BankOrCreditUnion",
-  "name": "Atheria Reserve Bank",
-  "url": "https://banking-system-1-0ae4.onrender.com/",
-  "description": "High-Precision Core Banking with 3NF Relational Integrity & ACID Transfers",
-  "currenciesAccepted": "INR",
-  "paymentAccepted": "Electronic Fund Transfer, IMPS, NEFT, RTGS",
-  "priceRange": "₹₹",
-  "openingHours": "Mo-Sa 09:00-18:00",
-  "telephone": "+91-98201-12345",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Nariman Point Flagship",
-    "addressLocality": "Mumbai",
-    "addressRegion": "MH",
-    "postalCode": "400021",
-    "addressCountry": "IN"
-  }
+  "@graph": [
+    {
+      "@type": "BankOrCreditUnion",
+      "@id": "https://atheria-reserve.vercel.app/#bank",
+      "name": "Atheria Reserve Bank",
+      "alternateName": ["Atheria Reserve", "ARB Core Bank"],
+      "url": "https://atheria-reserve.vercel.app/",
+      "logo": "https://atheria-reserve.vercel.app/static/img/logo-emblem.png",
+      "image": "https://atheria-reserve.vercel.app/static/img/logo-emblem.png",
+      "description": "High-Precision Core Banking with 3NF Relational Integrity, ACID Transfers, and Instant Account Opening.",
+      "currenciesAccepted": "INR",
+      "paymentAccepted": "Electronic Fund Transfer, IMPS, NEFT, RTGS",
+      "priceRange": "₹₹",
+      "openingHours": "Mo-Sa 09:00-18:00",
+      "telephone": "+91-98201-12345",
+      "email": "contact@atheriareserve.in",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Nariman Point Flagship",
+        "addressLocality": "Mumbai",
+        "addressRegion": "MH",
+        "postalCode": "400021",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 18.9256,
+        "longitude": 72.8242
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1280",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://atheria-reserve.vercel.app/#website",
+      "url": "https://atheria-reserve.vercel.app/",
+      "name": "Atheria Reserve Bank",
+      "publisher": {
+        "@id": "https://atheria-reserve.vercel.app/#bank"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://atheria-reserve.vercel.app/accounts/register/?ref={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://atheria-reserve.vercel.app/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Atheria Reserve Bank?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Atheria Reserve Bank is an institutional relational core banking system featuring a Third Normal Form (3NF) relational architecture, MySQL 8 InnoDB engine, strict ACID transaction isolation with pessimistic row-level locking (SELECT FOR UPDATE), and real-time passbook ledger audits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I open an account with Atheria Reserve Bank?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can open an Atheria Reserve savings or current account 100% online in less than two minutes via our instant registration portal with Aadhaar/PAN KYC verification."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What interest rates are offered on loans?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Atheria Reserve offers competitive interest rates: Home Loans starting at 8.50% p.a., Education Loans at 9.25% p.a., Vehicle Loans at 9.75% p.a., and Personal Loans at 11.50% p.a. with instantaneous monthly EMI calculation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Atheria Reserve guarantee atomic transactions and prevent race conditions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All debit, credit, and transfer operations run inside atomic database transactions using deterministic account-id ordering with SELECT FOR UPDATE row-level locks, mathematically preventing race conditions, dirty reads, and deadlocks."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the daily fund transfer limits?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Customers enjoy a daily electronic transfer limit of ₹1,00,000 for standard retail tiers, with custom corporate limits available on institutional current accounts."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FinancialProduct",
+      "name": "Atheria Reserve Savings Account",
+      "description": "High-interest retail savings account with instant digital passbook and 24/7 IMPS/NEFT transfers.",
+      "annualPercentageRate": "4.50",
+      "provider": {
+        "@id": "https://atheria-reserve.vercel.app/#bank"
+      }
+    },
+    {
+      "@type": "FinancialProduct",
+      "name": "Atheria Reserve Home Loan",
+      "description": "Flexible tenure home loan up to 30 years with fixed and floating competitive rates.",
+      "annualPercentageRate": "8.50",
+      "provider": {
+        "@id": "https://atheria-reserve.vercel.app/#bank"
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}

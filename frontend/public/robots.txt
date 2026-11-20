@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /accounts/login/
+Allow: /accounts/register/
+Allow: /static/
+Disallow: /portal-admin/
+Disallow: /banking/
+Disallow: /loans/
+Disallow: /api/
+Disallow: /django-admin/
+
+User-agent: Googlebot
+Allow: /
+Allow: /accounts/login/
+Allow: /accounts/register/
+Allow: /static/
+
+Sitemap: https://atheria-reserve.vercel.app/sitemap.xml
+Sitemap: https://banking-system-1-0ae4.onrender.com/sitemap.xml

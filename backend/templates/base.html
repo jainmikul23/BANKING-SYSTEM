@@ -22,34 +22,60 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{{ BANK_NAME|default:"Atheria Reserve Bank" }}{% endblock %}</title>
+  <title>{% block title %}{{ BANK_NAME|default:"Atheria Reserve Bank" }} | Relational Core Banking Architecture{% endblock %}</title>
 
   <!-- Google Search Console Verification -->
   <meta name="google-site-verification" content="Pg12xxCwxKSdyMJoogu5Qs1qPjNXdlERCoBC2VJlAcw" />
 
-  <!-- SEO & Search Engine Metadata -->
-  <meta name="description" content="{% block meta_description %}{{ BANK_NAME|default:" Atheria Reserve Bank" }} - 3NF
-    Normalized core banking engine with pessimistic row-locked atomic transfers, real-time passbook ledger, and visionOS
-    glassmorphism.{% endblock %}">
-  <meta name="keywords"
-    content="banking management system, DBMS project, 3NF normalization, ACID transactions, atomic transfers, SQL triggers, core banking">
-  <meta name="author" content="{{ BANK_NAME|default:" Atheria Reserve Bank" }}">
-  <meta name="robots" content="index, follow">
+  <!-- Canonical URL Specification -->
+  <link rel="canonical" href="{% block canonical_url %}{{ canonical_url|default:request.build_absolute_uri }}{% endblock %}">
 
-  <!-- Open Graph / Social Sharing -->
+  <!-- Core Search Engine Optimization & High-Intent Indexing -->
+  <meta name="description" content="{% block meta_description %}Atheria Reserve Bank is an institutional core banking platform featuring 3NF schema normalization, ACID pessimistic row-locked atomic transfers, instant savings &amp; current accounts, and real-time passbook ledger.{% endblock %}">
+  <meta name="keywords" content="Atheria Reserve Bank, Atheria Reserve, banking management system, core banking system, online banking portal, savings account open online, instant bank account, high interest savings, personal loan EMI calculator, home loan interest rates, education loan, DBMS banking project, 3NF normalization, ACID transactions, atomic transfers, MySQL 8 banking">
+  <meta name="author" content="Atheria Reserve Bank">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- Geo & Regional Local SEO Tags -->
+  <meta name="geo.region" content="IN-MH">
+  <meta name="geo.placename" content="Mumbai">
+  <meta name="geo.position" content="18.9256;72.8242">
+  <meta name="ICBM" content="18.9256, 72.8242">
+
+  <!-- Mobile & Progressive Web Meta -->
+  <meta name="theme-color" content="#080c14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Atheria Reserve">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Open Graph / Facebook / LinkedIn Social Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ BANK_NAME|default:" Atheria Reserve Bank" }} | Relational Core Banking
-    Architecture">
-  <meta property="og:description"
-    content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and visionOS design.">
-  <meta property="og:site_name" content="{{ BANK_NAME|default:" Atheria Reserve Bank" }}">
+  <meta property="og:url" content="https://atheria-reserve.vercel.app/">
+  <meta property="og:title" content="Atheria Reserve Bank | Relational Core Banking Architecture">
+  <meta property="og:description" content="Institutional core banking platform powered by MySQL 8, 3NF schema, ACID pessimistic row-locking, and spatial glassmorphism.">
+  <meta property="og:site_name" content="Atheria Reserve Bank">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:image" content="https://atheria-reserve.vercel.app/static/img/logo-emblem.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Atheria Reserve Bank Official Monogram">
 
-  <!-- Twitter Card -->
+  <!-- Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ BANK_NAME|default:" Atheria Reserve Bank" }} | Relational Core Banking
-    Architecture">
-  <meta name="twitter:description"
-    content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and visionOS design.">
+  <meta name="twitter:title" content="Atheria Reserve Bank | Relational Core Banking Architecture">
+  <meta name="twitter:description" content="ACID-compliant core banking system powered by MySQL 8, row-level locking concurrency, and visionOS design.">
+  <meta name="twitter:image" content="https://atheria-reserve.vercel.app/static/img/logo-emblem.png">
+  <meta name="twitter:image:alt" content="Atheria Reserve Bank Logo">
+
+  <!-- High-Performance DNS-Prefetch & Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://unpkg.com">
 
   <!-- Favicon & Touch Icons (Atheria Emblem) -->
   <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
