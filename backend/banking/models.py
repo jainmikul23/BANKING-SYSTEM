@@ -51,6 +51,8 @@ class Account(models.Model):
         indexes = [
             models.Index(fields=['customer'], name='idx_accounts_customer'),
             models.Index(fields=['account_number'], name='idx_accounts_acc_num'),
+            models.Index(fields=['customer', 'status'], name='idx_acc_cust_status'),
+            models.Index(fields=['status'], name='idx_acc_status'),
         ]
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
@@ -100,6 +102,9 @@ class Transaction(models.Model):
             models.Index(fields=['account'], name='idx_txn_account'),
             models.Index(fields=['created_at'], name='idx_txn_created_at'),
             models.Index(fields=['reference_no'], name='idx_txn_reference_no'),
+            models.Index(fields=['account', '-created_at'], name='idx_txn_acc_created'),
+            models.Index(fields=['account', 'type', '-created_at'], name='idx_txn_acc_type_created'),
+            models.Index(fields=['type', '-created_at'], name='idx_txn_type_created'),
         ]
         ordering = ['-created_at']
         verbose_name = 'Transaction'
@@ -136,6 +141,11 @@ class AuditLog(models.Model):
     class Meta:
         db_table = 'audit_log'
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['-created_at'], name='idx_audit_created'),
+            models.Index(fields=['user', '-created_at'], name='idx_audit_user_created'),
+            models.Index(fields=['action', '-created_at'], name='idx_audit_action_created'),
+        ]
         verbose_name = 'Audit Log'
         verbose_name_plural = 'Audit Logs'
 

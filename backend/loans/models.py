@@ -48,6 +48,11 @@ class Loan(models.Model):
     class Meta:
         db_table = 'loans'
         ordering = ['-applied_at']
+        indexes = [
+            models.Index(fields=['customer', '-applied_at'], name='idx_loan_cust_applied'),
+            models.Index(fields=['status', '-applied_at'], name='idx_loan_status_applied'),
+            models.Index(fields=['customer', 'status'], name='idx_loan_cust_status'),
+        ]
         verbose_name = 'Loan'
         verbose_name_plural = 'Loans'
 
@@ -87,6 +92,10 @@ class LoanPayment(models.Model):
     class Meta:
         db_table = 'loan_payments'
         ordering = ['-paid_on']
+        indexes = [
+            models.Index(fields=['loan', '-paid_on'], name='idx_loanpay_loan_paid'),
+            models.Index(fields=['status'], name='idx_loanpay_status'),
+        ]
         verbose_name = 'Loan Payment'
         verbose_name_plural = 'Loan Payments'
 

@@ -30,20 +30,32 @@ def admin_dashboard(request):
     pending_kyc = Customer.objects.filter(kyc_status='pending').select_related('user')[:5]
     recent_transactions = Transaction.objects.select_related('account', 'related_account').order_by('-created_at')[:8]
 
-    # Chart 1: Last 7 days transaction volume
+    # Chart 1: Last 7 days transaction volume (Optimized to 1 single database query, saving 13 roundtrips)
     today = timezone.now().date()
+    start_date = today - timedelta(days=6)
     days_labels = []
-    credits_data = []
-    debits_data = []
+    day_map = {}
 
     for i in range(6, -1, -1):
         d = today - timedelta(days=i)
         days_labels.append(d.strftime('%a, %d %b'))
-        day_txns = Transaction.objects.filter(created_at__date=d)
-        c_amt = day_txns.filter(type__in=['deposit', 'transfer_in', 'loan_credit']).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
-        d_amt = day_txns.filter(type__in=['withdraw', 'transfer_out', 'emi_debit']).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
-        credits_data.append(float(c_amt))
-        debits_data.append(float(d_amt))
+        day_map[d] = {'credits': Decimal('0.00'), 'debits': Decimal('0.00')}
+
+    recent_7d_txns = Transaction.objects.filter(
+        created_at__date__gte=start_date
+    ).values('created_at__date', 'type', 'amount')
+
+    credit_types = {'deposit', 'transfer_in', 'loan_credit'}
+    for t in recent_7d_txns:
+        d = t['created_at__date']
+        if d in day_map:
+            if t['type'] in credit_types:
+                day_map[d]['credits'] += t['amount']
+            else:
+                day_map[d]['debits'] += t['amount']
+
+    credits_data = [float(day_map[today - timedelta(days=i)]['credits']) for i in range(6, -1, -1)]
+    debits_data = [float(day_map[today - timedelta(days=i)]['debits']) for i in range(6, -1, -1)]
 
     context = {
         'total_customers': total_customers,

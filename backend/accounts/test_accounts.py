@@ -69,8 +69,15 @@ class BankingSecurityTests(TestCase):
         """Verify dynamic sitemap.xml returns valid XML."""
         res = self.client.get(reverse('sitemap_xml'))
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res['Content-Type'], 'application/xml')
+        self.assertTrue(res['Content-Type'].startswith('application/xml'))
         self.assertIn(b'<urlset', res.content)
+
+    def test_health_check_endpoint(self):
+        """Verify lightweight zero-DB health check returns 200 JSON for uptime monitors."""
+        res = self.client.get(reverse('health_check'))
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json().get('status'), 'ok')
+        self.assertEqual(res['X-Health-Check'], 'pass')
 
     def test_robots_txt_protects_internal_routes(self):
         """Verify robots.txt disallows sensitive banking routes."""

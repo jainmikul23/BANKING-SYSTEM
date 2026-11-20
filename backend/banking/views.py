@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.utils.dateparse import parse_date
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST, require_GET
@@ -187,7 +188,7 @@ def beneficiaries_view(request):
 def transaction_history_view(request):
     """Filterable, searchable and paginated transaction history."""
     customer = request.user.customer_profile
-    accounts = customer.accounts.all()
+    accounts = list(customer.accounts.select_related('branch').all())
 
     txns = Transaction.objects.filter(account__in=accounts).select_related('account', 'related_account')
 
@@ -214,7 +215,7 @@ def transaction_history_view(request):
 
     search_query = request.GET.get('q')
     if search_query:
-        txns = txns.filter(reference_no__icontains=search_query) | txns.filter(description__icontains=search_query)
+        txns = txns.filter(Q(reference_no__icontains=search_query) | Q(description__icontains=search_query))
 
     paginator = Paginator(txns, 15)
     page_number = request.GET.get('page')
@@ -386,11 +387,11 @@ def api_balance(request, acc_no):
     if not request.user.is_authenticated:
         return JsonResponse({'ok': False, 'message': 'Authentication required.'}, status=401)
 
-    account = get_object_or_404(Account, account_number=acc_no)
+    account = get_object_or_404(Account.objects.select_related('customer'), account_number=acc_no)
     if request.user.role == 'customer' and account.customer.user != request.user:
         return JsonResponse({'ok': False, 'message': 'Access denied: Not your account.'}, status=403)
 
-    return JsonResponse({
+    resp = JsonResponse({
         'ok': True,
         'data': {
             'account_number': account.account_number,
@@ -400,6 +401,8 @@ def api_balance(request, acc_no):
             'currency': 'INR'
         }
     })
+    resp['Cache-Control'] = 'private, no-cache, no-store, must-revalidate'
+    return resp
 
 
 @require_GET
@@ -448,5 +451,7 @@ def api_transactions(request):
         for t in txns
     ]
 
-    return JsonResponse({'ok': True, 'count': len(data), 'data': data})
+    resp = JsonResponse({'ok': True, 'count': len(data), 'data': data})
+    resp['Cache-Control'] = 'private, no-cache, no-store, must-revalidate'
+    return resp
 

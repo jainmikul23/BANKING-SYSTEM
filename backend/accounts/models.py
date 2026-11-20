@@ -13,6 +13,10 @@ class User(AbstractUser):
         db_table = 'users'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+        indexes = [
+            models.Index(fields=['role'], name='idx_users_role'),
+            models.Index(fields=['created_at'], name='idx_users_created_at'),
+        ]
 
     def is_admin_user(self):
         return self.role == 'admin' or self.is_superuser
@@ -40,6 +44,11 @@ class Customer(models.Model):
         db_table = 'customers'
         verbose_name = 'Customer'
         verbose_name_plural = 'Customers'
+        indexes = [
+            models.Index(fields=['kyc_status'], name='idx_cust_kyc_status'),
+            models.Index(fields=['-created_at'], name='idx_cust_created_at'),
+            models.Index(fields=['phone'], name='idx_cust_phone'),
+        ]
 
     def __str__(self):
         return f"{self.full_name} ({self.user.username})"

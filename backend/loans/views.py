@@ -163,7 +163,7 @@ def api_loan_emi(request):
         total_repayable = emi * tenure
         total_interest = total_repayable - principal
 
-        return JsonResponse({
+        resp = JsonResponse({
             'ok': True,
             'data': {
                 'principal': str(principal),
@@ -174,6 +174,9 @@ def api_loan_emi(request):
                 'total_repayable': str(round(total_repayable, 2))
             }
         })
+        if request.method == 'GET':
+            resp['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400'
+        return resp
     except Exception as e:
         return JsonResponse({'ok': False, 'message': str(e)}, status=400)
 

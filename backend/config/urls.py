@@ -5,8 +5,13 @@ from accounts import seo_views
 from banking import views as banking_views
 from loans import views as loans_views
 from adminpanel import views as adminpanel_views
+from config.health import health_check
 
 urlpatterns = [
+    # Zero-DB Fast Health Check & Keep-Alive Monitoring
+    path('health/', health_check, name='health_check'),
+    path('healthz/', health_check, name='healthz'),
+
     # SEO & Security Standards (XML Sitemap, Robots, RFC 9116, Favicons)
     path('favicon.ico', seo_views.favicon_ico, name='favicon_ico'),
     path('apple-touch-icon.png', seo_views.apple_touch_icon, name='apple_touch_icon'),

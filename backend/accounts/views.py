@@ -152,24 +152,26 @@ def logout_view(request):
 def customer_dashboard(request):
     """Customer Home Dashboard: balances, spending analytics, recent activity."""
     customer = request.user.customer_profile
-    accounts = customer.accounts.all()
+    # Eager-load branches in 1 query to prevent N+1 queries in template
+    accounts = list(customer.accounts.select_related('branch').all())
     
-    total_balance = accounts.aggregate(total=Sum('balance'))['total'] or Decimal('0.00')
-    active_accounts_count = accounts.filter(status='active').count()
+    # Calculate totals in memory from fetched accounts (saves 2 remote database roundtrips)
+    total_balance = sum((a.balance for a in accounts), Decimal('0.00'))
+    active_accounts_count = sum(1 for a in accounts if a.status == 'active')
     
-    # Recent transactions across all customer accounts
+    # Recent transactions across all customer accounts (uses composite index idx_txn_acc_created)
     recent_txns = Transaction.objects.filter(account__in=accounts).select_related('account', 'related_account')[:8]
     
-    # Active loans
-    active_loans = Loan.objects.filter(customer=customer, status='active')
+    # Active loans with related account pre-loaded
+    active_loans = Loan.objects.filter(customer=customer, status='active').select_related('account')
     
-    # Monthly spending chart data (last 6 months)
+    # Monthly spending chart data (last 6 months) - only fetch required scalar fields
     today = timezone.now()
     six_months_ago = today - timedelta(days=180)
     monthly_txns = Transaction.objects.filter(
         account__in=accounts,
         created_at__gte=six_months_ago
-    )
+    ).values('created_at', 'type', 'amount')
     
     # Group spending by month for Chart.js
     monthly_spending = {}
@@ -179,12 +181,12 @@ def customer_dashboard(request):
         monthly_spending[m_key] = {'credits': Decimal('0.00'), 'debits': Decimal('0.00')}
     
     for t in monthly_txns:
-        m_key = t.created_at.strftime('%b %Y')
+        m_key = t['created_at'].strftime('%b %Y')
         if m_key in monthly_spending:
-            if t.type in ('deposit', 'transfer_in', 'loan_credit'):
-                monthly_spending[m_key]['credits'] += t.amount
+            if t['type'] in ('deposit', 'transfer_in', 'loan_credit'):
+                monthly_spending[m_key]['credits'] += t['amount']
             else:
-                monthly_spending[m_key]['debits'] += t.amount
+                monthly_spending[m_key]['debits'] += t['amount']
 
     chart_labels = list(monthly_spending.keys())
     chart_credits = [float(val['credits']) for val in monthly_spending.values()]

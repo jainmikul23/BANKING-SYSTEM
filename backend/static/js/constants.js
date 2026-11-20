@@ -12,6 +12,15 @@
   const BANK_MONOGRAM = "ARB";
   const BACKEND_BASE_URL = "https://banking-system-1-0ae4.onrender.com";
 
+  const isSameOrigin = (typeof window !== 'undefined' && window.location && window.location.origin)
+    ? (window.location.origin.includes('onrender.com') ||
+       window.location.origin.includes('vercel.app') ||
+       window.location.hostname === 'localhost' ||
+       window.location.hostname === '127.0.0.1')
+    : false;
+
+  const API_BASE_URL = isSameOrigin ? '' : BACKEND_BASE_URL;
+
   // Assign to global window / globalThis scope
   global.CARD_NAME = CARD_NAME;
   global.CARD_NAME_UPPER = CARD_NAME_UPPER;
@@ -19,7 +28,7 @@
   global.BANK_SHORT_NAME = BANK_SHORT_NAME;
   global.BANK_MONOGRAM = BANK_MONOGRAM;
   global.BACKEND_BASE_URL = BACKEND_BASE_URL;
-  global.API_BASE_URL = BACKEND_BASE_URL;
+  global.API_BASE_URL = API_BASE_URL;
 
   // Optional CommonJS export
   if (typeof module !== 'undefined' && module.exports) {

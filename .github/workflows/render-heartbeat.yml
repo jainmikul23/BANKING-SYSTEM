@@ -1,0 +1,29 @@
+name: Render Backend Keep-Alive Heartbeat
+
+on:
+  schedule:
+    # Trigger every 10 minutes (cron format: minute hour day month day-of-week)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  heartbeat:
+    name: Ping Render Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Ping Backend /health/ Endpoint
+        run: |
+          echo "Sending keep-alive heartbeat to Render backend..."
+          RESPONSE=$(curl -s -S -f --max-time 20 -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" "https://banking-system-1-0ae4.onrender.com/health/")
+          echo "$RESPONSE"
+          
+          # Extract HTTP status
+          HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "Heartbeat successful: Render instance is active and warm."
+          else
+            echo "Warning: Received unexpected HTTP status $HTTP_STATUS"
+            exit 1
+          fi

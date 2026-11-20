@@ -73,7 +73,10 @@ class SessionInactivityTimeoutMiddleware:
                 messages.warning(request, "Session timed out after 15 minutes of inactivity for your security.")
                 return redirect('accounts:login')
 
-            request.session['last_activity'] = now
+            # Performance: Throttle session writes so we don't query/update MySQL on every single click
+            if not last_activity or (now - last_activity > 60):
+                request.session['last_activity'] = now
+                request.session.modified = True
 
         return self.get_response(request)
 
