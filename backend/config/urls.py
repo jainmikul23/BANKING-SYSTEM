@@ -8,9 +8,13 @@ from adminpanel import views as adminpanel_views
 from config.health import health_check
 
 urlpatterns = [
-    # Zero-DB Fast Health Check & Keep-Alive Monitoring
+    # Zero-DB Fast Health Check & Keep-Alive Monitoring (Multi-alias, with and without trailing slash)
     path('health/', health_check, name='health_check'),
+    path('health', health_check, name='health_no_slash'),
     path('healthz/', health_check, name='healthz'),
+    path('healthz', health_check, name='healthz_no_slash'),
+    path('ping/', health_check, name='ping'),
+    path('ping', health_check, name='ping_no_slash'),
 
     # SEO & Security Standards (XML Sitemap, Robots, RFC 9116, Favicons)
     path('favicon.ico', seo_views.favicon_ico, name='favicon_ico'),

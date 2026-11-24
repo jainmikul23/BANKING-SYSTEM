@@ -2,38 +2,42 @@ name: Render Backend Keep-Alive Heartbeat
 
 on:
   schedule:
-    # Trigger every 10 minutes (cron format: minute hour day month day-of-week)
-    - cron: '*/10 * * * *'
-  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+    # Trigger every 5 minutes so Render's 15-minute inactivity window is never reached
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:
   heartbeat:
-    name: Ping Render Health Check
+    name: Keep Render Awake and Warm
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - name: Ping Backend Keep-Alive Endpoints
+      - name: Ping Keep-Alive Endpoints
         run: |
           echo "=========================================================="
-          echo "Starting Keep-Alive Heartbeat for Render & Vercel..."
+          echo "Dispatching Keep-Alive Heartbeat to Prevent Cold Boot..."
           echo "=========================================================="
 
-          # Ping Render direct (with up to 60s timeout & 3 retries for cold starts)
-          echo "Pinging Render backend direct: https://banking-system-1-0ae4.onrender.com/health/ ..."
-          RENDER_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "https://banking-system-1-0ae4.onrender.com/health/" || echo "TIMEOUT")
-          echo "Render direct status code: $RENDER_STATUS"
+          # Ping Render direct /health/ (with up to 90s timeout for cold starts)
+          echo "Pinging Render /health/ : https://banking-system-1-0ae4.onrender.com/health/ ..."
+          RENDER_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 90 --retry 3 --retry-delay 5 "https://banking-system-1-0ae4.onrender.com/health/" || echo "TIMEOUT")
+          echo "Render direct status: $RENDER_STATUS"
 
-          # Ping Vercel edge proxy (with up to 60s timeout & 3 retries)
-          echo "Pinging Vercel edge proxy: https://atheria-reserve.vercel.app/health/ ..."
-          VERCEL_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "https://atheria-reserve.vercel.app/health/" || echo "TIMEOUT")
-          echo "Vercel proxy status code: $VERCEL_STATUS"
+          # Ping Render direct /ping
+          echo "Pinging Render /ping : https://banking-system-1-0ae4.onrender.com/ping ..."
+          PING_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 "https://banking-system-1-0ae4.onrender.com/ping" || echo "TIMEOUT")
+          echo "Render ping status: $PING_STATUS"
 
-          # Check results
-          if [ "$RENDER_STATUS" = "200" ] || [ "$VERCEL_STATUS" = "200" ]; then
-            echo "SUCCESS: Heartbeat verified. Backend is active, warm, and responsive."
+          # Ping Vercel Edge Proxy
+          echo "Pinging Vercel proxy : https://atheria-reserve.vercel.app/health/ ..."
+          VERCEL_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 "https://atheria-reserve.vercel.app/health/" || echo "TIMEOUT")
+          echo "Vercel proxy status: $VERCEL_STATUS"
+
+          if [ "$RENDER_STATUS" = "200" ] || [ "$PING_STATUS" = "200" ] || [ "$VERCEL_STATUS" = "200" ]; then
+            echo "SUCCESS: Instance is awake, warm, and responding immediately."
             exit 0
           else
-            echo "NOTICE: Server responded with status Render=$RENDER_STATUS, Vercel=$VERCEL_STATUS. Wake-up signal dispatched."
+            echo "NOTICE: Wakeup signal sent. Service is booting up."
             exit 0
           fi
