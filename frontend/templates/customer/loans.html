@@ -172,6 +172,7 @@ function syncRateFromType(type) {
   if (typeRates[type]) {
     document.getElementById('sliderRate').value = typeRates[type];
     updateLiveEMI();
+    if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('medium');
   }
 }
 

@@ -453,3 +453,48 @@ input[type="submit"]:active {
     animation: none !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Haptic Toggle Control & Animated Feedback States
+   -------------------------------------------------------------------------- */
+.haptic-toggle-btn {
+  position: relative;
+  transition: transform var(--duration-hover) var(--ease-squish),
+              background var(--duration-hover) var(--ease-squish),
+              border-color var(--duration-hover) var(--ease-squish);
+}
+
+.haptic-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+.haptic-toggle-btn.is-active .haptic-icon {
+  color: var(--accent, #38bdf8);
+}
+
+.haptic-toggle-btn.is-muted .haptic-icon {
+  opacity: 0.45;
+}
+
+.haptic-toggle-btn.is-muted::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: var(--danger, #ef4444);
+  transform: translateY(-50%) rotate(-45deg);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+@keyframes hapticWavePulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.18); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.haptic-pulsing {
+  animation: hapticWavePulse 220ms var(--ease-pop);
+}

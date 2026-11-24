@@ -474,6 +474,9 @@ function initNumberCounters() {
         requestAnimationFrame(update);
       } else {
         counter.textContent = isCurrency ? formatINR(target) : target.toLocaleString('en-IN');
+        if (typeof window.AtheriaHaptics !== 'undefined') {
+          window.AtheriaHaptics.trigger('tick');
+        }
       }
     }
     requestAnimationFrame(update);
@@ -484,6 +487,9 @@ function initNumberCounters() {
 function initModals() {
   function closeModal(modal) {
     if (!modal || modal.classList.contains('closing')) return;
+    if (typeof window.AtheriaHaptics !== 'undefined') {
+      window.AtheriaHaptics.trigger('tap');
+    }
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (isReduced) {
       modal.classList.remove('active', 'closing');
@@ -501,6 +507,10 @@ function initModals() {
       const modalId = btn.getAttribute('data-modal-open');
       const target = document.getElementById(modalId);
       if (!target) return;
+
+      if (typeof window.AtheriaHaptics !== 'undefined') {
+        window.AtheriaHaptics.trigger('medium');
+      }
 
       // Principle 11: Origin Awareness (scale from the trigger button's center)
       const rect = btn.getBoundingClientRect();
@@ -578,6 +588,14 @@ function showToast(message, type = 'info') {
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `<span>${message}</span>`;
   container.appendChild(toast);
+
+  // Trigger contextual vibration haptics on toast appearance
+  if (typeof window.AtheriaHaptics !== 'undefined') {
+    if (type === 'success') window.AtheriaHaptics.trigger('success');
+    else if (type === 'error' || type === 'danger') window.AtheriaHaptics.trigger('error');
+    else if (type === 'warning') window.AtheriaHaptics.trigger('warning');
+    else window.AtheriaHaptics.trigger('tap');
+  }
 
   dismissToastAfterDelay(toast, 4000);
 }

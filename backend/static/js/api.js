@@ -72,8 +72,19 @@ async function apiRequest(endpoint, method = 'GET', data = null) {
       const res = await fetch(fullUrl, options);
       const json = await res.json();
       if (!res.ok || !json.ok) {
+        if (typeof window.AtheriaHaptics !== 'undefined') {
+          window.AtheriaHaptics.trigger('error');
+        }
         throw new Error(json.message || 'An unexpected error occurred.');
       }
+
+      // Haptic confirmation for data mutation actions (transfers, deposits, loans)
+      if (typeof window.AtheriaHaptics !== 'undefined') {
+        if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
+          window.AtheriaHaptics.trigger('payment');
+        }
+      }
+
       return json;
     } catch (err) {
       if (typeof showToast === 'function') {

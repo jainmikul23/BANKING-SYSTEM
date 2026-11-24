@@ -19,6 +19,10 @@
      -------------------------------------------------------------------------- */
   function triggerHaptic(duration = 8) {
     if (prefersReducedMotion) return;
+    if (typeof window.AtheriaHaptics !== 'undefined') {
+      window.AtheriaHaptics.trigger(duration);
+      return;
+    }
     try {
       if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
         navigator.vibrate(duration);

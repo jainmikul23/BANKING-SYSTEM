@@ -64,6 +64,7 @@ function setAmount(val) {
   const input = document.getElementById('amount');
   const current = parseFloat(input.value) || 0;
   input.value = (current + val).toFixed(2);
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('notch');
 }
 </script>
 {% endblock %}

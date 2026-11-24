@@ -66,6 +66,7 @@
 <script>
 function setAmount(val) {
   document.getElementById('amount').value = val.toFixed(2);
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('notch');
 }
 </script>
 {% endblock %}

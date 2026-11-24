@@ -125,10 +125,12 @@
 <script>
 function selectBeneficiary(accNo) {
   document.getElementById('to_account').value = accNo;
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('tap');
 }
 
 function setTransferAmount(val) {
   document.getElementById('amount').value = val.toFixed(2);
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('notch');
 }
 
 function openConfirmModal() {
@@ -149,13 +151,16 @@ function openConfirmModal() {
   document.getElementById('modalToAcc').textContent = toAcc;
   document.getElementById('modalAmount').textContent = '₹' + amt.toLocaleString('en-IN', { minimumFractionDigits: 2 });
   document.getElementById('confirmTransferModal').classList.add('active');
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('medium');
 }
 
 function closeConfirmModal() {
   document.getElementById('confirmTransferModal').classList.remove('active');
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('tap');
 }
 
 function submitTransfer() {
+  if (typeof window.AtheriaHaptics !== 'undefined') window.AtheriaHaptics.trigger('heavy');
   closeConfirmModal();
   document.getElementById('transferForm').submit();
 }
