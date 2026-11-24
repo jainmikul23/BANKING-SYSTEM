@@ -14,16 +14,16 @@
    --------------------------------------------------------------------- */
 .landing-nav {
   position: fixed;
-  top: var(--space-5);
+  top: var(--space-4);
   left: 50%;
   transform: translateX(-50%);
-  width: min(1200px, calc(100% - var(--space-7)));
-  height: 72px;
+  width: min(1200px, calc(100% - 2 * var(--gutter)));
+  height: var(--nav-h);
   border-radius: var(--r-full);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-6);
+  padding: 0 var(--space-5);
   z-index: 1000;
   background: rgba(14, 20, 32, 0.85);
   backdrop-filter: blur(16px);
@@ -44,11 +44,15 @@
   font-size: 1.125rem;
   letter-spacing: -0.02em;
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .landing-nav .brand span {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.813rem, 3.2vw, 1.063rem);
 }
 
 .landing-nav .brand-icon {
@@ -153,6 +157,55 @@
 .hero-content {
   max-width: 620px;
   z-index: 10;
+}
+
+/* Academic Project Disclaimer Banner */
+.academic-project-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-secondary);
+  font-size: 0.813rem;
+  line-height: 1.45;
+  margin-bottom: var(--space-3);
+  max-width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+}
+
+.academic-project-banner .banner-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.22);
+  color: #60A5FA;
+  font-weight: 700;
+  font-size: 0.688rem;
+  flex-shrink: 0;
+}
+
+.academic-project-banner strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+[data-theme="light"] .academic-project-banner {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.22);
+  color: #475569;
+}
+
+[data-theme="light"] .academic-project-banner strong {
+  color: #0f172a;
 }
 
 .hero-pill {
@@ -525,9 +578,15 @@
 @media (max-width: 1024px) {
   .landing-hero {
     grid-template-columns: 1fr;
-    padding-top: calc(var(--nav-h) + var(--space-7));
+    padding-top: calc(var(--nav-h) + var(--space-6));
     text-align: center;
-    gap: var(--space-7);
+    gap: var(--space-6);
+  }
+
+  .academic-project-banner {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
   }
 
   .hero-content {
@@ -567,18 +626,56 @@
 
 @media (max-width: 768px) {
   .landing-nav {
-    width: calc(100% - var(--space-5));
-    padding: 0 var(--space-4);
-    height: var(--nav-h);
-    top: var(--space-3);
+    width: calc(100% - 24px);
+    padding: 0 12px;
+    height: 56px;
+    top: 10px;
+  }
+
+  .landing-nav .brand {
+    gap: 8px;
+    max-width: calc(100% - 145px);
+  }
+
+  .landing-nav .brand-icon {
+    width: 36px;
+    height: 36px;
   }
 
   .landing-nav .brand span {
-    font-size: 0.938rem;
+    font-size: 0.844rem;
+    max-width: 135px;
+  }
+
+  .landing-nav .nav-actions {
+    gap: 6px;
   }
 
   .landing-nav .nav-actions .btn-glass {
     display: none;
+  }
+
+  .landing-nav .nav-actions .btn-primary {
+    padding: 0 12px;
+    height: 36px;
+    min-height: 36px;
+    font-size: 0.813rem;
+  }
+
+  .landing-nav .theme-toggle-btn,
+  .landing-nav .haptic-toggle-btn {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  .academic-project-banner {
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    gap: 8px;
+    line-height: 1.4;
   }
 
   .card-stack-container {
@@ -597,8 +694,8 @@
   }
 
   .landing-hero {
-    padding: calc(var(--nav-h) + var(--space-6)) var(--gutter) var(--space-6) var(--gutter);
-    gap: var(--space-7);
+    padding: calc(var(--nav-h) + var(--space-5)) var(--gutter) var(--space-6) var(--gutter);
+    gap: var(--space-6);
   }
 
   .features-grid,
@@ -625,24 +722,60 @@
   }
 
   .hero-3d-container {
-    min-height: 380px;
+    min-height: 360px;
   }
 }
 
 @media (max-width: 414px) {
   .landing-nav {
-    width: calc(100% - var(--space-4));
-    padding: 0 var(--space-4);
-    height: 64px;
-    top: var(--space-2);
+    width: calc(100% - 16px);
+    padding: 0 8px;
+    height: 52px;
+    top: 6px;
+  }
+
+  .landing-nav .brand {
+    gap: 6px;
+    max-width: calc(100% - 120px);
+  }
+
+  .landing-nav .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .landing-nav .brand span {
+    font-size: 0.781rem;
+    max-width: 105px;
+  }
+
+  .landing-nav .nav-actions .btn-primary {
+    padding: 0 10px;
+    height: 34px;
+    min-height: 34px;
+    font-size: 0.75rem;
+  }
+
+  .landing-nav .theme-toggle-btn,
+  .landing-nav .haptic-toggle-btn {
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    min-width: 34px;
   }
 
   .landing-hero {
-    padding: calc(var(--nav-h) + var(--space-5)) var(--gutter) var(--space-5) var(--gutter);
+    padding: calc(var(--nav-h) + var(--space-4)) var(--gutter) var(--space-5) var(--gutter);
   }
 
   .hero-3d-container {
-    min-height: 300px;
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 350px) {
+  .landing-nav .brand span {
+    max-width: 75px;
   }
 }
 
