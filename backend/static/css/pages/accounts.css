@@ -2,9 +2,11 @@
 
 .wallet-stack {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--grid-gap);
   margin-top: var(--space-5);
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Apple Wallet Styled Bank Card */
@@ -155,4 +157,40 @@
   font-size: 0.813rem;
   font-weight: 600;
   color: var(--text);
+}
+
+@media (max-width: 480px) {
+  .bank-card {
+    height: auto;
+    min-height: 200px;
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .card-chip {
+    width: 38px;
+    height: 28px;
+  }
+
+  .card-number {
+    font-size: clamp(0.95rem, 4.5vw, 1.25rem);
+    letter-spacing: clamp(0.08em, 2vw, 0.16em);
+    margin: var(--space-2) 0;
+  }
+
+  .card-balance-val {
+    font-size: 1.188rem;
+  }
+
+  .card-details-panel {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 12px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-details-panel {
+    grid-template-columns: 1fr;
+  }
 }

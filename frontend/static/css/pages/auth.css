@@ -2,6 +2,7 @@
 
 .auth-viewport {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,13 +76,28 @@
 }
 
 @media (max-width: 580px) {
+  .auth-viewport {
+    padding: 24px 14px;
+  }
+
   .auth-grid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
   }
 
   .auth-card {
-    padding: var(--card-pad);
+    padding: 22px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .auth-title {
+    font-size: 1.35rem;
+  }
+
+  .auth-logo {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 12px;
   }
 }
 

@@ -81,3 +81,40 @@
   gap: var(--space-2);
 }
 
+@media (max-width: 640px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .filter-item {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .filter-bar .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .pagination-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .pagination-pages {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+    font-size: 0.813rem;
+  }
+}
+

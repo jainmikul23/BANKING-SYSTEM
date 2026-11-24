@@ -8,6 +8,37 @@
   width: 100%;
 }
 
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: var(--space-5);
+  }
+
+  .kpi-card {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .kpi-title {
+    font-size: 0.688rem;
+  }
+
+  .kpi-val {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .kpi-sub {
+    font-size: 0.688rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .kpi-grid>*,
 .admin-charts-grid>* {
   min-width: 0;
