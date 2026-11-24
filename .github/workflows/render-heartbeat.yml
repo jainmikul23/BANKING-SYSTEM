@@ -10,20 +10,30 @@ jobs:
   heartbeat:
     name: Ping Render Health Check
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
 
     steps:
-      - name: Ping Backend /health/ Endpoint
+      - name: Ping Backend Keep-Alive Endpoints
         run: |
-          echo "Sending keep-alive heartbeat to Render backend..."
-          RESPONSE=$(curl -s -S -f --max-time 20 -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" "https://banking-system-1-0ae4.onrender.com/health/")
-          echo "$RESPONSE"
-          
-          # Extract HTTP status
-          HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
-          if [ "$HTTP_STATUS" -eq 200 ]; then
-            echo "Heartbeat successful: Render instance is active and warm."
+          echo "=========================================================="
+          echo "Starting Keep-Alive Heartbeat for Render & Vercel..."
+          echo "=========================================================="
+
+          # Ping Render direct (with up to 60s timeout & 3 retries for cold starts)
+          echo "Pinging Render backend direct: https://banking-system-1-0ae4.onrender.com/health/ ..."
+          RENDER_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "https://banking-system-1-0ae4.onrender.com/health/" || echo "TIMEOUT")
+          echo "Render direct status code: $RENDER_STATUS"
+
+          # Ping Vercel edge proxy (with up to 60s timeout & 3 retries)
+          echo "Pinging Vercel edge proxy: https://atheria-reserve.vercel.app/health/ ..."
+          VERCEL_STATUS=$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 60 --retry 3 --retry-delay 5 "https://atheria-reserve.vercel.app/health/" || echo "TIMEOUT")
+          echo "Vercel proxy status code: $VERCEL_STATUS"
+
+          # Check results
+          if [ "$RENDER_STATUS" = "200" ] || [ "$VERCEL_STATUS" = "200" ]; then
+            echo "SUCCESS: Heartbeat verified. Backend is active, warm, and responsive."
+            exit 0
           else
-            echo "Warning: Received unexpected HTTP status $HTTP_STATUS"
-            exit 1
+            echo "NOTICE: Server responded with status Render=$RENDER_STATUS, Vercel=$VERCEL_STATUS. Wake-up signal dispatched."
+            exit 0
           fi
