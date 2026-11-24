@@ -1,0 +1,455 @@
+/* =====================================================================
+   UX MOTION: 20 ANIMATION & INTERACTION PRINCIPLES
+   Universal motion system applied across all banking pages:
+   Landing, Customer Dashboard, Accounts, Transfers, Loans, Admin Portal
+   ===================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------
+     Principle 5: Slow In, Slow Out - Canonical Timing Curves
+     ------------------------------------------------------------------- */
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);    /* Entering, opening, expanding */
+  --motion-ease-in: cubic-bezier(0.7, 0, 0.84, 0);     /* Leaving, closing, exiting */
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);/* Repositioning, moving */
+  --motion-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Playful micro-overshoot */
+
+  /* -------------------------------------------------------------------
+     Principle 8: Snappy Timing - Specific UI Durations
+     ------------------------------------------------------------------- */
+  --dur-press: 90ms;      /* Principle 1: Squash & press impact */
+  --dur-hover: 140ms;     /* Principle 8: Hover transitions */
+  --dur-toggle: 180ms;    /* Toggles, chips, tabs */
+  --dur-enter: 240ms;     /* Modals, sheets, popovers opening */
+  --dur-exit: 120ms;      /* Principle 18: Fast closing (1/2 of entry) */
+  --dur-stagger: 35ms;    /* Principle 3: Gap between cascading list items */
+
+  /* Default dynamic modal transform-origin (Principle 11) */
+  --modal-origin-x: 50%;
+  --modal-origin-y: 50%;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 1: Squash and Stretch
+   On press or impact, squash one axis and stretch the other to preserve
+   area (~0.98), giving interactive elements physical weight.
+   Never squash text, numbers or financial data.
+   --------------------------------------------------------------------- */
+.btn:active,
+button[type="submit"]:active,
+.quick-chip:active,
+.chip:active,
+.theme-toggle-btn:active,
+.nav-link:active,
+.modal-close:active {
+  transform: scale3d(1.025, 0.955, 1) translateY(1px) !important;
+  transition-duration: var(--dur-press) !important;
+  transition-timing-function: var(--motion-ease-out) !important;
+}
+
+/* Guard: Protect critical banking text & numbers from distorted squashing */
+.btn > span,
+.btn > svg,
+.btn-text,
+.account-balance,
+.stat-value,
+.amount-cell {
+  transform: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 2: Anticipation
+   Micro-crouch on high-intent submit/transfer actions before firing.
+   --------------------------------------------------------------------- */
+.btn-primary:active,
+.btn-transfer:active,
+.btn-submit:active {
+  transform: scale3d(0.985, 0.96, 1) translateY(1.5px) !important;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 3: Stagger
+   Cascade list items, table rows, and dashboard cards sequentially
+   (30-45ms gap, capped under 300ms total, remaining items together).
+   --------------------------------------------------------------------- */
+.stagger-items > *:nth-child(1) { animation-delay: calc(0 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(2) { animation-delay: calc(1 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(3) { animation-delay: calc(2 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(4) { animation-delay: calc(3 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(5) { animation-delay: calc(4 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(6) { animation-delay: calc(5 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(7) { animation-delay: calc(6 * var(--dur-stagger)); }
+.stagger-items > *:nth-child(8) { animation-delay: calc(7 * var(--dur-stagger)); }
+/* Beyond 8 items, show together so users don't wait */
+.stagger-items > *:nth-child(n+9) { animation-delay: calc(7 * var(--dur-stagger)); }
+
+.data-table tbody tr {
+  animation: tableRowFadeIn var(--dur-enter) var(--motion-ease-out) backwards;
+}
+.data-table tbody tr:nth-child(1) { animation-delay: calc(0 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(2) { animation-delay: calc(1 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(3) { animation-delay: calc(2 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(4) { animation-delay: calc(3 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(5) { animation-delay: calc(4 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(6) { animation-delay: calc(5 * var(--dur-stagger)); }
+.data-table tbody tr:nth-child(n+7) { animation-delay: calc(6 * var(--dur-stagger)); }
+
+@keyframes tableRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Principle 4: Follow Through
+   Modal children lag the container by 30-50ms with subtle settle.
+   --------------------------------------------------------------------- */
+.modal-overlay.active .modal-content > * {
+  animation: followThroughSettle 280ms var(--motion-ease-out) backwards;
+}
+.modal-overlay.active .modal-content > *:nth-child(1) { animation-delay: 40ms; }
+.modal-overlay.active .modal-content > *:nth-child(2) { animation-delay: 75ms; }
+.modal-overlay.active .modal-content > *:nth-child(3) { animation-delay: 110ms; }
+
+@keyframes followThroughSettle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Principle 6: Moving in Arcs
+   Toasts and floating alerts swoop in on a curved path, not mechanical diagonals.
+   --------------------------------------------------------------------- */
+.toast {
+  animation: toastArcEntrance 260ms var(--motion-ease-out) forwards !important;
+}
+
+@keyframes toastArcEntrance {
+  0% {
+    opacity: 0;
+    transform: translate3d(24px, 12px, 0) scale(0.92);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate3d(-3px, -1px, 0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Fast toast exit (Principle 18) */
+.toast.toast-dismissing {
+  opacity: 0 !important;
+  transform: translate3d(16px, 4px, 0) scale(0.92) !important;
+  transition: opacity var(--dur-exit) var(--motion-ease-in), transform var(--dur-exit) var(--motion-ease-in) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 7: Secondary Action
+   Subtle secondary visual confirmations that do not compete for attention.
+   --------------------------------------------------------------------- */
+.form-input,
+.form-select,
+.form-textarea {
+  transition: 
+    border-color var(--dur-hover) var(--motion-ease-out),
+    box-shadow var(--dur-hover) var(--motion-ease-out),
+    background-color var(--dur-hover) var(--motion-ease-out) !important;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow), inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 8: Snappy Timing
+   Standardize UI hover/press feedback between 100ms and 150ms.
+   --------------------------------------------------------------------- */
+.glass-card,
+.stat-card,
+.quick-action-card,
+.bank-card {
+  transition: 
+    transform var(--dur-hover) var(--motion-ease-out),
+    box-shadow var(--dur-hover) var(--motion-ease-out),
+    border-color var(--dur-hover) var(--motion-ease-out) !important;
+}
+
+.glass-card:hover,
+.stat-card:hover,
+.quick-action-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: var(--stroke-highlight) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 9: Exaggerated Feedback
+   Input validation error shake (3 oscillations over 280ms) and success pop.
+   --------------------------------------------------------------------- */
+.shake,
+.has-error .form-input,
+.form-input:invalid:not(:placeholder-shown):focus {
+  animation: inputShake 280ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes inputShake {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.badge-pop,
+.chip.active {
+  animation: badgePop 180ms var(--motion-ease-spring) both;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.92); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ---------------------------------------------------------------------
+   Principle 10: Solid Drawing in 3D
+   Specular top-edge highlights and layered depth shadows.
+   --------------------------------------------------------------------- */
+.glass-panel,
+.glass-card,
+.modal-content {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.35),
+    0 18px 28px -6px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+[data-theme="light"] .glass-panel,
+[data-theme="light"] .glass-card,
+[data-theme="light"] .modal-content {
+  box-shadow: 
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    0 12px 24px -4px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 11 & 18: Origin Awareness & Fast Closing for Modals
+   Modals expand from the trigger position with ease-out (240ms)
+   and close in half the time (120ms) with ease-in.
+   --------------------------------------------------------------------- */
+.modal-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-enter) var(--motion-ease-out) !important;
+}
+
+.modal-content {
+  transform-origin: var(--modal-origin-x, 50%) var(--modal-origin-y, 50%);
+  transform: scale(0.94) translateY(8px);
+  opacity: 0;
+  transition: 
+    transform var(--dur-enter) var(--motion-ease-out),
+    opacity var(--dur-enter) var(--motion-ease-out) !important;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Principle 18: Fast Closing state */
+.modal-overlay.closing {
+  opacity: 0 !important;
+  transition: opacity var(--dur-exit) var(--motion-ease-in) !important;
+}
+
+.modal-overlay.closing .modal-content {
+  transform: scale(0.95) translateY(4px) !important;
+  opacity: 0 !important;
+  transition: 
+    transform var(--dur-exit) var(--motion-ease-in),
+    opacity var(--dur-exit) var(--motion-ease-in) !important;
+}
+
+/* Dropdown menus scale from their anchor trigger (Principle 11) */
+.dropdown-menu,
+.user-menu-dropdown {
+  transform-origin: top right;
+  animation: dropdownEnter var(--dur-toggle) var(--motion-ease-out) forwards;
+}
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Principle 12: Fitts's Law
+   Guarantee minimum 44x44px hit targets for effortless clicks and taps.
+   --------------------------------------------------------------------- */
+.btn,
+.nav-link,
+.form-input,
+.form-select,
+.tab-item,
+.theme-toggle-btn,
+.mobile-tab-item {
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.theme-toggle-btn,
+.modal-close,
+.icon-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 15: Von Restorff Effect
+   Strict primary action visual dominance.
+   --------------------------------------------------------------------- */
+.btn-primary {
+  background: var(--accent) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35) !important;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover) !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 16: Doherty Threshold
+   Immediate responsiveness within 100ms for all taps/clicks.
+   --------------------------------------------------------------------- */
+button:active,
+a:active,
+input[type="submit"]:active {
+  transition-duration: 60ms !important;
+}
+
+/* ---------------------------------------------------------------------
+   Principle 19: Peak-End Rule
+   Crisp animated checkmark for payment, deposit, and transfer success.
+   --------------------------------------------------------------------- */
+.success-checkmark-svg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2.5;
+  stroke: var(--ok);
+  stroke-miterlimit: 10;
+  box-shadow: inset 0 0 0 var(--ok);
+  animation: checkmarkFill 300ms ease-in-out 300ms forwards, checkmarkScale 240ms ease-in-out 600ms both;
+}
+
+.success-checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2.5;
+  stroke-miterlimit: 10;
+  stroke: var(--ok);
+  fill: none;
+  animation: checkmarkStroke 400ms var(--motion-ease-out) forwards;
+}
+
+.success-checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: #FFFFFF;
+  animation: checkmarkStroke 250ms var(--motion-ease-out) 350ms forwards;
+}
+
+@keyframes checkmarkStroke {
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmarkScale {
+  0%, 100% { transform: none; }
+  50% { transform: scale3d(1.1, 1.1, 1); }
+}
+
+@keyframes checkmarkFill {
+  100% { box-shadow: inset 0 0 0 30px var(--ok); }
+}
+
+/* ---------------------------------------------------------------------
+   Principle 20: Accessibility & Frequency of Use (prefers-reduced-motion)
+   Bulletproof WCAG 2.1 compliance: when reduced motion is preferred,
+   disable all spatial transforms, tilts, and shakes, replacing them
+   with instantaneous or gentle 75ms opacity fades.
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn:active,
+  button[type="submit"]:active,
+  .quick-chip:active,
+  .glass-card:hover,
+  .modal-content,
+  .toast,
+  .data-table tbody tr {
+    transform: none !important;
+  }
+
+  .modal-overlay {
+    transition: opacity 75ms linear !important;
+  }
+
+  .modal-content {
+    transition: opacity 75ms linear !important;
+  }
+
+  .toast {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .shake,
+  .has-error .form-input {
+    animation: none !important;
+  }
+}

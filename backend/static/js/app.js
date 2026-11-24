@@ -480,40 +480,90 @@ function initNumberCounters() {
   }
 }
 
-// 9. Modals
+// 9. Modals (Principles 11: Origin Awareness, 17: Interruptible, 18: Fast Closing)
 function initModals() {
+  function closeModal(modal) {
+    if (!modal || modal.classList.contains('closing')) return;
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isReduced) {
+      modal.classList.remove('active', 'closing');
+      return;
+    }
+    // Fast closing: exit runs in ~120ms (half of opening duration)
+    modal.classList.add('closing');
+    setTimeout(() => {
+      modal.classList.remove('active', 'closing');
+    }, 130);
+  }
+
   document.querySelectorAll('[data-modal-open]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const modalId = btn.getAttribute('data-modal-open');
       const target = document.getElementById(modalId);
-      if (target) target.classList.add('active');
+      if (!target) return;
+
+      // Principle 11: Origin Awareness (scale from the trigger button's center)
+      const rect = btn.getBoundingClientRect();
+      const originX = Math.round(rect.left + rect.width / 2);
+      const originY = Math.round(rect.top + rect.height / 2);
+      const content = target.querySelector('.modal-content');
+      if (content) {
+        content.style.setProperty('--modal-origin-x', `${originX}px`);
+        content.style.setProperty('--modal-origin-y', `${originY}px`);
+      }
+
+      target.classList.remove('closing');
+      target.classList.add('active');
     });
   });
 
   document.querySelectorAll('[data-modal-close]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const modal = btn.closest('.modal-overlay');
-      if (modal) modal.classList.remove('active');
+      closeModal(modal);
     });
   });
 
   document.querySelectorAll('.modal-overlay').forEach((modal) => {
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('active');
+      if (e.target === modal) closeModal(modal);
     });
+  });
+
+  // Principle 17: Interruptible Motion (Escape key cancels immediately)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const activeModal = document.querySelector('.modal-overlay.active');
+      if (activeModal) closeModal(activeModal);
+    }
   });
 }
 
-// 10. Toasts
+// 10. Toasts (Principles 6: Curved Arc Motion, 18: Fast Closing, 20: Reduced Motion)
 function initToasts() {
   document.querySelectorAll('.toast').forEach((toast) => {
-    setTimeout(() => {
-      toast.style.transition = 'opacity 0.4s var(--ease), transform 0.4s var(--ease)';
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(12px) scale(0.95)';
-      setTimeout(() => toast.remove(), 400);
-    }, 4500);
+    dismissToastAfterDelay(toast, 4000);
   });
+}
+
+function dismissToastAfterDelay(toast, delay = 4000) {
+  setTimeout(() => {
+    dismissToast(toast);
+  }, delay);
+}
+
+function dismissToast(toast) {
+  if (!toast || toast.dataset.dismissing === 'true') return;
+  toast.dataset.dismissing = 'true';
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (isReduced) {
+    toast.remove();
+    return;
+  }
+  toast.classList.add('toast-dismissing');
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 130);
 }
 
 function showToast(message, type = 'info') {
@@ -529,10 +579,5 @@ function showToast(message, type = 'info') {
   toast.innerHTML = `<span>${message}</span>`;
   container.appendChild(toast);
 
-  setTimeout(() => {
-    toast.style.transition = 'opacity 0.4s var(--ease), transform 0.4s var(--ease)';
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(12px) scale(0.95)';
-    setTimeout(() => toast.remove(), 400);
-  }, 4500);
+  dismissToastAfterDelay(toast, 4000);
 }

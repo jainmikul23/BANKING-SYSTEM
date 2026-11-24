@@ -44,17 +44,28 @@ CSRF_TRUSTED_ORIGINS = list(set(
     [o.strip() for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()] +
     [
         'https://*.vercel.app',
+        'http://*.vercel.app',
         'https://atheria-reserve.vercel.app',
+        'http://atheria-reserve.vercel.app',
+        'https://www.atheria-reserve.vercel.app',
+        'http://www.atheria-reserve.vercel.app',
         'https://*.railway.app',
+        'http://*.railway.app',
         'https://*.up.railway.app',
+        'http://*.up.railway.app',
         'https://*.onrender.com',
+        'http://*.onrender.com',
         'https://banking-system-1-0ae4.onrender.com',
+        'http://banking-system-1-0ae4.onrender.com',
         'http://localhost:8000',
         'http://127.0.0.1:8000',
         'http://localhost:3000',
         'http://localhost:5173',
     ]
 ))
+
+# Institutional Branded CSRF Failure Recovery Handler
+CSRF_FAILURE_VIEW = 'config.csrf_views.csrf_failure'
 
 # Reverse Proxy SSL & Host Forwarding (Essential for Render & Vercel Proxies)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -258,16 +269,24 @@ X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_HTTPONLY = True
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-if DEBUG:
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SESSION_COOKIE_SAMESITE = 'Lax'
-    CSRF_COOKIE_SAMESITE = 'Lax'
-else:
+# Modern browsers (Safari WebKit, Chrome, Firefox) work seamlessly with SameSite=Lax
+# across Vercel reverse proxy rewrites and direct Render access without third-party cookie blocks.
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# In remote environments (Render/Railway/Vercel) or when not in local sqlite dev, enforce Secure cookies
+is_remote_env = (
+    os.getenv('RENDER') == 'true' or
+    os.getenv('RAILWAY_ENVIRONMENT') is not None or
+    not os.getenv('USE_SQLITE', 'false').lower() in ('true', '1')
+)
+if is_remote_env and not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = 'None'
-    CSRF_COOKIE_SAMESITE = 'None'
+else:
+    # Set to true when forwarded over HTTPS by reverse proxy
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 # Custom Test Runner (defaults to discovering all project apps)
 TEST_RUNNER = 'config.runner.ApexTestRunner'
